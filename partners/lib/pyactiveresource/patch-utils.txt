@@ -1,0 +1,177 @@
+From daa00f22ef2cc1fd9db9a6dc46fa751a9d2265cd Mon Sep 17 00:00:00 2001
+From: Dylan Smith <Dylan.Smith@shopify.com>
+Date: Mon, 7 Jan 2013 13:49:36 -0500
+Subject: [PATCH] Support array attributes of non-resource items.
+
+---
+ src/activeresource.py            | 19 +++++++++++++------
+ src/tests/activeresource_test.py | 36 ++++++++++++++++++++++++++++++------
+ src/util.py                      | 37 +++++++++++++++++--------------------
+ 3 files changed, 60 insertions(+), 32 deletions(-)
+
+diff --git a/src/activeresource.py b/src/activeresource.py
+index 981014f..f14241f 100755
+--- a/src/activeresource.py
++++ b/src/activeresource.py
+@@ -713,11 +713,11 @@ class ActiveResource(object):
+         for key, value in self.attributes.iteritems():
+             if isinstance(value, list):
+                 new_value = []
+-                for i in value:
+-                  if isinstance(i, dict):
+-                      new_value.append(i)
++                for item in value:
++                  if isinstance(item, ActiveResource):
++                      new_value.append(item.to_dict())
+                   else:
+-                      new_value.append(i.to_dict())
++                      new_value.append(item)
+                 values[key] = new_value
+             elif isinstance(value, ActiveResource):
+                 values[key] = value.to_dict()
+@@ -900,8 +900,15 @@ class ActiveResource(object):
+                 klass = self._find_class_for(key)
+                 attr = klass(value)
+             elif isinstance(value, list):
+-                klass = self._find_class_for_collection(key)
+-                attr = [klass(child) for child in value]
++                klass = None
++                attr = []
++                for child in value:
++                    if isinstance(child, dict):
++                        if klass is None:
++                            klass = self._find_class_for_collection(key)
++                        attr.append(klass(child))
++                    else:
++                        attr.append(child)
+             else:
+                 attr = value
+             # Store the actual value in the attributes dictionary
+diff --git a/src/tests/activeresource_test.py b/src/tests/activeresource_test.py
+index 7de0b2d..8b645c5 100644
+--- a/src/tests/activeresource_test.py
++++ b/src/tests/activeresource_test.py
+@@ -18,6 +18,13 @@ class Error(Exception):
+     pass
+ 
+ 
++class Store(activeresource.ActiveResource):
++    _site = 'http://localhost'
++
++class Address(activeresource.ActiveResource):
++    _site = 'http://localhost/people/$person_id/'
++
++
+ class ActiveResourceTest(unittest.TestCase):
+     """Tests for activeresource.ActiveResource."""
+ 
+@@ -57,14 +64,9 @@ class ActiveResourceTest(unittest.TestCase):
+ 
+         class Person(activeresource.ActiveResource):
+             _site = 'http://localhost'
+-        self.person = Person
+ 
+-        class Store(activeresource.ActiveResource):
+-            _site = 'http://localhost'
++        self.person = Person
+         self.store = Store
+-
+-        class Address(activeresource.ActiveResource):
+-            _site = 'http://localhost/people/$person_id/'
+         self.address = Address
+ 
+     def test_find_one(self):
+@@ -503,6 +505,13 @@ class ActiveResourceTest(unittest.TestCase):
+         parsed = util.xml_to_dict(xml, saveroot=False)
+         self.assertEqual(children, parsed['children'])
+ 
++    def test_to_xml_should_handle_attributes_containing_lists_of_strings(self):
++        store = self.store({'name': 'foo', 'id': 1})
++        store.websites = ['http://example.com', 'http://store.example.com']
++        xml = store.to_xml()
++        parsed = util.xml_to_dict(xml, saveroot=False)
++        self.assertEqual(['http://example.com', 'http://store.example.com'], parsed['websites'])
++
+     def test_to_xml_should_handle_dasherize_option(self):
+         res = activeresource.ActiveResource({'attr_name': 'value'})
+         xml = res.to_xml(dasherize=False)
+@@ -520,6 +529,21 @@ class ActiveResourceTest(unittest.TestCase):
+         self.assertNotEqual(hash(a), hash(b))
+         self.assertNotEqual(a, b)
+ 
++    def test_init_with_nested_resource(self):
++        person = self.person({'name': 'Joe', 'id': 1, 'address': {'id': 1, 'street': '12345 Street'}})
++        self.assertEqual(self.address, type(person.address))
++
++    def test_init_with_array_of_nested_resources(self):
++        store = self.store({'name': 'General Store', 'id': 1, 'addresses': [
++            {'id': 1, 'street': '100 Main'},
++            {'id': 2, 'street': '200 Bank'}
++        ]})
++        self.assertEqual(self.address, type(store.addresses[0]))
++
++    def test_init_with_array_of_strings(self):
++        store = self.store({'name': 'General Store', 'id': 1, 'websites': ['http://example.com', 'http://store.example.com']})
++        self.assertEqual(['http://example.com', 'http://store.example.com'], store.websites)
++
+ 
+ if __name__ == '__main__':
+     unittest.main()
+diff --git a/src/util.py b/src/util.py
+index b482145..c76a832 100644
+--- a/src/util.py
++++ b/src/util.py
+@@ -273,6 +273,22 @@ def serialize(value, element):
+             break
+ 
+ 
++def _to_xml_element(obj, root, dasherize):
++    root = dasherize and root.replace('_', '-') or root
++    root_element = ET.Element(root)
++    if isinstance(obj, list):
++        root_element.set('type', 'array')
++        for value in obj:
++            root_element.append(_to_xml_element(value, singularize(root), dasherize))
++    elif isinstance(obj, dict):
++        for key, value in obj.iteritems():
++            root_element.append(_to_xml_element(value, key, dasherize))
++    else:
++        serialize(obj, root_element)
++
++    return root_element
++
++
+ def to_xml(obj, root='object', pretty=False, header=True, dasherize=True):
+     """Convert a dictionary or list to an XML string.
+ 
+@@ -286,26 +302,7 @@ def to_xml(obj, root='object', pretty=False, header=True, dasherize=True):
+     Returns:
+         An xml string.
+     """
+-    root = dasherize and root.replace('_', '-') or root
+-    root_element = ET.Element(root)
+-    if isinstance(obj, list):
+-        root_element.set('type', 'array')
+-        for i in obj:
+-            element = ET.fromstring(
+-                    to_xml(i, root=singularize(root), header=False,
+-                           pretty=pretty, dasherize=dasherize))
+-            root_element.append(element)
+-    else:
+-        for key, value in obj.iteritems():
+-            key = dasherize and key.replace('_', '-') or key
+-            if isinstance(value, dict) or isinstance(value, list):
+-                element = ET.fromstring(
+-                    to_xml(value, root=key, header=False,
+-                           pretty=pretty, dasherize=dasherize))
+-                root_element.append(element)
+-            else:
+-                element = ET.SubElement(root_element, key)
+-                serialize(value, element)
++    root_element = _to_xml_element(obj, root, dasherize)
+     if pretty:
+         xml_pretty_format(root_element)
+     xml_data = ET.tostring(root_element)
+-- 
+1.8.0.2
+

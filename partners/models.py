@@ -1,6 +1,6 @@
 from django.db import models
-from pyactiveresource.activeresource import ActiveResource
-from pyrgify import Chargify
+from lib.pyactiveresource.activeresource import ActiveResource
+from lib.pyrgify import Chargify
 from django.conf import settings
 
 
