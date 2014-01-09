@@ -1,0 +1,24 @@
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Ubuntu Light'), local('Ubuntu-Light'), url(http://themes.googleusercontent.com/static/fonts/ubuntu/v5/WtcvfJHWXKxx4x0kuS1koaCWcynf_cDxXwCLxiixG1c.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Ubuntu'), url(http://themes.googleusercontent.com/static/fonts/ubuntu/v5/pFZGRS3ywNfpSqkEIed1Ww.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Ubuntu Medium'), local('Ubuntu-Medium'), url(http://themes.googleusercontent.com/static/fonts/ubuntu/v5/gMhvhm-nVj1086DvGgmzB6CWcynf_cDxXwCLxiixG1c.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Ubuntu Bold'), local('Ubuntu-Bold'), url(http://themes.googleusercontent.com/static/fonts/ubuntu/v5/nsLtvfQoT-rVwGTHHnkeJqCWcynf_cDxXwCLxiixG1c.ttf) format('truetype');
+}

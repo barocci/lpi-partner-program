@@ -1,0 +1,325 @@
+html, body {
+}
+
+body {
+	font-family: Ubuntu;
+	color: rgb(102, 102, 102);
+
+  background:rgb(244, 242, 243);
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color:#692630;
+  font-weight: lighter;
+  margin-bottom:20px;
+}
+
+ul {
+  list-style-type:none;
+}
+
+a {
+  color:#E06606;
+  cursor:pointer;
+}
+
+header {
+  background-color: #380f14;
+  height:150px;
+  padding-top:30px;
+  position:relative;
+  z-index:10;
+}
+
+.lpi-layer {
+  background:url('../images/logo-lpi-big.png') no-repeat;
+  width:472px;
+  height:472px;
+  z-index:-1;
+  background-size:100% 100%;
+  right:-200px;
+  top:-70px;
+  position:absolute;
+  opacity:0.3;
+  -webkit-transition:all 1s;
+}
+
+.lpi-layer-active {
+  -webkit-animation-name:             rotate; 
+  -webkit-animation-duration:         1.2s; 
+  -webkit-animation-iteration-count:  infinite;
+  -webkit-animation-timing-function: linear;
+}
+
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to { 
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+
+
+.container {
+  position: relative;
+  z-index:10;
+  padding:20px 0px 0px;
+}
+
+.prtn-container {
+  display:block;
+}
+
+
+.navbar-lpi {
+  position:absolute;
+  top:-40px;
+  height:40px;
+  padding:0px ;
+  width:100%;
+}
+
+.navbar-nav {
+}
+
+.navbar-nav .active {
+  position:relative;
+  background-image: linear-gradient(rgb(255, 255, 255), rgb(244, 242, 243));
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.navbar-nav li {
+  margin:0px 5px;
+  transition:all 0.5s;
+  -moz-transition:all 0.5s;
+  -webkit-transition:all 0.5s;
+}
+
+.navbar-nav a {
+  color: rgb(219, 217, 217);;
+  font-weight: lighter;
+  text-transform: uppercase;
+  padding:10px !important;
+}
+
+.navbar-nav a:hover {
+  color:#fff;
+  background: transparent !important; 
+}
+
+
+.navbar-nav .active a {
+  color: rgb(116, 31, 42);
+  font-weight: normal: ;
+}
+
+
+
+.header-container {
+  background:#681c26;
+  border-top: 1px solid #601a23
+  text-align:center;
+  height:120px;
+  background-image: linear-gradient(#441219 20%,#641b24);
+  border-bottom: 4px solid #4c141b;
+  width:100%;
+  text-align:center;
+}
+
+.header-container img {
+  width:300px;
+  margin:-20px auto 0px;
+}
+
+footer {
+  background-color: rgb(50, 44, 47);
+  height:100px;
+  padding-top:20px;
+  width:100%;
+  font-size: 13px;
+  position: relative;
+  clear:both;
+}
+
+footer .copyright {
+  color: rgb(153, 153, 153);
+}
+
+footer .sitemap {
+  float:right;
+  margin-right:;
+}
+
+footer .sitemap li {
+  border-right:1px dotted #999;
+  float:left;
+  padding:0px 15px;
+}
+
+footer .sitemap li:last-child {
+  border-right:none;
+}
+
+
+footer .sitemap a {
+  color: rgb(44, 198, 255);
+  font-size: 13px;
+}
+
+footer .sitemap a:hover {
+  color: #fff;
+}
+
+
+
+.prtn-page-container {
+	position:relative;
+  min-height:550px;
+  padding-bottom: 70px;
+}
+
+.prtn-page {
+	position:absolute;
+  width:100%;
+  opacity:0;
+  top:-10000px;
+  min-height:550px;
+  -webkit-transition:opacity 0.5s;
+}
+
+.prtn-page-selected {
+  opacity:1 !important;
+  position:relative !important;
+  top:0px;
+}
+
+.prtn-box-container {
+  margin:60px 0px;
+  min-height:400px;
+}
+
+.prtn-box {
+	float:left;
+	opacity:1;
+  height:300px;
+  position:relative;
+}
+
+.prtn-box-3 {
+  width:33%;
+}
+
+.prtn-box-2 {
+  width:50%;
+
+}
+.prtn-box-1 {
+  width:100%;
+}
+
+
+.animated {
+	opacity:1;
+}
+
+.prtn-box-inner {
+  position:absolute;
+  left:0px;
+	background:#fff;
+	margin:0px auto;
+	padding:15px;
+	border-radius:3px;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	box-shadow:0 1px 6px 0 #c2c2c2;
+}
+
+.prtn-box-inner {
+}
+
+.prtn-box h3 {
+  font-weight:lighter;
+  text-align:center;
+}
+
+.prtn-box-icon {
+   height:120px;
+   width:130px;
+   margin:20px auto;
+   background-color:#fff;
+   padding:20px;
+   border-radius:100%;
+   -webit-border-radius:100%;
+   -moz-border-radius:100%;
+   border:1px dotted rgb(100,200,100);
+   background:rgb(244, 242, 243);
+   background-size:60% auto;
+   background-repeat: no-repeat;
+   background-position: center center;
+}
+
+.prtn-box-icon-training {
+   background-image: url(../images/academic.png);
+   background-size:40% auto;
+}
+
+.prtn-box-icon-companies {
+   background-image: url(../images/career.png);
+}
+
+.prtn-box-icon-partner {
+   background-image: url(../images/communities.png);
+}
+
+.prtn-box-desc {
+  font-weight: 100;
+}
+
+.prtn-box-button {
+  padding:30px 0px 15px;
+  display:block;
+}
+
+.prtn-details-box {
+  background-image: linear-gradient(#441219 20%,#641b24);
+  box-shadow:0 1px 6px 0 #c2c2c2;
+  height:250px;
+  border-radius:5px;
+  position:relative;
+  z-index:20;
+  padding:20px;
+  color:#fff;
+
+}
+.prtn-details-box h3 {
+   color:#fff;
+}
+
+.prtn-details-indicator {
+  background-color:#441219;
+  height:50px;
+  width:50px;
+  -webkit-transform: rotate(45deg);
+  position:absolute;
+  top:-20px;
+  z-index:1;
+
+}
+
+.training_details .prtn-details-indicator {
+  left:130px;
+
+}
+.companies_details .prtn-details-indicator {
+  right:160px;
+}
+
+
+.input-group {
+  margin:10px 0px;
+}
+
+
