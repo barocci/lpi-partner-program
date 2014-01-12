@@ -33,6 +33,11 @@ TEMPLATE_DIRS = (
 
 ALLOWED_HOSTS = []
 
+AUTHENTICATION_BACKENDS  = (
+    'django.contrib.auth.backends.ModelBackend',
+    'redmineauth.backends.Redmine',
+)
+
 
 # Application definition
 
@@ -95,6 +100,7 @@ STATIC_URL = '/static/'
 
 
 # API KEYS
+REDMINE_URL = 'http://desk.lpi-italia.org' # no trailing slash
 REDMINE_API = ''
 REDMINE_PROJECT = 'lpi-partership'
 

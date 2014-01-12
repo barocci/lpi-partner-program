@@ -1,6 +1,6 @@
 from django.db import models
 from lib.pyactiveresource.activeresource import ActiveResource
-from lib.pyrgify import Chargify
+from lib.chargify.chergify import Chargify
 from django.conf import settings
 
 
@@ -9,9 +9,9 @@ from django.conf import settings
 #
 
 class BaseResource(ActiveResource):
-  _site = 'http://redmine.bbqlab.net'
-  _user = 'apper'
-  _password = '8caratteri'
+  _site = ''
+  _user = ''
+  _password = ''
 
 class Contact(BaseResource):
   pass

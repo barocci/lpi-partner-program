@@ -25,7 +25,6 @@ var lpi = {
               that.selected_page = page;
               new_view.in_transition();
               that.loading(false);
-
            });
          } else {
            new_view.in_transition();
