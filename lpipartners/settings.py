@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import sys
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DIRNAME = os.path.abspath(os.path.dirname(__file__))
 
@@ -48,7 +49,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_redmine',
     'partners'
 )
 
@@ -100,12 +100,12 @@ STATIC_URL = '/static/'
 
 
 # API KEYS
-REDMINE_URL = 'http://desk.lpi-italia.org' # no trailing slash
+REDMINE_URL = '' # no trailing slash
 REDMINE_API = ''
-REDMINE_PROJECT = 'lpi-partership'
+REDMINE_PROJECT = ''
 
-CHARGIFY_API = 'VRatXKPQ3OaPhnc8oe5i'
-CHARGIFY_SUBDOMAIN = 'metaforge-test1'
+CHARGIFY_API = ''
+CHARGIFY_SUBDOMAIN = ''
 
 CHARGIFY_HOSTED_PAGE = "https://%s.chargify.com/h/" % CHARGIFY_SUBDOMAIN
 

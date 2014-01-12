@@ -9,7 +9,7 @@ import socket
 import sys
 import urllib2
 import urlparse
-from pyactiveresource import formats
+import formats
 
 
 class Error(Exception):

@@ -6,7 +6,7 @@
 __author__ = 'Mark Roach (mrroach@google.com)'
 
 import logging
-from pyactiveresource import util
+import util
 
 
 class Error(Exception):
