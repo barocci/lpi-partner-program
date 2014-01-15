@@ -9,9 +9,9 @@ from django.conf import settings
 #
 
 class BaseResource(ActiveResource):
-  _site = ''
-  _user = ''
-  _password = ''
+  _site = settings.REDMINE_URL
+  _user = settings.REDMINE_USER
+  _password = settings.REMINE_PASS
 
 class Contact(BaseResource):
   pass
