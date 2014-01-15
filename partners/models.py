@@ -1,6 +1,6 @@
 from django.db import models
 from lib.pyactiveresource.activeresource import ActiveResource
-from lib.chargify.chergify import Chargify
+from lib.chargify.chargify import Chargify
 from django.conf import settings
 
 
@@ -11,7 +11,7 @@ from django.conf import settings
 class BaseResource(ActiveResource):
   _site = settings.REDMINE_URL
   _user = settings.REDMINE_USER
-  _password = settings.REMINE_PASS
+  _password = settings.REDMINE_PASS
 
 class Contact(BaseResource):
   pass
@@ -26,7 +26,7 @@ class Attachment(BaseResource):
   pass
 
 class Membership(BaseResource):
-  _site = 'http://redmine.bbqlab.net/projects/%s' % settings.REDMINE_PROJECT
+  _site = '%s/projects/%s' % (settings.REDMINE_URL, settings.REDMINE_PROJECT)
 
   def new_user(self, user_id):
       self.user_id = user_id

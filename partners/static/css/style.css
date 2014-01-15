@@ -42,6 +42,8 @@ header {
   position:absolute;
   opacity:0.3;
   -webkit-transition:all 1s;
+  -moz-transition:all 1s;
+  transition:all 1s;
 }
 
 .lpi-layer-active {
@@ -49,6 +51,16 @@ header {
   -webkit-animation-duration:         1.2s; 
   -webkit-animation-iteration-count:  infinite;
   -webkit-animation-timing-function: linear;
+
+  -moz-animation-name:             rotate; 
+  -moz-animation-duration:         1.2s; 
+  -moz-animation-iteration-count:  infinite;
+  -moz-animation-timing-function: linear;
+
+  animation-name:             rotate; 
+  animation-duration:         1.2s; 
+  animation-iteration-count:  infinite;
+  animation-timing-function: linear;
 }
 
 @-webkit-keyframes rotate {
@@ -60,7 +72,23 @@ header {
   }
 }
 
+@-moz-keyframes rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to { 
+    -webkit-transform: rotate(360deg);
+  }
+}
 
+@keyframes rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to { 
+    -webkit-transform: rotate(360deg);
+  }
+}
 
 .container {
   position: relative;
@@ -188,6 +216,8 @@ footer .sitemap a:hover {
   top:-10000px;
   min-height:550px;
   -webkit-transition:opacity 0.5s;
+  -moz-transition:opacity 0.5s;
+  transition:opacity 0.5s;
 }
 
 .prtn-page-selected {
@@ -303,6 +333,8 @@ footer .sitemap a:hover {
   height:50px;
   width:50px;
   -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  transform: rotate(45deg);
   position:absolute;
   top:-20px;
   z-index:1;

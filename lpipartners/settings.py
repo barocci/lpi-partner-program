@@ -100,14 +100,14 @@ STATIC_URL = '/static/'
 
 
 # API KEYS
-REDMINE_URL = '' # no trailing slash
-REDMINE_USER = '' # no trailing slash
-REDMINE_PASS = '' # no trailing slash
+REDMINE_URL = 'http://desk.lpi-italia.org' # no trailing slash
+REDMINE_USER = 'apper' # no trailing slash
+REDMINE_PASS = '8caratteri' # no trailing slash
 REDMINE_API = ''
 REDMINE_PROJECT = 'lpi-partership'
 
-CHARGIFY_API = ''
-CHARGIFY_SUBDOMAIN = ''
+CHARGIFY_API = 'VRatXKPQ3OaPhnc8oe5i'
+CHARGIFY_SUBDOMAIN = 'metaforge-test1'
 
 CHARGIFY_HOSTED_PAGE = "https://%s.chargify.com/h/" % CHARGIFY_SUBDOMAIN
 

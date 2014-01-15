@@ -6,8 +6,8 @@
 __author__ = 'Mark Roach (mrroach@google.com)'
 
 import urllib
-from pyactiveresource import connection
-from pyactiveresource import formats
+import connection
+import formats
 
 class Error(Exception):
     """The base exception class for this module."""

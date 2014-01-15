@@ -11,10 +11,10 @@ import urllib
 import urllib2
 import urlparse
 from string import Template
-from pyactiveresource import connection
-from pyactiveresource import element_containers
-from pyactiveresource import formats
-from pyactiveresource import util
+import connection
+import element_containers
+import formats
+import util
 
 
 VALID_NAME = re.compile('[a-z_]\w*')  # Valid python attribute names
