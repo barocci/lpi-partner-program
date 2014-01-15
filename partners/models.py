@@ -9,9 +9,9 @@ from django.conf import settings
 #
 
 class BaseResource(ActiveResource):
-  _site = ''
-  _user = ''
-  _password = ''
+  _site = settings.REDMINE_URL
+  _user = settings.REDMINE_USER
+  _password = settings.REDMINE_PASS
 
 class Contact(BaseResource):
   pass
@@ -26,7 +26,7 @@ class Attachment(BaseResource):
   pass
 
 class Membership(BaseResource):
-  _site = 'http://redmine.bbqlab.net/projects/%s' % settings.REDMINE_PROJECT
+  _site = '%s/projects/%s' % (settings.REDMINE_URL, settings.REDMINE_PROJECT)
 
   def new_user(self, user_id):
       self.user_id = user_id
