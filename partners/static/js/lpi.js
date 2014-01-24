@@ -120,7 +120,13 @@ var lpi = {
   },
 
   request: function(method, params, callback) {
-    $.getJSON('http://tortuga:8000/' + method + '/', params, callback);
+    $.getJSON('http://partners.lpi-italia.org/' + method + '/', params, function(response) {
+        if(response.redirect) {
+            lpi.redirect(response.redirect);
+        }else {
+            callback(response);
+        }
+     });
   }
 
 }

@@ -5,11 +5,12 @@ var SignupViewModel = function() {
   self.mail = ko.observable('');
   self.password = ko.observable('');
   self.confirm_password = ko.observable('');
+  self.product_handle = '';
 
   self.error_message = ko.observable(null);
 
   self.init = function(param) {
-      self.handle = param.handle;
+      self.product_handle = param.handle;
   };
 
   self.register = function() {
@@ -21,7 +22,8 @@ var SignupViewModel = function() {
      }else if(self.password() == self.confirm_password()) {
        var params = {
           mail: self.mail(),
-          password: self.password()
+          password: self.password(),
+          product: self.product_handle
        };
 
        lpi.request('register', params, function(response) {

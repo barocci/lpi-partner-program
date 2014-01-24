@@ -1,66 +1,30 @@
 from django.db import models
-from lib.pyactiveresource.activeresource import ActiveResource
 from lib.chargify.chargify import Chargify
+from lib.redmine import redmine
 from django.conf import settings
+from django.contrib.auth.models import User
 
+class LPIUser(User):
+    product = models.CharField(max_length=30)
+    company = models.CharField(max_length=100)
 
-#
-# Redmine resources
-#
+    def register(self, username, password):
+        user = LPIUser.objects.create_user(username, 
+                                                               username, 
+                                                               password)
+        redmine_user = redmine.User()
+        user.save()
 
-class BaseResource(ActiveResource):
-  _site = settings.REDMINE_URL
-  _user = settings.REDMINE_USER
-  _password = settings.REDMINE_PASS
+        saved = redmine_user.register(username, password)        
+        if saved:
+            return user
 
-class Contact(BaseResource):
-  pass
-
-class Issue(BaseResource):
-  pass
-
-class Deal(BaseResource):
-  pass
-
-class Attachment(BaseResource):
-  pass
-
-class Membership(BaseResource):
-  _site = '%s/projects/%s' % (settings.REDMINE_URL, settings.REDMINE_PROJECT)
-
-  def new_user(self, user_id):
-      self.user_id = user_id
-      self.role_ids = [8]
-      self.save()
-   
-
-class User(BaseResource):
-  def exists(self, mail):
-      users = self.find()
-      for user in users:
-          if mail == user.attributes['login']:
-              return True
-
-      return False
-
-  def register(self, mail, password):
-      self.mail = mail
-      self.login  = mail
-      self.password  = password
-      self.firstname  = 'web'
-      self.lastname  = 'user'
-      self.save()
-
-      membership = Membership()
-      membership.new_user(self.id)
-
-      return True
-      
+        return False
 
 
 # Create your models here.
 class Model(dict):
-   def __init__(self, *args):
+    def __init__(self, *args):
         dict.__init__(self, args)
 
         self.chargify = Chargify(settings.CHARGIFY_API, settings.CHARGIFY_SUBDOMAIN)
@@ -74,22 +38,22 @@ class Model(dict):
           'Incharge': '7',
         }
 
-   def __getitem__(self, key):
+    def __getitem__(self, key):
         val = dict.__getitem__(self, key)
         return val
 
-   def __setitem__(self, key, val):
+    def __setitem__(self, key, val):
         dict.__setitem__(self, key, val)
 
-   def encode_custom_fields(self, params):
-       encoded = {}
-       for key, value in params.iteritems():
+    def encode_custom_fields(self, params):
+        encoded = {}
+        for key, value in params.iteritems():
            if self.mapping.has_key(key):
                 encoded[self.mapping[key]] = value
            else:
                 encoded[key] = value
 
-       return encoded
+        return encoded
 
 class ProductFamily(Model):
     def get_by_handle(self, handle):
@@ -116,7 +80,6 @@ class Product(Model):
     def load_from_family(self, handle):
         products = []
         family = ProductFamily().get_by_handle(handle)
-        print family
         resources = self.chargify.Product().getByFamilyId(family['id'])
 
         for res in resources:
