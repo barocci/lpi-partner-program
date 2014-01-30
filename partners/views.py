@@ -35,10 +35,10 @@ def redirect(page):
 def login(request):
     ret = { 'error': 0, 'data': {} }
     user = auth.authenticate(username=request.GET['username'], 
-                                     password=request.GET['password'])
+                             password=request.GET['password'])
     if user:
         auth.login(request, user)
-        ret['data'] = {'login': user.username, 'id': user.id}
+        ret['data'] = {'username': user.username, 'id': user.id}
     else:
         ret['error'] = 1
 
@@ -81,21 +81,15 @@ def profile(request):
 
 @check_login
 def register_contact(request):
+    ret = {'error': 1, 'data:': ''}
     person = Person().create(request.GET)
     company = Company().create(request.GET)
     company['owner'] = person
     
-    #STUB
-    url = Product().hostedURL(request.GET['handle'])
-    url += '?first_name=' + person['name']
-    url += '&last_name=' + person['lastname']
-
-    data = {
-      'company': company,
-      'url': url
-    }
-
-    return renderJSON(data)
+    if person is not None and company is not None:
+        ret['error'] = 0
+    
+    return renderJSON(ret)
 
 
 def renderJSON(data):

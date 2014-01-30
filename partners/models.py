@@ -9,15 +9,13 @@ class LPIUser(User):
     company = models.CharField(max_length=100)
 
     def register(self, username, password):
-        user = LPIUser.objects.create_user(username, 
-                                                               username, 
-                                                               password)
-        redmine_user = redmine.User()
+        user = LPIUser.objects.create_user(username, username, password)
+        user.is_active = False
+        #redmine_user = redmine.User()
         user.save()
 
-        saved = redmine_user.register(username, password)        
-        if saved:
-            return user
+        #saved = redmine_user.register(username, password)        
+        return user
 
         return False
 
@@ -107,7 +105,7 @@ class Product(Model):
 
 class Company(Model):
     def create(self, args):
-        contact = Contact()
+        contact = redmine.Contact()
         contact.is_company = True
         contact.first_name = args['company_name']
         contact.visibility = 1
@@ -126,7 +124,7 @@ class Company(Model):
             avatar = Attachment.get(resource.attributes['avatar'].attributes['attachment_id'])
             self['image_url'] = avatar['content_url']
 
-        contact = Contact.find(is_company=False,cf_7=1,company=self['name'])
+        contact = redmine.Contact.find(is_company=False,cf_7=1,company=self['name'])
         if contact:
             self['owner'] = Person()
             self['owner'].load_from_resource(contact[0])
@@ -136,7 +134,7 @@ class Company(Model):
     def find_all(self, params):
         params = self.encode_custom_fields(params)
         print params
-        resources = Contact.find(is_company=1, **params)
+        resources = redmine.Contact.find(is_company=1, **params)
         companies = []
         for res in resources:
           company = Company()
@@ -147,7 +145,7 @@ class Company(Model):
 
 class Person(Model):
     def create(self, args):
-        contact = Contact()
+        contact = redmine.Contact()
         contact.is_company = True
         contact.first_name = args['owner_firstname']
         contact.last_name = args['owner_lastname']
@@ -164,8 +162,8 @@ class Person(Model):
 
 
 class Subscription(Model):
-  pass
+    pass
 
 class Reference(Model):
-  pass
+    pass
 

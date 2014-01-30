@@ -1,11 +1,45 @@
 var lpi = {
-  valid_pages: ['intro', 'training', 'companies', 'joinus','signup', 'login', 'wizard', 'offers'],
+  valid_pages: ['intro', 'training', 'companies', 'joinus',
+                'signup', 'login', 'wizard', 'offers', 'account'],
   selected_page: 'intro',
   pages: {},
 
   init: function() {
     this.init_views();
     this.init_router(); 
+    this.authenticate();
+  },
+
+  authenticate: function() {
+    console.log('auth');
+    if(this.is_logged()) {
+      this.pages.nav.login();
+    } else {
+      this.pages.nav.logout();
+    }
+  },
+
+  login: function(user) {
+    this.username = user.username;
+    this.user_id = user.user_id;
+    this.authenticate();
+  },
+
+  logout: function() {
+    $.cookie('csrftoken', '');
+    $.cookie('sessionid', '');
+    this.username = this.user_id = '';
+    console.log('porcodio');
+    this.redirect('#login');
+  },
+
+  is_logged: function() {
+    console.log($.cookie('sessionid'));
+    console.log($.cookie('csrftoken'));
+    if($.cookie('csrftoken') != '')
+      return true;
+
+    return false;
   },
 
   init_router: function() {
@@ -117,6 +151,10 @@ var lpi = {
     // wizard view
     this.pages.wizard = new WizardViewModel();
     ko.applyBindings(this.pages.wizard, $('.prtn-page-wizard')[0]);
+
+    // account view
+    this.pages.account = new AccountViewModel();
+    ko.applyBindings(this.pages.account, $('.prtn-page-account')[0]);
   },
 
   request: function(method, params, callback) {

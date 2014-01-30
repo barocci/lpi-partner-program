@@ -9,7 +9,20 @@ var NavViewModel = function() {
 
   self.selected = ko.observable('intro');
 
+  self.logged = ko.observable(false);
+
   self.intro = ko.observable();
+
+  self.login = function() {
+    self.logged(true);
+  };
+
+  self.logout = function() {
+    self.logged(false);
+    lpi.request('logout',{}, function(response) {
+      lpi.logout();
+    });
+  };
 
   self.set_page = function(page) {
     var esclude = [

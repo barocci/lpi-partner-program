@@ -103,10 +103,14 @@ header {
 
 .navbar-lpi {
   position:absolute;
-  top:-40px;
+  bottom:-30px;
   height:40px;
   padding:0px ;
   width:100%;
+}
+
+.navbar-lpi-inner {
+  position:relative;
 }
 
 .navbar-nav {
@@ -144,7 +148,11 @@ header {
   font-weight: normal: ;
 }
 
-
+.account-controls {
+  position:absolute;
+  top:-107px;
+  right:20px;
+}
 
 .header-container {
   background:#681c26;
@@ -155,6 +163,7 @@ header {
   border-bottom: 4px solid #4c141b;
   width:100%;
   text-align:center;
+  position:relative;
 }
 
 .header-container img {

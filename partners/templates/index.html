@@ -3,7 +3,9 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>LPI partners</title>
+	<title>Linux Professional Institute - Italia </title>
+     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+     <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
 	<link rel="stylesheet" href="{% static 'css/vendor/bootstrap/bootstrap.min.css' %}">
 	<link rel="stylesheet" href="{% static 'css/vendor/animate.css' %}">
 	<link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&subset=latin,latin-ext' 
@@ -19,15 +21,20 @@
       </a>  
     </div>
 
-
-  </header>
-
-
-	<div class='container prtn-container'>
-    <div class='lpi-layer'></div>
-
     <nav id='prtn-navbar' class="navbar navbar-lpi" role="navigation">
-      <div class="">
+      <div class='account-controls'>
+        <ul>
+          <li data-bind="visible: logged()">
+            <span data-bind='text:logged'></span>
+            <a data-bind="click: logout">Logout</a>
+          </li>
+          <li data-bind="visible: logged() == false">
+            <a href='#login'>Login</a>
+          </li>
+        </ul>
+
+      </div>
+      <div class="navbar-lpi-inner">
         <ul class="nav navbar-nav" data-bind='foreach: pages'>
           <li data-bind='css: { active: hash == $root.selected() }'>
              <a  data-bind='text:label, attr:{href: "#" + hash}'></a>
@@ -35,6 +42,12 @@
         </ul>
       </div>
     </nav>
+  </header>
+
+
+	<div class='container prtn-container'>
+    <div class='lpi-layer'></div>
+
 
 		<div class='prtn-page-container'>
 			<div class='prtn-page prtn-page-intro' data-bind='css: selected'>
@@ -197,6 +210,11 @@
 
         <div style='clear:both'></div> <!-- end boxes -->
 			</div>
+      
+      <!-- ACCOUNT -->
+      <div class='prtn-page prtn-page-account' data-bind='css: selected'>
+          Account
+      </div>
 
       <!-- SIGNUP -->
       <div class='prtn-page prtn-page-signup' data-bind='css: selected'>
@@ -518,6 +536,7 @@
   </footer>
   
   <script type='text/javascript' src='{% static "js/vendor/jquery/jquery.js" %}'></script>
+  <script type='text/javascript' src='{% static "js/vendor/jquery/jquery.cookie.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/routie.min.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/knockout.js/knockout-3.0.0.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/radio.min.js" %}'></script>
@@ -532,6 +551,7 @@
   <script type='text/javascript' src='{% static "js/viewmodels/intro.js" %}'></script>
   <script type='text/javascript' src='{% static "js/viewmodels/offers.js" %}'></script>
   <script type='text/javascript' src='{% static "js/viewmodels/login.js" %}'></script>
+  <script type='text/javascript' src='{% static "js/viewmodels/account.js" %}'></script>
   <script type='text/javascript' src='{% static "js/viewmodels/nav.js" %}'></script>
 
   <script type='text/javascript' src='{% static "js/lpi.js" %}'></script>

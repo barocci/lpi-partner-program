@@ -25,8 +25,7 @@ var WizardViewModel = function() {
     }
 
     lpi.request('register_contact', data, function(response) {
-      console.log(response);
-      window.location.href = response.url;
+      lpi.redirect('#account');
     });
   };
 }
