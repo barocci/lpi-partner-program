@@ -4,6 +4,9 @@ var lpi = {
   selected_page: 'intro',
   pages: {},
 
+  username: '',
+  user_id: '',
+
   init: function() {
     this.init_views();
     this.init_router(); 
@@ -11,8 +14,13 @@ var lpi = {
   },
 
   authenticate: function() {
-    console.log('auth');
     if(this.is_logged()) {
+      if(this.username == '' || this.user_id == '') {
+        var that = this;
+        this.request('user_info',{}, function(response) {
+           that.login(response);
+        });
+      }
       this.pages.nav.login();
     } else {
       this.pages.nav.logout();
@@ -20,22 +28,21 @@ var lpi = {
   },
 
   login: function(user) {
-    this.username = user.username;
-    this.user_id = user.user_id;
-    this.authenticate();
+    if(user) {
+      this.username = user.username;
+      this.user_id = user.user_id;
+      this.authenticate();
+    }
   },
 
   logout: function() {
     $.cookie('csrftoken', '');
     $.cookie('sessionid', '');
     this.username = this.user_id = '';
-    console.log('porcodio');
     this.redirect('#login');
   },
 
   is_logged: function() {
-    console.log($.cookie('sessionid'));
-    console.log($.cookie('csrftoken'));
     if($.cookie('csrftoken') != '')
       return true;
 
@@ -93,9 +100,9 @@ var lpi = {
   loading: function(flag) {
     var animations = 'lpi-layer-active';
     if(flag) {
-      $('.lpi-layer').addClass(animations);
+      $('.lpi-layer-image').addClass(animations);
     } else {
-      $('.lpi-layer').removeClass(animations);
+      $('.lpi-layer-image').removeClass(animations);
     }
   },
 

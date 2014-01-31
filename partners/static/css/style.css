@@ -31,14 +31,31 @@ header {
   z-index:10;
 }
 
+.lpi-layer-container {
+  position:absolute;
+  width:472px;
+  height:472px;
+  right:0px;
+  top:60px;
+  z-index:-2;
+  overflow:hidden;
+}
+
 .lpi-layer {
-  background:url('../images/logo-lpi-big.png') no-repeat;
+  position:relative;
+  width:472px;
+  height:472px;
+  overflow:hidden;
+}
+
+.lpi-layer-image {
+  background-image:url('../images/logo-lpi-big.png');
+  background-repeat: no-repeat;
+  background-position:0px 0px;
   width:472px;
   height:472px;
   z-index:-1;
-  background-size:100% 100%;
-  right:-200px;
-  top:-70px;
+  left:100px;
   position:absolute;
   opacity:0.3;
   -webkit-transition:all 1s;
@@ -74,19 +91,19 @@ header {
 
 @-moz-keyframes rotate {
   from {
-    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
   }
   to { 
-    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
   }
 }
 
 @keyframes rotate {
   from {
-    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   to { 
-    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
@@ -150,9 +167,16 @@ header {
 
 .account-controls {
   position:absolute;
-  top:-107px;
-  right:20px;
+  top:-117px;
+  right:15px;
+  margin:0px 0px 0px 0px !important;
+  min-height:0px;
 }
+.account-controls ul li{
+  float:left;
+  margin-left:15px;
+}
+
 
 .header-container {
   background:#681c26;

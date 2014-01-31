@@ -53,6 +53,27 @@ class Model(dict):
 
         return encoded
 
+class Customer(Model):
+    def create(self, email, first_name, last_name):
+        customer = self.chargify.Customer()
+        print dir(customer)
+        customer.first_name = first_name
+        customer.last_name = last_name
+        customer.email = email
+        customer.save()
+        print "saving customer %s" % customer.first_name
+        self.load_from_resource(customer)
+
+        return self
+
+    def load_from_resource(self, resource):
+        self['first_name'] = resource.first_name
+        self['last_name'] = resource.last_name
+        self['email'] = resource.email
+
+        return self
+
+
 class ProductFamily(Model):
     def get_by_handle(self, handle):
         families = self.chargify.ProductFamily().getAll()
@@ -104,10 +125,10 @@ class Product(Model):
 
 
 class Company(Model):
-    def create(self, args):
+    def create(self, company_name):
         contact = redmine.Contact()
         contact.is_company = True
-        contact.first_name = args['company_name']
+        contact.first_name = company_name
         contact.visibility = 1
         contact.custom_fields = [
           { 'value': 0, 'id': self.mapping_id['Incharge']}
@@ -144,20 +165,21 @@ class Company(Model):
         return companies
 
 class Person(Model):
-    def create(self, args):
+    def create(self, company_name, first_name, last_name, role):
         contact = redmine.Contact()
-        contact.is_company = True
-        contact.first_name = args['owner_firstname']
-        contact.last_name = args['owner_lastname']
-        contact.job_title = args['owner_role']
+        contact.first_name = first_name
+        contact.last_name = last_name
+        contact.job_title = role
+        contact.company = company_name
         contact.project_id = settings.REDMINE_PROJECT
-        #contact.save()
+        contact.is_company = False
+        contact.save()
         return self.load_from_resource(contact)
 
     def load_from_resource(self, resource):
-        self['name'] = resource.attributes['first_name']
-        self['lastname'] = resource.attributes['last_name']
-        self['job'] = resource.attributes['job_title']
+        self['first_name'] = resource.attributes['first_name']
+        self['last_name'] = resource.attributes['last_name']
+        self['job_title'] = resource.attributes['job_title']
         return self
 
 

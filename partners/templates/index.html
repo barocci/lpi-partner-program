@@ -4,8 +4,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Linux Professional Institute - Italia </title>
-     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-     <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
 	<link rel="stylesheet" href="{% static 'css/vendor/bootstrap/bootstrap.min.css' %}">
 	<link rel="stylesheet" href="{% static 'css/vendor/animate.css' %}">
 	<link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&subset=latin,latin-ext' 
@@ -14,6 +14,10 @@
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
+  <div class="lpi-layer-container">
+       <div class='lpi-layer-image'></div>
+  </div>
+
   <header>
     <div class="header-container">
       <a href=''>
@@ -22,18 +26,25 @@
     </div>
 
     <nav id='prtn-navbar' class="navbar navbar-lpi" role="navigation">
-      <div class='account-controls'>
-        <ul>
-          <li data-bind="visible: logged()">
-            <span data-bind='text:logged'></span>
-            <a data-bind="click: logout">Logout</a>
-          </li>
-          <li data-bind="visible: logged() == false">
-            <a href='#login'>Login</a>
-          </li>
-        </ul>
-
+      <div class='account-controls navbar'>
+        <div class='navbar_inner'>
+          <ul>
+            <li data-bind="visible: logged()">
+              <span data-bind="text: 'Ciao ' + username()"></span>
+            </li>
+            <li data-bind="visible: logged()">
+              <a href="#account">Mio account</a>
+            </li>
+            <li data-bind="visible: logged()">
+              <a data-bind="click: logout">Logout</a>
+            </li>
+            <li data-bind="visible: logged() == false">
+              <a href='#login'>Login</a>
+            </li>
+          </ul>
+        </div>
       </div>
+
       <div class="navbar-lpi-inner">
         <ul class="nav navbar-nav" data-bind='foreach: pages'>
           <li data-bind='css: { active: hash == $root.selected() }'>
@@ -46,8 +57,6 @@
 
 
 	<div class='container prtn-container'>
-    <div class='lpi-layer'></div>
-
 
 		<div class='prtn-page-container'>
 			<div class='prtn-page prtn-page-intro' data-bind='css: selected'>

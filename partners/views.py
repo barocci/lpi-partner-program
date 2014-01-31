@@ -51,7 +51,6 @@ def logout(request):
 
 def register(request):
     ret = { 'error': 0, 'data': {} }
-    
     try:
         user = LPIUser().register(request.GET['mail'], request.GET['password'])        
         user.product = request.GET['product']
@@ -75,6 +74,15 @@ def register(request):
     return renderJSON(ret)
 
 @check_login
+def user_info(request):
+    ret = {
+      'username': request.user.username,
+      'user_id': request.user.id
+    }
+
+    return renderJSON(ret)
+
+@check_login
 def profile(request):
     ret = {'error': 0, 'data:': ''}
     return renderJSON(ret)
@@ -82,19 +90,34 @@ def profile(request):
 @check_login
 def register_contact(request):
     ret = {'error': 1, 'data:': ''}
-    person = Person().create(request.GET)
-    company = Company().create(request.GET)
+    print 'registering contact %s %s' %(request.GET['owner_firstname'], request.GET['owner_lastname'])
+    print request.GET
+
+#    try:
+    person = Person().create(request.GET['company_name'],
+                             request.GET['owner_firstname'],
+                             request.GET['owner_lastname'],
+                             request.GET['owner_role'])
+    company = Company().create(request.GET['company_name'])
     company['owner'] = person
-    
+    print "email: %s" % request.user.email 
+    print person
+    customer = Customer().create(request.user.email, 
+                               person['first_name'], 
+                               person['last_name'])
+        
+    print "created customer %s" % customer['first_name']
     if person is not None and company is not None:
         ret['error'] = 0
+#    except Exception, e:
+#        print "Chargify error %s" % e
     
     return renderJSON(ret)
 
 
 def renderJSON(data):
     return HttpResponse(json.dumps(data, separators=(',', ':')), 
-                                                                   content_type="application/json")
+                                         content_type="application/json")
 
 
 
