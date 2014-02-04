@@ -376,6 +376,10 @@ class ChargifyCustomer(ChargifyBase):
         obj = ChargifySubscription(self.api_key, self.sub_domain)
         return obj.getByCustomerId(self.id)
 
+    def getManagementInfo(self, id):
+        obj = self.getById(id)
+        return self._get('/portal/customers/%s/management_link.xml' % obj.id)   
+
     def save(self):
         return self._save('customers', 'customer')
 

@@ -53,9 +53,15 @@ def register(request):
     ret = { 'error': 0, 'data': {} }
     try:
         user = LPIUser().register(request.GET['mail'], request.GET['password'])        
-        user.product = request.GET['product']
         user.save()
+
+
         if user:
+            subscription = LPISubscription.objects.create(product=request.GET['product'],
+                                                       user=user,
+                                                       active=False)
+            subscription.save()
+
             user = auth.authenticate(username=request.GET['mail'], 
                                              password=request.GET['password'])
             if user:
@@ -63,10 +69,10 @@ def register(request):
                 ret['data'] = {'login': user.username, 'id': user.id}
             else:
                 ret['error'] = 2  # error registering
-                ret['data'] = 'Error registering redmine_user.'
+                ret['data'] = 'Error registering user.'
         else:
                 ret['error'] = 2  # error registering
-                ret['data'] = 'Error registering redmine_user.'
+                ret['data'] = 'Error registering user.'
     except Exception, e:
         ret['error'] = 1
         ret['data'] = 'User already exists.'
@@ -84,33 +90,66 @@ def user_info(request):
 
 @check_login
 def profile(request):
-    ret = {'error': 0, 'data:': ''}
+    ret = {'error': 0, 'data': []}
+    if request.GET.has_key('id'):
+        contact = Contact().find_one({id: request.GET['id']})
+        if contact
+        ret['data']
+
+    return renderJSON(ret);
+
+
+@check_login
+def account_info(request):
+    ret = {'error': 0, 'data': []}
+
+    if request.GET['section'] == 'partnership':
+        data = {'training':[], 'services':[], 'academic':[]}
+        subscriptions = LPISubscription.objects.all().filter(user__id=request.user.id)
+        for sub in subscriptions:
+            product = Product().get_by_handle(sub.product)
+            info = {}
+            info['active'] = sub.active  
+            info['company'] = sub.company  
+            info['product'] = product  
+            info['id'] = sub.id  
+
+            family = product.family()
+
+            if family:
+                data[family].append(info)
+
+
+        ret['data'] = data
+
     return renderJSON(ret)
 
 @check_login
 def register_contact(request):
     ret = {'error': 1, 'data:': ''}
-    print 'registering contact %s %s' %(request.GET['owner_firstname'], request.GET['owner_lastname'])
-    print request.GET
 
-#    try:
-    person = Person().create(request.GET['company_name'],
-                             request.GET['owner_firstname'],
-                             request.GET['owner_lastname'],
-                             request.GET['owner_role'])
-    company = Company().create(request.GET['company_name'])
-    company['owner'] = person
-    print "email: %s" % request.user.email 
-    print person
-    customer = Customer().create(request.user.email, 
-                               person['first_name'], 
-                               person['last_name'])
-        
-    print "created customer %s" % customer['first_name']
-    if person is not None and company is not None:
-        ret['error'] = 0
-#    except Exception, e:
-#        print "Chargify error %s" % e
+    try:
+        person = Person().create(request.GET['company_name'],
+                                 request.GET['owner_firstname'],
+                                 request.GET['owner_lastname'],
+                                 request.GET['owner_role'])
+        company = Company().create(request.GET['company_name'])
+        company['owner'] = person
+
+        customer = Customer().create(request.user.email, 
+                                   person['first_name'], 
+                                   person['last_name'])
+
+        subscription = LPISubscription.objects.get(user__id=request.user.id)
+        subscription.company = company['id']
+        subscription.save()
+
+            
+        if person is not None and company is not None:
+            ret['error'] = 0
+
+    except Exception, e:
+        print "Chargify error %s" % e
     
     return renderJSON(ret)
 

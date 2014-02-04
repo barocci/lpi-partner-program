@@ -223,18 +223,85 @@
       <!-- ACCOUNT -->
       <div class='prtn-page prtn-page-account' data-bind='css: selected'>
           <div class="prtn-page-sidebar"> 
-            <ul>
-              <li class='active'>
-                  Partnership <span></span>
+            <ul data-bind='foreach: sections'>
+              <li data-bind='css: { active: $parent.active_section() == slug}'>
+                <a data-bind='click: $parent.show_section, text: name'></a>
+                <span></span>
               </li>
-              <li>Account <span></span></li>
-              <li>Pagamenti <span></span></li>
-              <li>Ordini <span></span></li>
-              <li>Messaggi <span></span></li>
             </ul>
           </div>
-          <div class='prtn-page-content'>
-            <h1>Partnership</h1>
+
+          <div class='prtn-page-content' data-bind='visible: loading() == false'>
+            <div data-bind='visible: active_section() == "partnership"'>
+              <h1>Partnership</h1>
+
+              <div data-bind='visible: training().length > 0'>
+                tra
+              </div>
+
+              <div data-bind='visible: services().length > 0'>
+                <h3>Azienda di servizi</h3>
+
+                <table class='table'>
+                  <thead>
+                    <tr>
+                      <th>Prodotto</th>
+                      <th>Stato</th>
+                      <th>Scadenza</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody data-bind='foreach: services()'>
+                    <tr>
+                      <td>
+                         <a data-bind='text: product.name, click: $parent.goto_profile'></a>
+                      </td>
+                      <td data-bind='text: $parent.state(active)'>
+                      <td data-bind=''>- </td>
+                      <td>
+                        <a class='button button-disable'>Paga</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div data-bind='visible: academic().length > 0'>
+                aca
+              </div>
+
+            </div>
+            
+            <div data-bind='visible: active_section() == "profile"'>
+              <h1>Profilo</h1>
+              <div data-bind='visible: selected_profile() == false'>
+                <ul data-bind='foreach: services()'>
+                  <li>
+                    <a data-bind='text: product.name, click: $parent.goto_profile'></a>
+                  </li>
+                </ul>
+
+              </div>
+              <div data-bind='visible: selected_profile() != false'>
+                <a data-bind='click: show_all_profiles'>Visualizza tutti i profili</a>
+              </div>
+            </div>
+
+            <div data-bind='visible: active_section() == "account"'>
+              <h1>Account</h1>
+            </div>
+
+            <div data-bind='visible: active_section() == "billing"'>
+              <h1>Pagamenti</h1>
+            </div>
+
+            <div data-bind='visible: active_section() == "orders"'>
+              <h1>Ordini</h1>
+            </div>
+
+            <div data-bind='visible: active_section() == "messages"'>
+              <h1>Messages</h1>
+            </div>
           </div>
       </div>
 
@@ -493,13 +560,12 @@
         </div>
       </div>
 
-
       <div class='prtn-page prtn-page-login' data-bind='css: selected'>
         <h1>Login</h1>
         <br>
         <form action=''>
+          
           <div class="col-sm-5">
-
             <div class="input-group">
               <span class="input-group-addon">
                 <span class='glyphicon glyphicon-envelope'></span>
@@ -523,7 +589,6 @@
             <hr>
 
             <a class='btn btn-default' data-bind='click: login'>Entra</a>
-
           </div>
 
           <div class='col-sm-5 col-sm-offset-1'>
@@ -533,8 +598,8 @@
             <p>
               <a data-bind='click: recover_password'>Dimenticato la password?</a>
             </p>
-            
           </div>
+
         </form>
       </div>
 

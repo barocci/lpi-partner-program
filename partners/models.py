@@ -3,9 +3,9 @@ from lib.chargify.chargify import Chargify
 from lib.redmine import redmine
 from django.conf import settings
 from django.contrib.auth.models import User
+import datetime
 
 class LPIUser(User):
-    product = models.CharField(max_length=30)
     company = models.CharField(max_length=100)
 
     def register(self, username, password):
@@ -18,6 +18,17 @@ class LPIUser(User):
         return user
 
         return False
+
+class LPISubscription(models.Model):
+    product = models.CharField(max_length=30)
+    user = models.ForeignKey(LPIUser)
+    company = models.CharField(max_length=100)
+    active = models.CharField(max_length=15)
+    date = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        self.date = datetime.datetime.today()
+        return super(LPISubscription, self).save(*args, **kwargs)
 
 
 # Create your models here.
@@ -43,6 +54,8 @@ class Model(dict):
     def __setitem__(self, key, val):
         dict.__setitem__(self, key, val)
 
+    
+
     def encode_custom_fields(self, params):
         encoded = {}
         for key, value in params.iteritems():
@@ -54,14 +67,20 @@ class Model(dict):
         return encoded
 
 class Customer(Model):
+
+    def get_managment_info(self):
+        customer = self.chargify.Customer()
+        info = customer.getManagementInfo('4484267')
+        return info
+
+         
+
     def create(self, email, first_name, last_name):
         customer = self.chargify.Customer()
-        print dir(customer)
         customer.first_name = first_name
         customer.last_name = last_name
         customer.email = email
         customer.save()
-        print "saving customer %s" % customer.first_name
         self.load_from_resource(customer)
 
         return self
@@ -77,8 +96,6 @@ class Customer(Model):
 class ProductFamily(Model):
     def get_by_handle(self, handle):
         families = self.chargify.ProductFamily().getAll()
-        print families
-        print 'looking for ', handle
         for family in families:
             if family.handle == handle:
                 print 'found'
@@ -108,6 +125,17 @@ class Product(Model):
 
         return products
 
+    def family(self):
+        for key, family in settings.PRODUCT_FAMILIES.iteritems():
+            if self['handle'].find(key):
+                return family
+
+        return False
+
+    def get_by_handle(self, handle):
+        resource = self.chargify.Product().getByHandle(handle)
+        return self.load_from_resource(resource)
+
     def hostedURL(self, handle):
         resource = self.chargify.Product().getByHandle(handle)
 
@@ -123,23 +151,40 @@ class Product(Model):
         return self
         #self['price'] = "%.2f" % int(resource.price_in_cents)/100
 
+class Contact(Model):
+    def find(self, id):
+        resource = redmine.Contact.find(id_=id)
 
-class Company(Model):
+        return resource
+
+    def find_one(self, params):
+        params = self.encode_custom_fields(params)
+        resource = redmine.Contact.find_one(**params)
+
+        return resource
+
+    def find_all(self, params):
+        params = self.encode_custom_fields(params)
+        resources = redmine.Contact.find(**params)
+        return resources
+        
+
+class Company(Contact):
     def create(self, company_name):
         contact = redmine.Contact()
         contact.is_company = True
         contact.first_name = company_name
         contact.visibility = 1
         contact.custom_fields = [
-          { 'value': 0, 'id': self.mapping_id['Incharge']}
+            { 'value': 0, 'id': self.mapping_id['Incharge']}
         ]
         contact.project_id = settings.REDMINE_PROJECT
         contact.save()
         return self.load_from_resource(contact)
 
-
     def load_from_resource(self, resource):
         self['name'] = resource.attributes['first_name']
+        self['id'] = resource.attributes['id']
         self['image_url'] = ''
         if resource.attributes.has_key('avatar'):
             avatar = Attachment.get(resource.attributes['avatar'].attributes['attachment_id'])
@@ -153,18 +198,18 @@ class Company(Model):
         return self
 
     def find_all(self, params):
-        params = self.encode_custom_fields(params)
-        print params
-        resources = redmine.Contact.find(is_company=1, **params)
+        params['is_company'] = 1
+        resources = Contact().find_all(params)
         companies = []
         for res in resources:
-          company = Company()
-          company.load_from_resource(res)
-          companies.append(company)
+            company = Company()
+            company.load_from_resource(res)
+            companies.append(company)
 
         return companies
 
-class Person(Model):
+
+class Person(Contact):
     def create(self, company_name, first_name, last_name, role):
         contact = redmine.Contact()
         contact.first_name = first_name
@@ -177,10 +222,22 @@ class Person(Model):
         return self.load_from_resource(contact)
 
     def load_from_resource(self, resource):
+        self['id'] = resource.attributes['id']
         self['first_name'] = resource.attributes['first_name']
         self['last_name'] = resource.attributes['last_name']
         self['job_title'] = resource.attributes['job_title']
         return self
+
+    def find_all(self, params):
+        params['is_company'] = 0    
+        resources = Contact().find_all(params)
+        people = []
+        for res in resources:
+            person = Person()
+            person.load_from_resource(res)
+            people.append(person)
+
+        return people
 
 
 class Subscription(Model):

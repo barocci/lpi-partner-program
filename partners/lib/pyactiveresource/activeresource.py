@@ -371,7 +371,7 @@ class ActiveResource(object):
             return resources[0]
 
     @classmethod
-    def find_one(cls, from_, **kwargs):
+    def find_one(cls, from_=None, **kwargs):
         """Get a single resource from a specific URL.
 
         Args:

@@ -420,6 +420,10 @@ footer .sitemap a:hover {
   display:none;
 }
 
+.prtn-page-sidebar ul li.active > a {
+  color:#fff;
+}
+
 .prtn-page-sidebar ul li.active > span {
   display:block;
   position:absolute;
@@ -436,3 +440,39 @@ footer .sitemap a:hover {
   padding:0px 20px 30px 280px;
 }
 
+.button {
+  background-clip: padding-box;
+  border-radius: 5px;
+  background-color: rgb(116, 31, 42);
+  background-image: linear-gradient(rgb(156, 42, 57), rgb(96, 26, 35));
+  border: 1px solid rgb(96, 26, 35);
+  box-shadow: 1px 1px 0px 0px rgb(15, 4, 6), 1px 1px 3px 0px rgb(76, 20, 27), 0px 1px 0px 0px rgb(176, 47, 64) inset;
+  color: rgb(243, 210, 214);
+  font-weight: bold;
+  padding: 0.5em 1.2em;
+  overflow: visible;
+  position: relative;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px rgb(56, 15, 20);
+  text-transform: uppercase;
+  width: auto;
+}
+
+.button:hover {
+  color:#fff;
+  text-decoration: none;
+}
+
+
+.button-disable {
+  border: 1px solid rgb(96, 96, 96);
+  text-shadow: 0px 1px 0px rgb(56, 56, 56);
+  color: rgb(210, 210, 210);
+  box-shadow: 0px 1px 0px 0px rgb(100, 100, 100) inset;
+  background-image: linear-gradient(rgb(156, 156, 156), rgb(75, 66, 75));
+}
+
+.button-disable:hover {
+  color: rgb(210, 210, 210);
+  text-decoration: none;
+}
