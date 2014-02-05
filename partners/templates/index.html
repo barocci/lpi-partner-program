@@ -273,17 +273,200 @@
             </div>
             
             <div data-bind='visible: active_section() == "profile"'>
-              <h1>Profilo</h1>
+              <h1>
+                <small data-bind='visible: selected_profile() != false' class='pull-right'>
+                  <a data-bind='click: show_all_profiles'>Visualizza tutti i profili</a>
+                </small>
+                Profilo: 
+                <span data-bind='text: profile_product()!=false?profile_product():""'></span>
+                
+              </h1>
               <div data-bind='visible: selected_profile() == false'>
                 <ul data-bind='foreach: services()'>
                   <li>
                     <a data-bind='text: product.name, click: $parent.goto_profile'></a>
                   </li>
                 </ul>
+                
 
               </div>
               <div data-bind='visible: selected_profile() != false'>
-                <a data-bind='click: show_all_profiles'>Visualizza tutti i profili</a>
+                <div class="row">
+                  <div data-bind='' class='col-sm-6'>
+                    <h3>Azienda</h3>
+                    <form class='fixed-headers'>
+                      
+                      <div class="input-group">
+                        <span class="input-group-addon">
+                          Nome azienda
+                        </span>
+                        <input type='text' class='form-control' 
+                               placeholder='Nome azienda'>
+                      </div>
+
+                      <div class="input-group">
+                        <span class="input-group-addon">
+                          Settore
+                        </span>
+                        <input type='text' class='form-control' 
+                               placeholder='Settore'>
+                      </div>
+
+                      <div class="input-group">
+                        <span class="input-group-addon">
+                          Descrizione
+                        </span>
+                        <textarea class='form-control' style='height:100px'
+                               placeholder='Descrizione'></textarea>
+                      </div>
+
+                      <div class="input-group">
+                        <span class="input-group-addon">
+                          Indirizzo
+                        </span>
+                        <input type='text' class='form-control' 
+                               placeholder='Indirizzo'>
+                        <input type='text' class='form-control' 
+                               placeholder='Indirizzo 2'>
+                        <input type='text' class='form-control' 
+                               placeholder='Citta'>
+                        <input type='text' class='form-control' 
+                               placeholder='CAP'>
+                        <input type='text' class='form-control' 
+                               placeholder='Paese'>
+                      </div>
+
+                      <div class="input-group">
+                        <span class="input-group-addon">
+                          Partita IVA
+                        </span>
+                        <input type='text' class='form-control' 
+                               placeholder='Partita IVA'>
+                      </div>
+
+                      <div class="input-group">
+                        <span class="input-group-addon">
+                          Website
+                        </span>
+                        <input type='text' class='form-control' 
+                               placeholder='Website'>
+                      </div>
+
+                      <div class="input-group">
+                        <span class="input-group-addon">
+                          Telefono
+                        </span>
+                        <input type='text' class='form-control' 
+                               placeholder='Telefono'>
+                      </div>
+
+                      <div class="input-group">
+                        <span class="input-group-addon">
+                          Email
+                        </span>
+                        <input type='text' class='form-control' 
+                               placeholder='Email'>
+                      </div>
+
+                      <a class='button pull-right'>Salva</a>
+                    </form>
+                    </div>
+
+                    <div class='col-sm-4 col-sm-offset-1 image-avatar'>
+                      <div class='avatar-container'>
+
+                        <div class="row avatar-box">
+                          <img src='{% static "images/logo-moc.jpg" %}'>
+                        </div>
+                        <hr>
+                        <div class="row">
+                          <a data-bind=''>Cambia immagine</a>
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="row">
+                    <div data-bind='' class='col-sm-6'>
+                      <form class='fixed-headers'>
+
+                        <h3>Responsabile azienda</h3>
+                         <div class="input-group">
+                          <span class="input-group-addon">
+                            Nome
+                          </span>
+                          <input type='text' class='form-control' 
+                                 placeholder='Nome'>
+                        </div>
+                         <div class="input-group">
+                          <span class="input-group-addon">
+                            Cognome
+                          </span>
+                          <input type='text' class='form-control' 
+                                 placeholder='Cognome'>
+                        </div>
+                         <div class="input-group">
+                          <span class="input-group-addon">
+                            Titolo
+                          </span>
+                          <input type='text' class='form-control' 
+                                 placeholder='Titolo'>
+                        </div>
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            Indirizzo
+                          </span>
+                          <input type='text' class='form-control' 
+                                 placeholder='Indirizzo'>
+                          <input type='text' class='form-control' 
+                                 placeholder='Indirizzo 2'>
+                          <input type='text' class='form-control' 
+                                 placeholder='Citta'>
+                          <input type='text' class='form-control' 
+                                 placeholder='CAP'>
+                          <input type='text' class='form-control' 
+                                 placeholder='Paese'>
+                        </div>
+
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            Partita IVA
+                          </span>
+                          <input type='text' class='form-control' 
+                                 placeholder='Partita IVA'>
+                        </div>
+
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            Website
+                          </span>
+                          <input type='text' class='form-control' 
+                                 placeholder='Website'>
+                        </div>
+
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            Telefono
+                          </span>
+                          <input type='text' class='form-control' 
+                                 placeholder='Telefono'>
+                        </div>
+
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            Email
+                          </span>
+                          <input type='text' class='form-control' 
+                                 placeholder='Email'>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                
               </div>
             </div>
 
@@ -617,7 +800,7 @@
       </ul>
 
       <div class="copyright">
-        © 1999-2013 Linux Professional Institute Italia.
+        © 1999-2014 Linux Professional Institute Italia.
       </div>
     </div>
   </footer>

@@ -476,3 +476,26 @@ footer .sitemap a:hover {
   color: rgb(210, 210, 210);
   text-decoration: none;
 }
+
+.fixed-headers .input-group-addon {
+  width:140px;
+  vertical-align:top;
+  text-align:left;
+}
+
+.input-group {
+  width:100%;
+}
+
+.avatar-container {
+  background:#fff;
+  margin-top:65px;
+  text-align:center;
+  height:250px;
+  border:1px solid rgb(116, 31, 42);
+  padding-top:20px;
+}
+
+.avatar-box img {
+  height:150px;
+}

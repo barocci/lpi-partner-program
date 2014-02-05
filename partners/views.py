@@ -93,8 +93,8 @@ def profile(request):
     ret = {'error': 0, 'data': []}
     if request.GET.has_key('id'):
         contact = Contact().find_one({id: request.GET['id']})
-        if contact
-        ret['data']
+        if contact:
+            ret['data'] = contact
 
     return renderJSON(ret);
 

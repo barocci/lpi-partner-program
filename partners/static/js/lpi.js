@@ -15,15 +15,16 @@ var lpi = {
 
   authenticate: function() {
     if(this.is_logged()) {
+      console.log('is logged');
       if(this.username == '' || this.user_id == '') {
         var that = this;
         this.request('user_info',{}, function(response) {
-           that.login(response);
+          that.login(response);
         });
       }
       this.pages.nav.login();
     } else {
-      this.pages.nav.logout();
+      //this.pages.nav.logout();
     }
   },
 
@@ -43,6 +44,7 @@ var lpi = {
   },
 
   is_logged: function() {
+    console.log($.cookie('csrftoken'));
     if($.cookie('csrftoken') != '')
       return true;
 

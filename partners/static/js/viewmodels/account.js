@@ -18,7 +18,7 @@ var AccountViewModel = function() {
   self.loading = ko.observable(true);
 
   self.selected_profile = ko.observable(false);
-
+  self.profile_product = ko.observable(false);
 
   self.init = function() {
     if(!lpi.is_logged()) {
@@ -30,11 +30,13 @@ var AccountViewModel = function() {
 
   self.goto_profile = function(obj) {
     self.selected_profile(obj.company);
+    self.profile_product(obj.product.name);
     self.show_section({slug: 'profile'});
   }
 
   self.show_all_profiles = function() {
     self.selected_profile(false);
+    self.profile_product(false);
     self.ready['profile']();
   }
 
