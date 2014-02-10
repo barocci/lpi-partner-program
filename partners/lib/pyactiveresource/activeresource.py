@@ -487,6 +487,8 @@ class ActiveResource(object):
         else:
 
             path = cls._collection_path(prefix_options, query_options)
+
+            print path
         return cls._build_list(cls.connection.get(path, cls.headers),
                                prefix_options)
 

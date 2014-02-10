@@ -16,7 +16,6 @@ def check_login(view):
 
       return wrapper
 
-
 def index(request):
     return render_to_response('index.html', {}, 
             context_instance=RequestContext(request))
@@ -26,7 +25,6 @@ def load_products(request):
 
 def search(request):
     return renderJSON(Company().find_all(request.GET))
-
 
 def redirect(page):
     data = {'redirect': page}
@@ -54,7 +52,6 @@ def register(request):
     try:
         user = LPIUser().register(request.GET['mail'], request.GET['password'])        
         user.save()
-
 
         if user:
             subscription = LPISubscription.objects.create(product=request.GET['product'],
@@ -92,7 +89,7 @@ def user_info(request):
 def profile(request):
     ret = {'error': 0, 'data': []}
     if request.GET.has_key('id'):
-        contact = Contact().find_one({id: request.GET['id']})
+        contact = Contact().find_one({'id': request.GET['id']})
         if contact:
             ret['data'] = contact
 
@@ -122,6 +119,20 @@ def account_info(request):
 
         ret['data'] = data
 
+    if request.GET['section'] == 'profile':
+        company = Company().find(request.GET['data'])
+        commercial = company['Commercial']
+        incharge = company['Incharge']
+
+        del company['Incharge']
+        del company['Commercial']
+        ret['data'] = { 
+          'company': company,
+          'commercial': commercial,
+          'incharge': incharge
+        }
+
+  
     return renderJSON(ret)
 
 @check_login

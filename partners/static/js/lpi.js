@@ -24,6 +24,7 @@ var lpi = {
       }
       this.pages.nav.login();
     } else {
+      console.log('not logged');
       //this.pages.nav.logout();
     }
   },
@@ -45,7 +46,8 @@ var lpi = {
 
   is_logged: function() {
     console.log($.cookie('csrftoken'));
-    if($.cookie('csrftoken') != '')
+    if($.cookie('csrftoken') != undefined && 
+       $.cookie('csrftoken') != '')
       return true;
 
     return false;
@@ -56,26 +58,32 @@ var lpi = {
 
     function route(page, args) {
       if(that.valid_pages.indexOf(page) >= 0) {
-         var old_view = that.pages[that.selected_page];
-         var new_view = that.pages[page];
-         that.loading(true);
-         that.pages.nav.set_page(page);
-         old_view.end(page, args);
-         new_view.init(args);
+        var old_view = that.pages[that.selected_page];
+        var new_view = that.pages[page];
 
-         if(page != that.selected_page) {
-           old_view.out_transition(function() {
+        if(!lpi.is_logged() && new_view.require_login) {
+          console.log('redirecting');
+          that.redirect('#login');
+          return;
+        }
+
+        that.loading(true);
+        that.pages.nav.set_page(page);
+        old_view.end(page, args);
+        new_view.init(args);
+
+        if(page != that.selected_page) {
+          old_view.out_transition(function() {
               that.selected_page = page;
               new_view.in_transition();
               that.loading(false);
-           });
-         } else {
+          });
+        } else {
            new_view.in_transition();
            that.loading(false);
+        }
 
-         }
-
-         $('body,html').animate({scrollTop: 0}, 500);
+        $('body,html').animate({scrollTop: 0}, 500);
       }
     }
 

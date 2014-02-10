@@ -15,7 +15,7 @@
 </head>
 <body>
   <div class="lpi-layer-container">
-       <div class='lpi-layer-image'></div>
+    <div class='lpi-layer-image'></div>
   </div>
 
   <header>
@@ -65,7 +65,7 @@
 			  	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 			  </p>
 
-			 <div class='prtn-box-container'>
+  			<div class='prtn-box-container'>
 			 	  <div class='prtn-box prtn-box-3 prtn-box-left' data-bind='css: box_left_show'>
 			 	  	<div class='prtn-box-inner'>
 				 	  	<h3>Formazione</h3>
@@ -301,6 +301,7 @@
                           Nome azienda
                         </span>
                         <input type='text' class='form-control' 
+                               data-bind='value: profiles.company.name()'
                                placeholder='Nome azienda'>
                       </div>
 
@@ -309,6 +310,7 @@
                           Settore
                         </span>
                         <input type='text' class='form-control' 
+                               data-bind='value: profiles.company.job_title()'
                                placeholder='Settore'>
                       </div>
 
@@ -316,8 +318,9 @@
                         <span class="input-group-addon">
                           Descrizione
                         </span>
-                        <textarea class='form-control' style='height:100px'
-                               placeholder='Descrizione'></textarea>
+                        <textarea class='form-control' style='height:100px' 
+                                  data-bind='value: profiles.company.description()'
+                                  placeholder='Descrizione'></textarea>
                       </div>
 
                       <div class="input-group">
@@ -325,14 +328,16 @@
                           Indirizzo
                         </span>
                         <input type='text' class='form-control' 
+                               data-bind='value: profiles.company.street()'
                                placeholder='Indirizzo'>
-                        <input type='text' class='form-control' 
-                               placeholder='Indirizzo 2'>
-                        <input type='text' class='form-control' 
+                        <input type='text' class='form-control'
+                               data-bind='value: profiles.company.city()'
                                placeholder='Citta'>
-                        <input type='text' class='form-control' 
+                        <input type='text' class='form-control'
+                               data-bind='value: profiles.company.postcode()'
                                placeholder='CAP'>
-                        <input type='text' class='form-control' 
+                        <input type='text' class='form-control'
+                               data-bind='value: profiles.company.country()'
                                placeholder='Paese'>
                       </div>
 
@@ -341,6 +346,7 @@
                           Partita IVA
                         </span>
                         <input type='text' class='form-control' 
+                               data-bind='value: profiles.company.piva()'
                                placeholder='Partita IVA'>
                       </div>
 
@@ -349,6 +355,7 @@
                           Website
                         </span>
                         <input type='text' class='form-control' 
+                               data-bind='value: profiles.company.website()'
                                placeholder='Website'>
                       </div>
 
@@ -356,7 +363,8 @@
                         <span class="input-group-addon">
                           Telefono
                         </span>
-                        <input type='text' class='form-control' 
+                        <input type='text' class='form-control'
+                               data-bind='value: profiles.company.phone()'
                                placeholder='Telefono'>
                       </div>
 
@@ -364,7 +372,8 @@
                         <span class="input-group-addon">
                           Email
                         </span>
-                        <input type='text' class='form-control' 
+                        <input type='text' class='form-control'
+                               data-bind='value: profiles.company.email()'
                                placeholder='Email'>
                       </div>
 
@@ -392,76 +401,45 @@
                     <div data-bind='' class='col-sm-6'>
                       <form class='fixed-headers'>
 
-                        <h3>Responsabile azienda</h3>
-                         <div class="input-group">
-                          <span class="input-group-addon">
-                            Nome
-                          </span>
-                          <input type='text' class='form-control' 
-                                 placeholder='Nome'>
+                        <h3>Responsabile aministrativo</h3>
+                        <div data-bind='with:profiles.incharge'>
+                          <div class='person-card'>
+                            <img src='image_url()'>
+                            <span data-bind='text: first_name() + " " + last_name()'>
+                          </div>
+                          <a data-bind='click: function() { $parent.edit_profile("incharge") }'>
+                            Modifica responsabile amministrativo</a>
                         </div>
-                         <div class="input-group">
-                          <span class="input-group-addon">
-                            Cognome
-                          </span>
-                          <input type='text' class='form-control' 
-                                 placeholder='Cognome'>
-                        </div>
-                         <div class="input-group">
-                          <span class="input-group-addon">
-                            Titolo
-                          </span>
-                          <input type='text' class='form-control' 
-                                 placeholder='Titolo'>
-                        </div>
-                        <div class="input-group">
-                          <span class="input-group-addon">
-                            Indirizzo
-                          </span>
-                          <input type='text' class='form-control' 
-                                 placeholder='Indirizzo'>
-                          <input type='text' class='form-control' 
-                                 placeholder='Indirizzo 2'>
-                          <input type='text' class='form-control' 
-                                 placeholder='Citta'>
-                          <input type='text' class='form-control' 
-                                 placeholder='CAP'>
-                          <input type='text' class='form-control' 
-                                 placeholder='Paese'>
-                        </div>
+                    </div>
+                    <div data-bind='template: {name: "person-form", data: profiles.incharge},
+                                    visible: edit.incharge()' class='col-sm-6'>
+                    </div>
 
-                        <div class="input-group">
-                          <span class="input-group-addon">
-                            Partita IVA
-                          </span>
-                          <input type='text' class='form-control' 
-                                 placeholder='Partita IVA'>
-                        </div>
+                  </div>
 
-                        <div class="input-group">
-                          <span class="input-group-addon">
-                            Website
-                          </span>
-                          <input type='text' class='form-control' 
-                                 placeholder='Website'>
-                        </div>
+                  <div class="row">
+                    <div data-bind='' class='col-sm-6'>
+                        <h3>Responsabile commerciale</h3>
+                        <div data-bind='with:profiles.commercial'>
+                          <div data-bind='visible: id() != ""'>
+                            <div class='person-card'>
+                              <img src='image_url()'>
+                              <span data-bind='text: first_name() + " " + last_name()'>
+                            </div>
+                            <a data-bind='click: function() { $parent.edit_profile("commercial") }'>
+                              Modifica responsabile commerciale</a>
+                          </div>
 
-                        <div class="input-group">
-                          <span class="input-group-addon">
-                            Telefono
-                          </span>
-                          <input type='text' class='form-control' 
-                                 placeholder='Telefono'>
+                          <div data-bind='visible: id() == ""'>
+                            <a data-bind='click: function() { $parent.edit_profile("commercial") }'>
+                              Aggiungi responsabile commerciale</a>
+                          </div>
                         </div>
-
-                        <div class="input-group">
-                          <span class="input-group-addon">
-                            Email
-                          </span>
-                          <input type='text' class='form-control' 
-                                 placeholder='Email'>
-                        </div>
+                        
                       </form>
+                    </div>
+                    <div data-bind='template: {name: "person-form", data: profiles.commercial},
+                                    visible: edit.commercial()' class='col-sm-6'>
                     </div>
                   </div>
                 </div>
@@ -486,305 +464,307 @@
               <h1>Messages</h1>
             </div>
           </div>
-      </div>
 
-      <!-- SIGNUP -->
-      <div class='prtn-page prtn-page-signup' data-bind='css: selected'>
-        <h1>
-          Registrati
-          
-        </h1>
-        <br>
-        <form action=''>
-          <div class="col-sm-5">
+          <!-- SIGNUP -->
+          <div class='prtn-page prtn-page-signup' data-bind='css: selected'>
+            <h1>
+              Registrati
+              
+            </h1>
+            <br>
+            <form action=''>
+              <div class="col-sm-5">
 
-            <div class="input-group">
-              <span class="input-group-addon">
-                <span class='glyphicon glyphicon-envelope'></span>
-              </span>
-              <input type='text' class='form-control' data-bind='value: mail'
-                     placeholder='La tua email'>
-            </div>
+                <div class="input-group">
+                  <span class="input-group-addon">
+                    <span class='glyphicon glyphicon-envelope'></span>
+                  </span>
+                  <input type='text' class='form-control' data-bind='value: mail'
+                         placeholder='La tua email'>
+                </div>
 
-            <div class="input-group">
-              <span class="input-group-addon">
-                <span class="glyphicon glyphicon-lock"></span>
-              </span>
-              <input type='password' class='form-control' data-bind='value: password'
-                     placeholder='Scegli una password'><br>
-            </div>
+                <div class="input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-lock"></span>
+                  </span>
+                  <input type='password' class='form-control' data-bind='value: password'
+                         placeholder='Scegli una password'><br>
+                </div>
 
-            <div class="input-group">
-              <span class="input-group-addon">
-                <span class="glyphicon glyphicon-asterisk"></span>
-              </span>          
-              <input type='password' class='form-control' data-bind='value: confirm_password'
-                     placeholder='Conferma password'><br>
-            </div>
-            
-            <div class='alert alert-danger' 
-                 data-bind='text: error_message, visible: error_message'>
-            </div>
-            <hr>
+                <div class="input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-asterisk"></span>
+                  </span>          
+                  <input type='password' class='form-control' data-bind='value: confirm_password'
+                         placeholder='Conferma password'><br>
+                </div>
+                
+                <div class='alert alert-danger' 
+                     data-bind='text: error_message, visible: error_message'>
+                </div>
+                <hr>
 
-            <a class='btn btn-default' data-bind='click: register'>Register</a>
+                <a class='btn btn-default' data-bind='click: register'>Register</a>
 
+              </div>
+
+              <div class='col-sm-5 col-sm-offset-1'>
+                <p>
+                  Questa procedura guidata vi guidera' attraverso la creazione
+                  del vostro profilo pubblico e del pagamento per diventare 
+                  partner LPI.
+                </p>
+                <p>
+                  <a href='#login'>
+                    Gia' registrato? 
+                  </a>
+                </p>
+              </div>
+            </form>
           </div>
 
-          <div class='col-sm-5 col-sm-offset-1'>
+          <div class='prtn-page prtn-page-wizard' data-bind='css: selected'>
+            <h1>Account information</h1>
             <p>
-              Questa procedura guidata vi guidera' attraverso la creazione
-              del vostro profilo pubblico e del pagamento per diventare 
-              partner LPI.
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
             </p>
-            <p>
-              <a href='#login'>
-                Gia' registrato? 
-              </a>
-            </p>
+            <div class='row'>
+              <div class='prtn-wizard-section prtn-wizard-section-a'> 
+                <h3>Company</h3>
+                <div class="col-sm-5">
+                  <div class="input-group">
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-asterisk"></span>
+                    </span>          
+                    <input type='text' class='form-control' data-bind='value: company_name'
+                           placeholder='Company name'><br>
+                  </div>
+
+                  <div class="input-group">
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-asterisk"></span>
+                    </span>          
+                    <input type='text' class='form-control' data-bind='value: company_sector'
+                           placeholder='Company sector'><br>
+                  </div>
+                </div>
+
+                <div class="col-sm-5 col-sm-offset-1">
+                   Bla bla bla   
+                </div>
+              
+              </div>
+            </div>
+
+            <div class="row">
+              <div class='prtn-wizard-section prtn-wizard-section-b'>
+                <h3>Personal</h3>
+                <div class="col-sm-5">
+                  <div class="input-group">
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-asterisk"></span>
+                    </span>          
+                    <input type='text' class='form-control' data-bind='value: owner_firstname'
+                           placeholder='First name'><br>
+                  </div>
+
+                  <div class="input-group">
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-asterisk"></span>
+                    </span>          
+                    <input type='text' class='form-control' data-bind='value: owner_lastname'
+                           placeholder='Surname'><br>
+                  </div>
+
+                  <div class="input-group">
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-asterisk"></span>
+                    </span>          
+                    <input type='text' class='form-control' data-bind='value: owner_role'
+                           placeholder='Role'><br>
+                  </div>
+                </div>
+
+                <div class="col-sm-5 col-sm-offset-1">
+                   Bla bla bla   
+                </div>
+
+              </div>
+            </div>
+            <div class="row">
+              <div class='prtn-wizard-section prtn-wizard-section-a'>
+                <h3>Term of service</h3>
+
+
+              </div>
+            </div>
+            <div class="row">
+              <a class='btn btn-default' data-bind='click: submit'>Avanti</a>
+            </div>
           </div>
-        </form>
+
+          <div class='prtn-page prtn-page-offers' data-bind='css: selected'>
+
+            <div data-bind='visible: type() == "service-company" && show'>
+              <div class="row">
+              <h1>Servizi e consulenza</h1>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+              </div>
+
+              <div class="row">
+              <ul class='prtn-box-container'>
+                <li class='prtn-box col-sm-3'>
+                  <div class='prtn-box-inner'>
+                    <h3 data-bind="text: product_low.name"></h3>
+                    <div class='prtn-box-icon'></div>
+                    <div class='prtn-box-desc' data-bind='text: product_low.description'></div>
+                    <a data-bind='attr:{href: "#signup/" + product_low.handle()}' 
+                       class="btn prtn-box-button">Acquista</a>
+                  </div>
+                </li>
+
+                <li class='prtn-box col-sm-3 col-sm-offset-1'>
+                  <div class='prtn-box-inner'>
+                    <h3 data-bind="text: product_middle.name"></h3>
+                    <div class='prtn-box-icon'></div>
+                    <div class='prtn-box-desc' data-bind='text: product_middle.description'></div>
+                    <a data-bind='attr:{href: "#signup/" + product_middle.handle()}' 
+                       class="btn prtn-box-button">Acquista</a>
+                  </div>
+                </li>
+
+                <li class='prtn-box col-sm-3 col-sm-offset-1'>
+                  <div class='prtn-box-inner'>
+                    <h3 data-bind="text: product_pro.name"></h3>
+                    <div class='prtn-box-icon'></div>
+                    <div class='prtn-box-desc' data-bind='text: product_pro.description'></div>
+                    <a data-bind='attr:{href: "#signup/" + product_pro.handle()}' 
+                       class="btn prtn-box-button">Acquista</a>
+                  </div>
+                </li>
+
+              </ul>
+
+
+              </div>
+            </div>
+            <div data-bind='visible: type() == "training-company" && show'>
+              <div class="row">               
+              <h1>Formazione per aziende</h1>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+              </div>
+
+              <div class="row">
+
+              <ul class='prtn-box-container'>
+                 <li class='prtn-box col-sm-5'>
+                  <div class='prtn-box-inner'>
+                    <h3 data-bind="text: product_low.name"></h3>
+                    <div class='prtn-box-icon'></div>
+                    <div class='prtn-box-desc' data-bind='text: product_low.description'></div>
+                    <a data-bind='attr:{href: "#signup/" + product_low.handle()}' 
+                       class="btn prtn-box-button">Acquista</a>
+                  </div>
+                </li>
+
+                <li class='prtn-box col-sm-5 col-sm-offset-1'>
+                  <div class='prtn-box-inner'>
+                    <h3 data-bind="text: product_middle.name"></h3>
+                    <div class='prtn-box-icon'></div>
+                    <div class='prtn-box-desc' data-bind='text: product_middle.description'></div>
+                    <a data-bind='attr:{href: "#signup/" + product_middle.handle()}' 
+                       class="btn prtn-box-button">Acquista</a>
+                  </div>
+                </li>
+              </ul>
+              
+              </div>
+            </div>
+
+            <div data-bind='visible: type() == "training-academy" && show'>
+              <div class="row">
+              <h1>Formazione per scuole e universita'</h1>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+              </div>
+
+              <div class="row">
+              <ul class='prtn-box-container'>
+                <li class='prtn-box col-sm-5'>
+                  <div class='prtn-box-inner'>
+                    <h3 data-bind="text: product_low.name"></h3>
+                    <div class='prtn-box-icon'></div>
+                    <div class='prtn-box-desc' data-bind='text: product_low.description'></div>
+                    <a data-bind='attr:{href: "#signup/" + product_low.handle()}' 
+                       class="btn prtn-box-button">Acquista</a>
+                  </div>
+                </li>
+
+                <li class='prtn-box col-sm-5 col-sm-offset-1'>
+                  <div class='prtn-box-inner'>
+                    <h3 data-bind="text: product_middle.name"></h3>
+                    <div class='prtn-box-icon'></div>
+                    <div class='prtn-box-desc' data-bind='text: product_middle.description'></div>
+                    <a data-bind='attr:{href: "#signup/" + product_middle.handle()}' 
+                       class="btn prtn-box-button">Acquista</a>
+                  </div>
+                </li>
+              </ul>
+              
+              </div>
+            </div>
+          </div>
+
+          <div class='prtn-page prtn-page-login' data-bind='css: selected'>
+            <h1>Login</h1>
+            <br>
+            <form action=''>
+              
+              <div class="col-sm-5">
+                <div class="input-group">
+                  <span class="input-group-addon">
+                    <span class='glyphicon glyphicon-envelope'></span>
+                  </span>
+                  <input type='text' class='form-control' data-bind='value: mail'
+                         placeholder='La tua email'>
+                </div>
+
+                <div class="input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-lock"></span>
+                  </span>
+                  <input type='password' class='form-control' data-bind='value: password'
+                         placeholder='La tua password'><br>
+                </div>
+
+
+                <div class='alert alert-danger' 
+                     data-bind='text: error_message, visible: error_message'>
+                </div>
+                <hr>
+
+                <a class='btn btn-default' data-bind='click: login'>Entra</a>
+              </div>
+
+              <div class='col-sm-5 col-sm-offset-1'>
+                <p>
+                  Inserire le credenziali per effettuare il login.
+                </p>
+                <p>
+                  <a data-bind='click: recover_password'>Dimenticato la password?</a>
+                </p>
+              </div>
+
+            </form>
+          </div>
+
       </div>
-
-      <div class='prtn-page prtn-page-wizard' data-bind='css: selected'>
-        <h1>Account information</h1>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-        <div class='row'>
-          <div class='prtn-wizard-section prtn-wizard-section-a'> 
-            <h3>Company</h3>
-            <div class="col-sm-5">
-              <div class="input-group">
-                <span class="input-group-addon">
-                  <span class="glyphicon glyphicon-asterisk"></span>
-                </span>          
-                <input type='text' class='form-control' data-bind='value: company_name'
-                       placeholder='Company name'><br>
-              </div>
-
-              <div class="input-group">
-                <span class="input-group-addon">
-                  <span class="glyphicon glyphicon-asterisk"></span>
-                </span>          
-                <input type='text' class='form-control' data-bind='value: company_sector'
-                       placeholder='Company sector'><br>
-              </div>
-            </div>
-
-            <div class="col-sm-5 col-sm-offset-1">
-               Bla bla bla   
-            </div>
-          
-          </div>
-        </div>
-
-        <div class="row">
-          <div class='prtn-wizard-section prtn-wizard-section-b'>
-            <h3>Personal</h3>
-            <div class="col-sm-5">
-              <div class="input-group">
-                <span class="input-group-addon">
-                  <span class="glyphicon glyphicon-asterisk"></span>
-                </span>          
-                <input type='text' class='form-control' data-bind='value: owner_firstname'
-                       placeholder='First name'><br>
-              </div>
-
-              <div class="input-group">
-                <span class="input-group-addon">
-                  <span class="glyphicon glyphicon-asterisk"></span>
-                </span>          
-                <input type='text' class='form-control' data-bind='value: owner_lastname'
-                       placeholder='Surname'><br>
-              </div>
-
-              <div class="input-group">
-                <span class="input-group-addon">
-                  <span class="glyphicon glyphicon-asterisk"></span>
-                </span>          
-                <input type='text' class='form-control' data-bind='value: owner_role'
-                       placeholder='Role'><br>
-              </div>
-            </div>
-
-            <div class="col-sm-5 col-sm-offset-1">
-               Bla bla bla   
-            </div>
-
-          </div>
-        </div>
-        <div class="row">
-          <div class='prtn-wizard-section prtn-wizard-section-a'>
-            <h3>Term of service</h3>
-
-
-          </div>
-        </div>
-        <div class="row">
-          <a class='btn btn-default' data-bind='click: submit'>Avanti</a>
-        </div>
-      </div>
-
-      <div class='prtn-page prtn-page-offers' data-bind='css: selected'>
-
-        <div data-bind='visible: type() == "service-company" && show'>
-          <div class="row">
-          <h1>Servizi e consulenza</h1>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          </div>
-
-          <div class="row">
-          <ul class='prtn-box-container'>
-            <li class='prtn-box col-sm-3'>
-              <div class='prtn-box-inner'>
-                <h3 data-bind="text: product_low.name"></h3>
-                <div class='prtn-box-icon'></div>
-                <div class='prtn-box-desc' data-bind='text: product_low.description'></div>
-                <a data-bind='attr:{href: "#signup/" + product_low.handle()}' 
-                   class="btn prtn-box-button">Acquista</a>
-              </div>
-            </li>
-
-            <li class='prtn-box col-sm-3 col-sm-offset-1'>
-              <div class='prtn-box-inner'>
-                <h3 data-bind="text: product_middle.name"></h3>
-                <div class='prtn-box-icon'></div>
-                <div class='prtn-box-desc' data-bind='text: product_middle.description'></div>
-                <a data-bind='attr:{href: "#signup/" + product_middle.handle()}' 
-                   class="btn prtn-box-button">Acquista</a>
-              </div>
-            </li>
-
-            <li class='prtn-box col-sm-3 col-sm-offset-1'>
-              <div class='prtn-box-inner'>
-                <h3 data-bind="text: product_pro.name"></h3>
-                <div class='prtn-box-icon'></div>
-                <div class='prtn-box-desc' data-bind='text: product_pro.description'></div>
-                <a data-bind='attr:{href: "#signup/" + product_pro.handle()}' 
-                   class="btn prtn-box-button">Acquista</a>
-              </div>
-            </li>
-
-          </ul>
-
-
-          </div>
-        </div>
-        <div data-bind='visible: type() == "training-company" && show'>
-          <div class="row">               
-          <h1>Formazione per aziende</h1>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          </div>
-
-          <div class="row">
-
-          <ul class='prtn-box-container'>
-             <li class='prtn-box col-sm-5'>
-              <div class='prtn-box-inner'>
-                <h3 data-bind="text: product_low.name"></h3>
-                <div class='prtn-box-icon'></div>
-                <div class='prtn-box-desc' data-bind='text: product_low.description'></div>
-                <a data-bind='attr:{href: "#signup/" + product_low.handle()}' 
-                   class="btn prtn-box-button">Acquista</a>
-              </div>
-            </li>
-
-            <li class='prtn-box col-sm-5 col-sm-offset-1'>
-              <div class='prtn-box-inner'>
-                <h3 data-bind="text: product_middle.name"></h3>
-                <div class='prtn-box-icon'></div>
-                <div class='prtn-box-desc' data-bind='text: product_middle.description'></div>
-                <a data-bind='attr:{href: "#signup/" + product_middle.handle()}' 
-                   class="btn prtn-box-button">Acquista</a>
-              </div>
-            </li>
-          </ul>
-          
-          </div>
-        </div>
-
-        <div data-bind='visible: type() == "training-academy" && show'>
-          <div class="row">
-          <h1>Formazione per scuole e universita'</h1>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          </div>
-
-          <div class="row">
-          <ul class='prtn-box-container'>
-            <li class='prtn-box col-sm-5'>
-              <div class='prtn-box-inner'>
-                <h3 data-bind="text: product_low.name"></h3>
-                <div class='prtn-box-icon'></div>
-                <div class='prtn-box-desc' data-bind='text: product_low.description'></div>
-                <a data-bind='attr:{href: "#signup/" + product_low.handle()}' 
-                   class="btn prtn-box-button">Acquista</a>
-              </div>
-            </li>
-
-            <li class='prtn-box col-sm-5 col-sm-offset-1'>
-              <div class='prtn-box-inner'>
-                <h3 data-bind="text: product_middle.name"></h3>
-                <div class='prtn-box-icon'></div>
-                <div class='prtn-box-desc' data-bind='text: product_middle.description'></div>
-                <a data-bind='attr:{href: "#signup/" + product_middle.handle()}' 
-                   class="btn prtn-box-button">Acquista</a>
-              </div>
-            </li>
-          </ul>
-          
-          </div>
-        </div>
-      </div>
-
-      <div class='prtn-page prtn-page-login' data-bind='css: selected'>
-        <h1>Login</h1>
-        <br>
-        <form action=''>
-          
-          <div class="col-sm-5">
-            <div class="input-group">
-              <span class="input-group-addon">
-                <span class='glyphicon glyphicon-envelope'></span>
-              </span>
-              <input type='text' class='form-control' data-bind='value: mail'
-                     placeholder='La tua email'>
-            </div>
-
-            <div class="input-group">
-              <span class="input-group-addon">
-                <span class="glyphicon glyphicon-lock"></span>
-              </span>
-              <input type='password' class='form-control' data-bind='value: password'
-                     placeholder='La tua password'><br>
-            </div>
-
-
-            <div class='alert alert-danger' 
-                 data-bind='text: error_message, visible: error_message'>
-            </div>
-            <hr>
-
-            <a class='btn btn-default' data-bind='click: login'>Entra</a>
-          </div>
-
-          <div class='col-sm-5 col-sm-offset-1'>
-            <p>
-              Inserire le credenziali per effettuare il login.
-            </p>
-            <p>
-              <a data-bind='click: recover_password'>Dimenticato la password?</a>
-            </p>
-          </div>
-
-        </form>
-      </div>
+      
 
 	  </div> <!-- end .container -->
   </div>
@@ -804,6 +784,75 @@
       </div>
     </div>
   </footer>
+
+  <script type='text/html' id='person-form'>
+    <div class="input-group">
+      <span class="input-group-addon">
+        Nome
+      </span>
+      <input type='text' class='form-control' data-bind='value: first_name'
+             placeholder='Nome'>
+    </div>
+     <div class="input-group">
+      <span class="input-group-addon">
+        Cognome
+      </span>
+      <input type='text' class='form-control' data-bind='value: last_name'
+             placeholder='Cognome'>
+    </div>
+     <div class="input-group">
+      <span class="input-group-addon">
+        Titolo
+      </span>
+      <input type='text' class='form-control' data-bind='value: job_title'
+             placeholder='Titolo'>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon">
+        Indirizzo
+      </span>
+      <input type='text' class='form-control' data-bind=''
+             placeholder='Indirizzo'>
+      <input type='text' class='form-control' data-bind=''
+             placeholder='Citta'>
+      <input type='text' class='form-control' data-bind=''
+             placeholder='CAP'>
+      <input type='text' class='form-control' data-bind=''
+             placeholder='Paese'>
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon">
+        Partita IVA
+      </span>
+      <input type='text' class='form-control' data-bind=''
+             placeholder='Partita IVA'>
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon">
+        Website
+      </span>
+      <input type='text' class='form-control' data-bind=''
+             placeholder='Website'>
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon">
+        Telefono
+      </span>
+      <input type='text' class='form-control' data-bind=''
+             placeholder='Telefono'>
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon">
+        Email
+      </span>
+      <input type='text' class='form-control' data-bind=''
+             placeholder='Email'>
+    </div>
+  </script>
   
   <script type='text/javascript' src='{% static "js/vendor/jquery/jquery.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/jquery/jquery.cookie.js" %}'></script>

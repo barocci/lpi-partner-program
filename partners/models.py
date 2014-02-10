@@ -11,13 +11,8 @@ class LPIUser(User):
     def register(self, username, password):
         user = LPIUser.objects.create_user(username, username, password)
         user.is_active = False
-        #redmine_user = redmine.User()
         user.save()
-
-        #saved = redmine_user.register(username, password)        
         return user
-
-        return False
 
 class LPISubscription(models.Model):
     product = models.CharField(max_length=30)
@@ -37,14 +32,19 @@ class Model(dict):
         dict.__init__(self, args)
 
         self.chargify = Chargify(settings.CHARGIFY_API, settings.CHARGIFY_SUBDOMAIN)
+
         self.mapping = {
-          'Tipo': 'cf_14',
-          'Incharge': 'cf_7',
+          'Tipo':       'cf_14',
+          'Incharge':   'cf_7',
+          'Role':       'cf_1',
+          'company_id': 'cf_2'
         }
 
         self.mapping_id = {
-          'Tipo': '14',
-          'Incharge': '7',
+          'Tipo':       '14',
+          'Incharge':   '7',
+          'Role':       '1',
+          'company_id': '2'
         }
 
     def __getitem__(self, key):
@@ -72,8 +72,6 @@ class Customer(Model):
         customer = self.chargify.Customer()
         info = customer.getManagementInfo('4484267')
         return info
-
-         
 
     def create(self, email, first_name, last_name):
         customer = self.chargify.Customer()
@@ -112,6 +110,7 @@ class ProductFamily(Model):
 
         return self
 
+
 class Product(Model):
     def load_from_family(self, handle):
         products = []
@@ -134,12 +133,13 @@ class Product(Model):
 
     def get_by_handle(self, handle):
         resource = self.chargify.Product().getByHandle(handle)
+
         return self.load_from_resource(resource)
 
     def hostedURL(self, handle):
         resource = self.chargify.Product().getByHandle(handle)
-
         url = "%s%s/subscriptions/new" % (settings.CHARGIFY_HOSTED_PAGE, resource.id)
+
         return url
 
     def load_from_resource(self, resource):
@@ -152,20 +152,18 @@ class Product(Model):
         #self['price'] = "%.2f" % int(resource.price_in_cents)/100
 
 class Contact(Model):
-    def find(self, id):
-        resource = redmine.Contact.find(id_=id)
-
+    def find(self, id, **kwarg):
+        resource = redmine.Contact.find(id_=id, **kwarg)
         return resource
 
     def find_one(self, params):
         params = self.encode_custom_fields(params)
         resource = redmine.Contact.find_one(**params)
-
         return resource
 
     def find_all(self, params):
         params = self.encode_custom_fields(params)
-        resources = redmine.Contact.find(**params)
+        resources = redmine.Contact.find_all(**params)
         return resources
         
 
@@ -182,18 +180,58 @@ class Company(Contact):
         contact.save()
         return self.load_from_resource(contact)
 
+    def find(self, id):
+        resource = Contact().find(id, include='contacts')
+        return self.load_from_resource(resource)
+
     def load_from_resource(self, resource):
-        self['name'] = resource.attributes['first_name']
-        self['id'] = resource.attributes['id']
+        self['name'] = resource.first_name
+        self['id'] = resource.id
+
+        self['job_title'] = ''
+        if resource.attributes.has_key('job_title'):
+            self['job_title'] = resource.job_title
+
+        self['description'] = ''
+        if resource.attributes.has_key('background'):
+            self['description'] = resource.background
+
+        self['website'] = ''
+        if resource.attributes.has_key('website'):
+            self['website'] = resource.website
+
+        self['phone'] = ''
+        if resource.attributes.has_key('phones'):
+            self['phone'] = resource.phones[0].number
+
+        self['email'] = ''
+        if resource.attributes.has_key('emails'):
+            self['email'] = resource.emails[0].address
+
+        self['street'] = ''
+        self['postcode'] = ''
+        self['city'] = ''
+        self['country'] = ''
+        if resource.attributes.has_key('address'):
+            address = resource.attributes['address'].attributes
+
+            self['city'] = address['city']
+            self['postcode'] = address['postcode']
+            self['street'] = address['street']
+            self['country'] = address['country']
+
         self['image_url'] = ''
+
         if resource.attributes.has_key('avatar'):
             avatar = Attachment.get(resource.attributes['avatar'].attributes['attachment_id'])
             self['image_url'] = avatar['content_url']
+        
+        self['Incharge'] = False
+        self['Commercial'] = False
 
-        contact = redmine.Contact.find(is_company=False,cf_7=1,company=self['name'])
-        if contact:
-            self['owner'] = Person()
-            self['owner'].load_from_resource(contact[0])
+        for contact_resource in resource.attributes['contacts']:
+            contact = Person().find(contact_resource.attributes['id'])
+            self[contact['Role']] = contact
 
         return self
 
@@ -219,13 +257,57 @@ class Person(Contact):
         contact.project_id = settings.REDMINE_PROJECT
         contact.is_company = False
         contact.save()
+        
         return self.load_from_resource(contact)
 
+    def find(self, id):
+        resource = Contact().find(id)
+        return self.load_from_resource(resource)
+
     def load_from_resource(self, resource):
-        self['id'] = resource.attributes['id']
-        self['first_name'] = resource.attributes['first_name']
-        self['last_name'] = resource.attributes['last_name']
-        self['job_title'] = resource.attributes['job_title']
+        self['id'] = resource.id
+        self['first_name'] = resource.first_name
+        self['last_name'] = resource.last_name
+        self['job_title'] = resource.job_title
+
+        self['job_title'] = ''
+        if resource.attributes.has_key('job_title'):
+            self['job_title'] = resource.job_title
+
+        self['website'] = ''
+        if resource.attributes.has_key('website'):
+            self['website'] = resource.website
+
+        self['phone'] = ''
+        if resource.attributes.has_key('phones'):
+            self['phone'] = resource.phones[0].number
+
+        self['email'] = ''
+        if resource.attributes.has_key('emails'):
+            self['email'] = resource.emails[0].address
+
+        self['street'] = ''
+        self['postcode'] = ''
+        self['city'] = ''
+        self['country'] = ''
+        if resource.attributes.has_key('address'):
+            address = resource.attributes['address'].attributes
+
+            self['city'] = address['city']
+            self['postcode'] = address['postcode']
+            self['street'] = address['street']
+            self['country'] = address['country']
+
+
+
+        for cf in resource.custom_fields:
+            self[cf.name] = cf.value
+
+        self['image_url'] = ''
+        if resource.attributes.has_key('avatar'):
+            avatar = Attachment.get(resource.attributes['avatar'].attributes['attachment_id'])
+            self['image_url'] = avatar['content_url']
+
         return self
 
     def find_all(self, params):
