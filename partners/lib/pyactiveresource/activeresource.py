@@ -773,9 +773,11 @@ class ActiveResource(object):
         Raises:
             connection.Error: On any communications problems.
         """
+        print self.to_xml()
         try:
             self.errors.clear()
             if self.id:
+
                 response = self.klass.connection.put(
                         self._element_path(self.id, self._prefix_options),
                         self.klass.headers,

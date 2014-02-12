@@ -182,7 +182,20 @@ var lpi = {
             callback(response);
         }
      });
+  },
+
+  post: function(method, params, callback) {
+    params['csrfmiddlewaretoken'] = $.cookie('csrftoken');
+    $.post('http://partners.lpi-italia.org/' + method + '/', params, function(response) {
+        console.log(response);
+        if(response.redirect) {
+            lpi.redirect(response.redirect);
+        }else {
+            callback(response);
+        }
+     });
   }
+
 
 }
 

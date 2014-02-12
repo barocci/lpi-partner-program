@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from models import *
 import json
@@ -76,6 +76,9 @@ def register(request):
 
     return renderJSON(ret)
 
+def subscribe(request):
+    return HttpResponseRedirect("/#account")
+
 @check_login
 def user_info(request):
     ret = {
@@ -95,6 +98,30 @@ def profile(request):
 
     return renderJSON(ret);
 
+@check_login
+def edit_profile(request):
+    ret = {'error': 0, 'data': []}
+
+    profile = request.POST.copy()
+    print profile
+
+    if profile.has_key('id'):
+        if profile['id'] == '':
+            print "Creating contact"
+            contact = Person().create(profile['company'], 
+                                      profile['company_id'], 
+                                      profile['first_name'], 
+                                      profile['last_name'], 
+                                      profile['Role'])
+
+            profile['id'] = contact['id']
+
+        print profile
+        Contact().edit(profile)
+        ret['data'] = profile
+ 
+    return renderJSON(ret);
+
 
 @check_login
 def account_info(request):
@@ -109,7 +136,8 @@ def account_info(request):
             info['active'] = sub.active  
             info['company'] = sub.company  
             info['product'] = product  
-            info['id'] = sub.id  
+            info['id'] = sub.id
+            info['product']['url'] = product.hostedURL(product['handle'])
 
             family = product.family()
 
@@ -119,7 +147,7 @@ def account_info(request):
 
         ret['data'] = data
 
-    if request.GET['section'] == 'profile':
+    if request.GET['section'] == 'profile' and request.GET.has_key('data'):
         company = Company().find(request.GET['data'])
         commercial = company['Commercial']
         incharge = company['Incharge']
@@ -140,16 +168,19 @@ def register_contact(request):
     ret = {'error': 1, 'data:': ''}
 
     try:
+        company = Company().create(request.GET['company_name'])
+
         person = Person().create(request.GET['company_name'],
+                                 company['id'],
                                  request.GET['owner_firstname'],
                                  request.GET['owner_lastname'],
-                                 request.GET['owner_role'])
-        company = Company().create(request.GET['company_name'])
+                                 request.GET['owner_role'],
+                                 'Incharge')
         company['owner'] = person
 
-        customer = Customer().create(request.user.email, 
-                                   person['first_name'], 
-                                   person['last_name'])
+        #customer = Customer().create(request.user.email, 
+        #                             person['first_name'], 
+        #                             person['last_name'])
 
         subscription = LPISubscription.objects.get(user__id=request.user.id)
         subscription.company = company['id']

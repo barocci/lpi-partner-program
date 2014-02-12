@@ -225,7 +225,7 @@
           <div class="prtn-page-sidebar"> 
             <ul data-bind='foreach: sections'>
               <li data-bind='css: { active: $parent.active_section() == slug}'>
-                <a data-bind='click: $parent.show_section, text: name'></a>
+                <a data-bind='click: function() { $parent.show_section({slug: slug},{}); }, text: name'></a>
                 <span></span>
               </li>
             </ul>
@@ -259,7 +259,7 @@
                       <td data-bind='text: $parent.state(active)'>
                       <td data-bind=''>- </td>
                       <td>
-                        <a class='button button-disable'>Paga</a>
+                        <a data-bind="attr: {href: product.url}" class='button button-disable'>Paga</a>
                       </td>
                     </tr>
                   </tbody>
@@ -301,7 +301,7 @@
                           Nome azienda
                         </span>
                         <input type='text' class='form-control' 
-                               data-bind='value: profiles.company.name()'
+                               data-bind='value: profiles.company.first_name()'
                                placeholder='Nome azienda'>
                       </div>
 
@@ -319,7 +319,7 @@
                           Descrizione
                         </span>
                         <textarea class='form-control' style='height:100px' 
-                                  data-bind='value: profiles.company.description()'
+                                  data-bind='value: profiles.company.background()'
                                   placeholder='Descrizione'></textarea>
                       </div>
 
@@ -811,13 +811,13 @@
       <span class="input-group-addon">
         Indirizzo
       </span>
-      <input type='text' class='form-control' data-bind=''
+      <input type='text' class='form-control' data-bind='value: street'
              placeholder='Indirizzo'>
-      <input type='text' class='form-control' data-bind=''
+      <input type='text' class='form-control' data-bind='value: city'
              placeholder='Citta'>
-      <input type='text' class='form-control' data-bind=''
+      <input type='text' class='form-control' data-bind='value: postcode'
              placeholder='CAP'>
-      <input type='text' class='form-control' data-bind=''
+      <input type='text' class='form-control' data-bind='value: country'
              placeholder='Paese'>
     </div>
 
@@ -825,7 +825,7 @@
       <span class="input-group-addon">
         Partita IVA
       </span>
-      <input type='text' class='form-control' data-bind=''
+      <input type='text' class='form-control' data-bind='value: piva'
              placeholder='Partita IVA'>
     </div>
 
@@ -833,7 +833,7 @@
       <span class="input-group-addon">
         Website
       </span>
-      <input type='text' class='form-control' data-bind=''
+      <input type='text' class='form-control' data-bind='value: website'
              placeholder='Website'>
     </div>
 
@@ -841,7 +841,7 @@
       <span class="input-group-addon">
         Telefono
       </span>
-      <input type='text' class='form-control' data-bind=''
+      <input type='text' class='form-control' data-bind='value: phone'
              placeholder='Telefono'>
     </div>
 
@@ -849,8 +849,14 @@
       <span class="input-group-addon">
         Email
       </span>
-      <input type='text' class='form-control' data-bind=''
+      <input type='text' class='form-control' data-bind='value: email'
              placeholder='Email'>
+    </div>
+
+    <div>
+      <a data-bind='click: function() { $parent.submit_profile(type); }' 
+         class='button pull-right'>Salva</a>
+      <a data-bind='click: function() { $parent.abort_edit_profile(type); }'>Annulla</a>
     </div>
   </script>
   
@@ -858,6 +864,7 @@
   <script type='text/javascript' src='{% static "js/vendor/jquery/jquery.cookie.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/routie.min.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/knockout.js/knockout-3.0.0.js" %}'></script>
+  <script type='text/javascript' src='{% static "js/vendor/knockout.js/knockout.mapping.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/radio.min.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/class.js" %}'></script>
 

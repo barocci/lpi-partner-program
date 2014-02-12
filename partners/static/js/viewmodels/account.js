@@ -30,9 +30,10 @@ var AccountViewModel = function() {
   self.profiles = {
     'company': {
       'id': ko.observable(''),
-      'name': ko.observable(''),
+      'first_name': ko.observable(''),
+      'last_name': ko.observable(''),
       'job_title': ko.observable(''),
-      'description': ko.observable(''),
+      'background': ko.observable(''),
       'street': ko.observable(''),
       'city': ko.observable(''),
       'piva': ko.observable(''),
@@ -43,6 +44,8 @@ var AccountViewModel = function() {
       'phone': ko.observable(''),
       'email': ko.observable(''),
       'image_url': ko.observable(''),
+      'Role': ko.observable('Company'),
+      'type': 'company',
     },
 
     'incharge': {
@@ -50,7 +53,7 @@ var AccountViewModel = function() {
       'first_name': ko.observable(''),
       'last_name': ko.observable(''),
       'job_title': ko.observable(''),
-      'description': ko.observable(''),
+      'background': ko.observable(''),
       'street': ko.observable(''),
       'city': ko.observable(''),
       'postcode': ko.observable(''),
@@ -61,7 +64,8 @@ var AccountViewModel = function() {
       'email': ko.observable(''),
       'image_url': ko.observable(''),
       'company_id': ko.observable(''),
-      'Role': ko.observable('')
+      'Role': ko.observable('Incharge'),
+      'type': 'incharge',
     },
 
     'commercial': {
@@ -69,7 +73,7 @@ var AccountViewModel = function() {
       'first_name': ko.observable(''),
       'last_name': ko.observable(''),
       'job_title': ko.observable(''),
-      'description': ko.observable(''),
+      'background': ko.observable(''),
       'street': ko.observable(''),
       'city': ko.observable(''),
       'postcode': ko.observable(''),
@@ -80,7 +84,8 @@ var AccountViewModel = function() {
       'email': ko.observable(''),
       'image_url': ko.observable(''),
       'company_id': ko.observable(''),
-      'Role': ko.observable('')
+      'Role': ko.observable('Commercial'),
+      'type': 'commercial',
     }
   }
 
@@ -94,26 +99,12 @@ var AccountViewModel = function() {
   }
 
   self.observe_form = function(data) {
-
     for(type in self.profiles) {
       if(data[type]) {
         for(i in data[type]) {
           console.log("Setting[" + type + "] " + i + " = " + data[type][i]);
           self.profiles[type][i](data[type][i]);
         }
-      }
-    }
-    return;
-
-    if(data.incharge) {
-      for(i in data.incharge) {
-        self.profiles.incharge[i](data.incharge[i]);
-      }
-    }
-
-    if(data.commercial) {
-      for(i in data.commercial) {
-        self.profiles.commercial[i](data.commercial[i]);
       }
     }
   }
@@ -123,8 +114,19 @@ var AccountViewModel = function() {
     self.edit[type](true);
   }
 
+  self.abort_edit_profile = function(type) {
+    self.edit[type](false);
+  }
+
   self.submit_profile = function(type) {
-    var profile = self.profiles[type];
+    var profile = ko.mapping.toJS(self.profiles[type]);
+    console.log(profile);
+    profile.company = self.profiles.company.first_name()
+    profile.company_id = self.profiles.company.id()
+    lpi.post('edit_profile', profile, function(response) {
+      console.log(response);
+      self.edit[type](false);
+    });
   }
 
   self.goto_profile = function(obj) {
@@ -160,7 +162,7 @@ var AccountViewModel = function() {
         console.log(data);
         self.observe_form(data);
         console.log("----");
-        console.log(self.profiles.company.name());
+        console.log(self.profiles.company.first_name());
       } else {
         lpi.request('account_info', {section: 'partnership'}, function(response) {
           self.ready['partnership'](response);
@@ -170,8 +172,8 @@ var AccountViewModel = function() {
   }
 
   self.show_section = function(section, data) {
+    console.log('showing ' + section.slug);
     self.loading(true);
-
     lpi.request('account_info', {section: section.slug, data: data}, function(response) {
       if(self.ready[section.slug]) {
         self.ready[section.slug](response.data);

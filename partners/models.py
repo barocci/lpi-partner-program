@@ -37,14 +37,16 @@ class Model(dict):
           'Tipo':       'cf_14',
           'Incharge':   'cf_7',
           'Role':       'cf_1',
-          'company_id': 'cf_2'
+          'company_id': 'cf_2',
+          'piva':       'cf_3'
         }
 
         self.mapping_id = {
           'Tipo':       '14',
           'Incharge':   '7',
           'Role':       '1',
-          'company_id': '2'
+          'company_id': '2',
+          'piva': '3',
         }
 
     def __getitem__(self, key):
@@ -53,8 +55,6 @@ class Model(dict):
 
     def __setitem__(self, key, val):
         dict.__setitem__(self, key, val)
-
-    
 
     def encode_custom_fields(self, params):
         encoded = {}
@@ -156,9 +156,40 @@ class Contact(Model):
         resource = redmine.Contact.find(id_=id, **kwarg)
         return resource
 
+    def exists(self, id):
+        return redmine.Contact.exists(id)
+
+    def edit(self, data):
+        exclude = ['image_url', 'csrfmiddlewaretoken', 'type', 
+                   'street', 'city', 'country', 'postcode']
+        contact = redmine.Contact()
+        data = self.encode_custom_fields(data)
+
+        custom_fields = []
+
+        for key, value in data.iteritems():
+            if key in exclude: continue
+            if key[:2] == 'cf':
+                custom_fields.append({ 'value': value, 'id': key[3:]})
+            else:
+                print "setting %s = %s " % (key, value)
+                setattr(contact, key, value)
+
+        contact.custom_fields = custom_fields
+
+        contact.address_attributes = {
+            'street1': data['street'],
+            'city': data['city'],
+            'postcode': data['postcode'],
+            'country_code': 'IT'
+        }
+
+        contact.save()
+        
     def find_one(self, params):
         params = self.encode_custom_fields(params)
-        resource = redmine.Contact.find_one(**params)
+        print params
+        resource = erdmine.Contact.find_one(**params)
         return resource
 
     def find_all(self, params):
@@ -178,23 +209,23 @@ class Company(Contact):
         ]
         contact.project_id = settings.REDMINE_PROJECT
         contact.save()
-        return self.load_from_resource(contact)
+        return self.find(contact.id)
 
     def find(self, id):
         resource = Contact().find(id, include='contacts')
         return self.load_from_resource(resource)
 
     def load_from_resource(self, resource):
-        self['name'] = resource.first_name
+        self['first_name'] = resource.first_name
         self['id'] = resource.id
 
         self['job_title'] = ''
         if resource.attributes.has_key('job_title'):
             self['job_title'] = resource.job_title
 
-        self['description'] = ''
+        self['background'] = ''
         if resource.attributes.has_key('background'):
-            self['description'] = resource.background
+            self['background'] = resource.background
 
         self['website'] = ''
         if resource.attributes.has_key('website'):
@@ -229,9 +260,10 @@ class Company(Contact):
         self['Incharge'] = False
         self['Commercial'] = False
 
-        for contact_resource in resource.attributes['contacts']:
-            contact = Person().find(contact_resource.attributes['id'])
-            self[contact['Role']] = contact
+        if resource.attributes.has_key('contacts'):
+            for contact_resource in resource.attributes['contacts']:
+                contact = Person().find(contact_resource.attributes['id'])
+                self[contact['Role']] = contact
 
         return self
 
@@ -248,14 +280,19 @@ class Company(Contact):
 
 
 class Person(Contact):
-    def create(self, company_name, first_name, last_name, role):
+    def create(self, company_name, company_id, first_name, last_name, job, role):
         contact = redmine.Contact()
         contact.first_name = first_name
         contact.last_name = last_name
-        contact.job_title = role
+        contact.job_title = job
         contact.company = company_name
         contact.project_id = settings.REDMINE_PROJECT
         contact.is_company = False
+        contact.custom_fields = [
+            { 'value': role, 'id': self.mapping_id['Role']},
+            { 'value': company_id, 'id': self.mapping_id['company_id']}
+        ]
+        print contact.custom_fields
         contact.save()
         
         return self.load_from_resource(contact)
