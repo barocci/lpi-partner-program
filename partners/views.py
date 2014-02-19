@@ -47,34 +47,6 @@ def logout(request):
     auth.logout(request)
     return renderJSON(ret)
 
-def register(request):
-    ret = { 'error': 0, 'data': {} }
-    try:
-        user = LPIUser().register(request.GET['mail'], request.GET['password'])        
-        user.save()
-
-        if user:
-            subscription = LPISubscription.objects.create(product=request.GET['product'],
-                                                       user=user,
-                                                       active=False)
-            subscription.save()
-
-            user = auth.authenticate(username=request.GET['mail'], 
-                                             password=request.GET['password'])
-            if user:
-                auth.login(request, user)
-                ret['data'] = {'login': user.username, 'id': user.id}
-            else:
-                ret['error'] = 2  # error registering
-                ret['data'] = 'Error registering user.'
-        else:
-                ret['error'] = 2  # error registering
-                ret['data'] = 'Error registering user.'
-    except Exception, e:
-        ret['error'] = 1
-        ret['data'] = 'User already exists.'
-
-    return renderJSON(ret)
 
 def subscribe(request):
     return HttpResponseRedirect("/#account")
@@ -178,10 +150,6 @@ def register_contact(request):
                                  'Incharge')
         company['owner'] = person
 
-        #customer = Customer().create(request.user.email, 
-        #                             person['first_name'], 
-        #                             person['last_name'])
-
         subscription = LPISubscription.objects.get(user__id=request.user.id)
         subscription.company = company['id']
         subscription.save()
@@ -193,6 +161,33 @@ def register_contact(request):
     except Exception, e:
         print "Chargify error %s" % e
     
+    return renderJSON(ret)
+
+def register(request):
+    ret = { 'error': 0, 'data': {} }
+    try:
+        user = LPIUser().register(request.GET['mail'], request.GET['password'])        
+        user.save()
+
+        if user:
+            subscription = LPISubscription.create(product=request.GET['product'],
+                                                  user_id=user_id)
+
+            user = auth.authenticate(username=request.GET['mail'], 
+                                             password=request.GET['password'])
+            if user:
+                auth.login(request, user)
+                ret['data'] = {'login': user.username, 'id': user.id}
+            else:
+                ret['error'] = 2  # error registering
+                ret['data'] = 'Error registering user.'
+        else:
+                ret['error'] = 2  # error registering
+                ret['data'] = 'Error registering user.'
+    except Exception, e:
+        ret['error'] = 1
+        ret['data'] = 'User already exists.'
+
     return renderJSON(ret)
 
 

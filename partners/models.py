@@ -14,16 +14,6 @@ class LPIUser(User):
         user.save()
         return user
 
-class LPISubscription(models.Model):
-    product = models.CharField(max_length=30)
-    user = models.ForeignKey(LPIUser)
-    company = models.CharField(max_length=100)
-    active = models.CharField(max_length=15)
-    date = models.DateTimeField(auto_now=True)
-
-    def save(self, *args, **kwargs):
-        self.date = datetime.datetime.today()
-        return super(LPISubscription, self).save(*args, **kwargs)
 
 
 # Create your models here.
@@ -38,7 +28,11 @@ class Model(dict):
           'Incharge':   'cf_7',
           'Role':       'cf_1',
           'company_id': 'cf_2',
-          'piva':       'cf_3'
+          'piva':       'cf_3',
+          'state':      'cf_4',
+          'contact_id': 'cf_5',
+          'product':    'cf_6',
+          'user_id':    'cf_7'
         }
 
         self.mapping_id = {
@@ -46,7 +40,11 @@ class Model(dict):
           'Incharge':   '7',
           'Role':       '1',
           'company_id': '2',
-          'piva': '3',
+          'piva':       '3',
+          'state':      '4',
+          'contact_id': '5',
+          'product':    '6',
+          'user_id':    '7'
         }
 
     def __getitem__(self, key):
@@ -357,6 +355,29 @@ class Person(Contact):
             people.append(person)
 
         return people
+
+class LPISubscription(Model):
+    def create(self, product, user_id):
+        deal = redmine.Deal()
+        custom_fields = {
+          self.mapping['product']: product,
+          self.mapping['user_id']: user_id,
+          self.mapping['state']: 'pending' 
+        }
+
+        deal.currency = settings.CURRENCY
+        deal.custom_fields = custom_fields
+        deal.save()
+
+        self.load_from_resource(deal)
+
+        return self
+
+    def load_from_resource(self, resource):
+        self['product'] = resource.custome_fields[self.mapping['product']]
+        self['user_id'] = resource.custome_fields[self.mapping['user_id']]
+        self['state'] = resource.custome_fields[self.mapping['state']]
+    
 
 
 class Subscription(Model):
