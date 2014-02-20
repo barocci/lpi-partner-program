@@ -383,7 +383,7 @@ class ActiveResource(object):
             connection.Error: On any communications errors.
             Error: On any other errors.
         """
-        return cls._find_one(from_, kwargs)
+        return cls._find_one(from_, **kwargs)
 
     @classmethod
     def exists(cls, id_, **kwargs):

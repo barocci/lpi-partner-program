@@ -24,7 +24,20 @@ def load_products(request):
     return renderJSON(Product().load_from_family(request.GET['family']))
 
 def search(request):
-    return renderJSON(Company().find_all(request.GET))
+    ret = { 'error': 0, 'data': {} }
+    if request.GET.has_key['type']:
+        if request.GET['type'] == 'services':
+            contacts = Company.search_services()
+        else if request.GET['type'] == 'academic':
+            contacts = Company.search_academies()
+        else if request.GET['type'] == 'training':
+            contacts = Company.search_trainers()
+        else:
+            contacts = []
+
+        ret['data'] = contacts
+        
+    return renderJSON(ret)
 
 def redirect(page):
     data = {'redirect': page}
@@ -48,7 +61,13 @@ def logout(request):
     return renderJSON(ret)
 
 
+@check_login
 def subscribe(request):
+    ret = {'error': 0, 'data:': ''}
+    subscription = LPISubscription().link_deal(request.GET['id'],
+                                                    request.GET['ref'],
+                                                    request.GET['product'])
+
     return HttpResponseRedirect("/#account")
 
 @check_login
@@ -83,7 +102,8 @@ def edit_profile(request):
             contact = Person().create(profile['company'], 
                                       profile['company_id'], 
                                       profile['first_name'], 
-                                      profile['last_name'], 
+                                      profile['last_name'],
+                                      profile['job_title'], 
                                       profile['Role'])
 
             profile['id'] = contact['id']
@@ -95,21 +115,23 @@ def edit_profile(request):
     return renderJSON(ret);
 
 
+
+
 @check_login
 def account_info(request):
     ret = {'error': 0, 'data': []}
 
     if request.GET['section'] == 'partnership':
         data = {'training':[], 'services':[], 'academic':[]}
-        subscriptions = LPISubscription.objects.all().filter(user__id=request.user.id)
+        subscriptions = LPISubscription().find({'user_id' :request.user.id})
         for sub in subscriptions:
-            product = Product().get_by_handle(sub.product)
+            product = Product().get_by_handle(sub['product'])
             info = {}
-            info['active'] = sub.active  
-            info['company'] = sub.company  
+            info['state'] = sub['state']  
             info['product'] = product  
-            info['id'] = sub.id
-            info['product']['url'] = product.hostedURL(product['handle'])
+            info['id'] = sub['id']
+            info['due_date'] = sub['due_date']
+            info['product']['url'] = product.hostedURL(product['handle'], request.user.id)
 
             family = product.family()
 
@@ -118,19 +140,25 @@ def account_info(request):
 
 
         ret['data'] = data
+    
+    print request.GET
 
     if request.GET['section'] == 'profile' and request.GET.has_key('data'):
-        company = Company().find(request.GET['data'])
-        commercial = company['Commercial']
-        incharge = company['Incharge']
 
-        del company['Incharge']
-        del company['Commercial']
-        ret['data'] = { 
-          'company': company,
-          'commercial': commercial,
-          'incharge': incharge
-        }
+        subscriptions = LPISubscription().find({'id': request.GET['data']})
+        if len(subscriptions) > 0:
+            subscription = subscriptions[0]
+            company = subscription['company']
+            commercial = company['Commercial']
+            incharge = company['Incharge']
+
+            del company['Incharge']
+            del company['Commercial']
+            ret['data'] = { 
+              'company': company,
+              'commercial': commercial,
+              'incharge': incharge
+            }
 
   
     return renderJSON(ret)
@@ -140,7 +168,7 @@ def register_contact(request):
     ret = {'error': 1, 'data:': ''}
 
     try:
-        company = Company().create(request.GET['company_name'])
+        company = Company().create(request.GET['company_name'], request.GET['company_sector'])
 
         person = Person().create(request.GET['company_name'],
                                  company['id'],
@@ -150,16 +178,17 @@ def register_contact(request):
                                  'Incharge')
         company['owner'] = person
 
-        subscription = LPISubscription.objects.get(user__id=request.user.id)
-        subscription.company = company['id']
-        subscription.save()
+
+        subscription = LPISubscription().create(product=request.GET['product'],
+                                                user_id=request.user.id,
+                                                company_id=company['id'])
 
             
         if person is not None and company is not None:
             ret['error'] = 0
 
     except Exception, e:
-        print "Chargify error %s" % e
+        ret['data'] = "Chargify error %s" % e
     
     return renderJSON(ret)
 
@@ -170,9 +199,7 @@ def register(request):
         user.save()
 
         if user:
-            subscription = LPISubscription.create(product=request.GET['product'],
-                                                  user_id=user_id)
-
+            
             user = auth.authenticate(username=request.GET['mail'], 
                                              password=request.GET['password'])
             if user:
@@ -186,7 +213,7 @@ def register(request):
                 ret['data'] = 'Error registering user.'
     except Exception, e:
         ret['error'] = 1
-        ret['data'] = 'User already exists.'
+        ret['data'] = 'User already exists. %s' % e
 
     return renderJSON(ret)
 
