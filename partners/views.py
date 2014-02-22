@@ -123,7 +123,7 @@ def account_info(request):
 
     if request.GET['section'] == 'partnership':
         data = {'training':[], 'services':[], 'academic':[]}
-        subscriptions = LPISubscription().find({'user_id' :request.user.id})
+        subscriptions = LPISubscription().find(cf_7=request.user.id)
         for sub in subscriptions:
             product = Product().get_by_handle(sub['product'])
             info = {}
@@ -145,7 +145,7 @@ def account_info(request):
 
     if request.GET['section'] == 'profile' and request.GET.has_key('data'):
 
-        subscriptions = LPISubscription().find({'id': request.GET['data']})
+        subscriptions = LPISubscription().find(id=request.GET['data'])
         if len(subscriptions) > 0:
             subscription = subscriptions[0]
             company = subscription['company']
@@ -194,6 +194,7 @@ def register_contact(request):
 
 def register(request):
     ret = { 'error': 0, 'data': {} }
+    print "suca"
     try:
         user = LPIUser().register(request.GET['mail'], request.GET['password'])        
         user.save()
@@ -213,7 +214,7 @@ def register(request):
                 ret['data'] = 'Error registering user.'
     except Exception, e:
         ret['error'] = 1
-        ret['data'] = 'User already exists. %s' % e
+        ret['data'] = 'User --already exists. %s' % e
 
     return renderJSON(ret)
 

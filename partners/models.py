@@ -136,7 +136,7 @@ class LPISubscription(Model):
         cs = self.chargify.Subscription().getBySubscriptionId(subscription_id)
 
         # get right deal by userid/handle
-        subscriptions = self.find({'user_id': user_id, 'product': product})
+        subscriptions = self.find(cf_7=user_id, cf_6=product)
 
 
         if len(subscriptions) > 0:
@@ -178,10 +178,9 @@ class LPISubscription(Model):
 
         return self
 
-    def find(self, params={}):
-        #TOFIX: waiting from redmineCRM plugin patch
+    def find(self, **params):
         results = []
-        deals = redmine.Deal().find()
+        deals = redmine.Deal().find(**params)
         for deal in deals:
             subscription = self.load_from_resource(deal)
             results.append(subscription)
