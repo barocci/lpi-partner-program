@@ -1,6 +1,6 @@
 var lpi = {
   valid_pages: ['intro', 'training', 'companies', 'joinus', 'teachers',
-                'signup', 'login', 'wizard', 'offers', 'account'],
+                'signup', 'login', 'wizard', 'offers', 'account', 'info'],
   selected_page: 'intro',
   pages: {},
 
@@ -88,6 +88,9 @@ var lpi = {
     }
 
     routie({ 
+       'info/:id': function(id) {
+         route('info', {id: id});
+       },
        'offers/:type': function(type) {
          route('offers', {type: type});
        },
@@ -164,6 +167,10 @@ var lpi = {
     // signup view
     this.pages.signup = new SignupViewModel();
     ko.applyBindings(this.pages.signup, $('.prtn-page-signup')[0]);
+
+    // info view
+    this.pages.info = new InfoViewModel();
+    ko.applyBindings(this.pages.info, $('.prtn-page-info')[0]);
 
     // login view
     this.pages.login = new LoginViewModel();

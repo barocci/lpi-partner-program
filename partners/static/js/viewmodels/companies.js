@@ -7,8 +7,9 @@ var CompaniesListViewModel = function() {
     console.log('requesting');
     self.selected("prtn-page-selected");
 
-    lpi.request('search', {type: 'services'}, function(data) {
-      self.companies(data);
+    lpi.request('search', {type: 'services'}, function(response) {
+      self.companies(response.data);
+
     });
   }
 }

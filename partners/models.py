@@ -170,6 +170,7 @@ class LPISubscription(Model):
 
         self['company'] = False
         if resource.attributes.has_key('contact'):
+            print "looking for %s" % resource.contact.id
             self['company'] = Company().find(resource.contact.id)
 
         self['product'] = custom_fields[self.mapping['product']]
@@ -343,10 +344,37 @@ class Company(Contact):
 
         if resource.attributes.has_key('contacts'):
             for contact_resource in resource.attributes['contacts']:
-                contact = Person().find(contact_resource.attributes['id'])
+                contact = Person().find(id=contact_resource.attributes['id'])
                 self[contact['Role']] = contact
 
         return self
+
+    def search_services(self, params={}):
+        name = "lpi-sp|lpi-csp|lpi-csp-gold"
+        return self.search(name)
+
+    def search_academies(self, params={}):
+        name = "lpi-aap|lpi-aap-pro"
+        return self.search(name)
+
+    def search_trainers(self, params={}):
+        name = "lpi-atp|lpi-atp-pro"
+        return self.search(name)
+
+    def search(self, name):
+        deals = redmine.Deal().find(name=name, cf_4='active')
+        ids = []
+        for deal in deals:
+            ids.append(deal.contact.id)
+
+        resources = redmine.Contact().find(id="|".join(ids))
+
+        companies = []
+
+        for res in resources:
+            companies.append(Company().load_from_resource(res))
+
+        return companies
 
     def find_all(self, params):
         params['is_company'] = 1

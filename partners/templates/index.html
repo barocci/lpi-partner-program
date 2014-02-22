@@ -121,12 +121,11 @@
         </p>
         <ul data-bind="foreach: trainers">
            <li>
-              <img style='max-height:100px' data-bind='attr: {src: image_url}'>
-              <span data-bind='text: name'></span>
-              <span data-bind='text: owner.name'>
+              <img style='max-height:100px;display:none' data-bind='attr: {src: image_url}'>
+              <a data-bind='text: first_name, attr:{href: "#info/" + id}'></a>
+              <span data-bind='text: "(" + city + ")"'>
                  
               </span>
-              <small data-bind='text:owner.job'></small>
            </li>
         </ul>
 
@@ -139,12 +138,11 @@
         </p>
         <ul data-bind="foreach: companies">
            <li>
-              <img style='max-height:100px' data-bind='attr: {src: image_url}'>
-              <span data-bind='text: name'></span>
-              <span data-bind='text: owner.name'>
+              <img style='max-height:100px;display:none' data-bind='attr: {src: image_url}'>
+              <a data-bind='text: first_name, attr:{href: "#info/" + id}'></a>
+              <span data-bind='text: "(" + city + ")"'>
                  
               </span>
-              <small data-bind='text:owner.job'></small>
            </li>
         </ul>
 			</div>
@@ -248,7 +246,31 @@
               <h1>Partnership</h1>
 
               <div data-bind='visible: training().length > 0'>
-                tra
+                <h3>Azienda di formazione</h3>
+
+                <table class='table'>
+                  <thead>
+                    <tr>
+                      <th>Prodotto</th>
+                      <th>Stato</th>
+                      <th>Scadenza</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody data-bind='foreach: training()'>
+                    <tr>
+                      <td>
+                         <a data-bind='text: product.name, click: $parent.goto_profile'></a>
+                      </td>
+                      <td data-bind='text: state'>
+                      <td data-bind='text: due_date'> - </td>
+                      <td>
+                        <a data-bind="attr: {href: product.url}, visible: state != 'active'" 
+                           class='button'>Attiva</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
 
               <div data-bind='visible: services().length > 0'>
@@ -280,7 +302,31 @@
               </div>
 
               <div data-bind='visible: academic().length > 0'>
-                aca
+                <h3>Scuole e Universita'</h3>
+
+                <table class='table'>
+                  <thead>
+                    <tr>
+                      <th>Prodotto</th>
+                      <th>Stato</th>
+                      <th>Scadenza</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody data-bind='foreach: academic()'>
+                    <tr>
+                      <td>
+                         <a data-bind='text: product.name, click: $parent.goto_profile'></a>
+                      </td>
+                      <td data-bind='text: state'>
+                      <td data-bind='text: due_date'> - </td>
+                      <td>
+                        <a data-bind="attr: {href: product.url}, visible: state != 'active'" 
+                           class='button'>Attiva</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
 
             </div>
@@ -617,6 +663,30 @@
             </div>
           </div>
 
+          <div class='prtn-page prtn-page-info' data-bind='css: selected'>
+            <h1 data-bind="text: profiles.company.first_name()"></h1>
+            <p data-bind="text: profiles.company.background()"></p>
+            <address>
+              <div class='street-address' data-bind='text: profiles.company.street()'></div>
+              <div class='city' data-bind='text: profiles.company.city()'></div>
+              <div class='country' data-bind='text: profiles.company.country()'></div>
+              <div class='phone' data-bind='text: profiles.company.phone()'></div>
+              <div class='email' data-bind='text: profiles.company.email()'></div>
+            </address>
+
+            <div data-bind='visible: profiles.incharge.first_name() != ""'>
+              <h3>Responsabile legale</h3>
+              <b data-bind='text: profiles.incharge.first_name() + " " + profiles.incharge.last_name()'></b>
+            </div>
+
+            <div data-bind='visible: profiles.commercial.first_name() != ""'>
+              <h3>Responsabile commerciale</h3>
+              <b data-bind='text: profiles.commercial.first_name() + " " + profiles.commercial.last_name()'></b>
+            </div>
+
+            <h3>
+          </div>
+
           <div class='prtn-page prtn-page-offers' data-bind='css: selected'>
 
             <div data-bind='visible: type() == "service-company" && show'>
@@ -913,6 +983,7 @@
   <script type='text/javascript' src='{% static "js/viewmodels/training.js" %}'></script>
   <script type='text/javascript' src='{% static "js/viewmodels/joinus.js" %}'></script>
   <script type='text/javascript' src='{% static "js/viewmodels/signup.js" %}'></script>
+  <script type='text/javascript' src='{% static "js/viewmodels/info.js" %}'></script>
   <script type='text/javascript' src='{% static "js/viewmodels/wizard.js" %}'></script>
   <script type='text/javascript' src='{% static "js/viewmodels/intro.js" %}'></script>
   <script type='text/javascript' src='{% static "js/viewmodels/offers.js" %}'></script>

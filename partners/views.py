@@ -25,13 +25,13 @@ def load_products(request):
 
 def search(request):
     ret = { 'error': 0, 'data': {} }
-    if request.GET.has_key['type']:
+    if request.GET.has_key('type'):
         if request.GET['type'] == 'services':
-            contacts = Company.search_services()
+            contacts = Company().search_services()
         elif request.GET['type'] == 'academic':
-            contacts = Company.search_academies()
+            contacts = Company().search_academies()
         elif request.GET['type'] == 'training':
-            contacts = Company.search_trainers()
+            contacts = Company().search_trainers()
         else:
             contacts = []
 
@@ -114,7 +114,22 @@ def edit_profile(request):
  
     return renderJSON(ret);
 
+def details(request):
+    ret = {'error': 0, 'data': []}
+    if request.GET.has_key('id'):
+        company = Company().find(request.GET['id'])
+        commercial = company['Commercial']
+        incharge = company['Incharge']
 
+        del company['Incharge']
+        del company['Commercial']
+        ret['data'] = { 
+          'company': company,
+          'commercial': commercial,
+          'incharge': incharge
+        }
+        
+    return renderJSON(ret);
 
 
 @check_login
@@ -124,6 +139,7 @@ def account_info(request):
     if request.GET['section'] == 'partnership':
         data = {'training':[], 'services':[], 'academic':[]}
         subscriptions = LPISubscription().find(cf_7=request.user.id)
+        print subscriptions
         for sub in subscriptions:
             product = Product().get_by_handle(sub['product'])
             info = {}
@@ -134,6 +150,7 @@ def account_info(request):
             info['product']['url'] = Product().hostedURL(product['id'], request.user.id)
 
             family = product.family()
+            print "Famili %s" % family
 
             if family:
                 data[family].append(info)

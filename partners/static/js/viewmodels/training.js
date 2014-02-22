@@ -8,9 +8,8 @@ var TrainingListViewModel = function() {
     console.log('requesting');
     self.selected("prtn-page-selected");
 
-		lpi.request('search', {Tipo: 'Trainer'}, function(data) {
-      console.log(data);
-      self.trainers(data);
+		lpi.request('search', {type: 'training'}, function(response) {
+      self.trainers(response.data);
 		});
 	}
 }
