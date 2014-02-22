@@ -103,7 +103,7 @@ var AccountViewModel = function() {
       if(data[type]) {
         for(i in data[type]) {
           console.log("Setting[" + type + "] " + i + " = " + data[type][i]);
-          self.profiles[type][i](data[type][i]);
+          self.profiles[type][i](data[type][i]?data[type][i]:'');
         }
       }
     }
@@ -130,22 +130,16 @@ var AccountViewModel = function() {
   }
 
   self.goto_profile = function(obj) {
-    self.selected_profile(obj.company);
+    console.log(obj);
+    self.selected_profile(obj.id);
     self.profile_product(obj.product.name);
-    self.show_section({slug: 'profile'}, obj.company);
+    self.show_section({slug: 'profile'}, obj.id);
   }
 
   self.show_all_profiles = function() {
     self.selected_profile(false);
     self.profile_product(false);
     self.ready['profile']();
-  }
-
-  self.state = function(value) {
-    if(value == "True")
-      return "Attivo"
-    else
-      return "Non attivo"
   }
 
   self.ready = {
@@ -172,7 +166,7 @@ var AccountViewModel = function() {
   }
 
   self.show_section = function(section, data) {
-    console.log('showing ' + section.slug);
+    console.log('showing ' + section.slug + ' data ' + data);
     self.loading(true);
     lpi.request('account_info', {section: section.slug, data: data}, function(response) {
       if(self.ready[section.slug]) {

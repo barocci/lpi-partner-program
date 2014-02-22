@@ -268,10 +268,11 @@
                       <td>
                          <a data-bind='text: product.name, click: $parent.goto_profile'></a>
                       </td>
-                      <td data-bind='text: $parent.state(active)'>
-                      <td data-bind=''>- </td>
+                      <td data-bind='text: state'>
+                      <td data-bind='text: due_date'> - </td>
                       <td>
-                        <a data-bind="attr: {href: product.url}" class='button button-disable'>Paga</a>
+                        <a data-bind="attr: {href: product.url}, visible: state != 'active'" 
+                           class='button button-disable'>Attiva</a>
                       </td>
                     </tr>
                   </tbody>
@@ -313,7 +314,7 @@
                           Nome azienda
                         </span>
                         <input type='text' class='form-control' 
-                               data-bind='value: profiles.company.first_name()'
+                               data-bind='value: profiles.company.first_name'
                                placeholder='Nome azienda'>
                       </div>
 
@@ -322,7 +323,7 @@
                           Settore
                         </span>
                         <input type='text' class='form-control' 
-                               data-bind='value: profiles.company.job_title()'
+                               data-bind='value: profiles.company.job_title'
                                placeholder='Settore'>
                       </div>
 
@@ -331,7 +332,7 @@
                           Descrizione
                         </span>
                         <textarea class='form-control' style='height:100px' 
-                                  data-bind='value: profiles.company.background()'
+                                  data-bind='value: profiles.company.background'
                                   placeholder='Descrizione'></textarea>
                       </div>
 
@@ -340,16 +341,16 @@
                           Indirizzo
                         </span>
                         <input type='text' class='form-control' 
-                               data-bind='value: profiles.company.street()'
+                               data-bind='value: profiles.company.street'
                                placeholder='Indirizzo'>
                         <input type='text' class='form-control'
-                               data-bind='value: profiles.company.city()'
+                               data-bind='value: profiles.company.city'
                                placeholder='Citta'>
                         <input type='text' class='form-control'
-                               data-bind='value: profiles.company.postcode()'
+                               data-bind='value: profiles.company.postcode'
                                placeholder='CAP'>
                         <input type='text' class='form-control'
-                               data-bind='value: profiles.company.country()'
+                               data-bind='value: profiles.company.country'
                                placeholder='Paese'>
                       </div>
 
@@ -358,7 +359,7 @@
                           Partita IVA
                         </span>
                         <input type='text' class='form-control' 
-                               data-bind='value: profiles.company.piva()'
+                               data-bind='value: profiles.company.piva'
                                placeholder='Partita IVA'>
                       </div>
 
@@ -367,7 +368,7 @@
                           Website
                         </span>
                         <input type='text' class='form-control' 
-                               data-bind='value: profiles.company.website()'
+                               data-bind='value: profiles.company.website'
                                placeholder='Website'>
                       </div>
 
@@ -376,7 +377,7 @@
                           Telefono
                         </span>
                         <input type='text' class='form-control'
-                               data-bind='value: profiles.company.phone()'
+                               data-bind='value: profiles.company.phone'
                                placeholder='Telefono'>
                       </div>
 
@@ -385,11 +386,12 @@
                           Email
                         </span>
                         <input type='text' class='form-control'
-                               data-bind='value: profiles.company.email()'
+                               data-bind='value: profiles.company.email'
                                placeholder='Email'>
                       </div>
 
-                      <a class='button pull-right'>Salva</a>
+                      <a data-bind='click: function() { submit_profile("company"); }' 
+                         class='button pull-right'>Salva</a>
                     </form>
                     </div>
 

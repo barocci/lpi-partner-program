@@ -21,7 +21,7 @@ var WizardViewModel = function() {
       'owner_lastname': self.owner_lastname(),
       'owner_role': self.owner_role(),
       'userID': self.userID,
-      'handle': self.handle
+      'product': self.handle
     }
 
     lpi.request('register_contact', data, function(response) {

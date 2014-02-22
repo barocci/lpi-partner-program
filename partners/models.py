@@ -24,27 +24,28 @@ class Model(dict):
         self.chargify = Chargify(settings.CHARGIFY_API, settings.CHARGIFY_SUBDOMAIN)
 
         self.mapping = {
-          'Tipo':       'cf_14',
-          'Incharge':   'cf_7',
-          'Role':       'cf_1',
-          'company_id': 'cf_2',
-          'piva':       'cf_3',
-          'state':      'cf_4',
-          'contact_id': 'cf_5',
-          'product':    'cf_6',
-          'user_id':    'cf_7'
+          'Role':            'cf_1',
+          'company_id':      'cf_2',
+          'piva':            'cf_3',
+          'state':           'cf_4',
+          'contact_id':      'cf_5',
+          'product':         'cf_6',
+          'user_id':         'cf_7',
+          'subscription_id': 'cf_8',
+          'visible':         'cf_10'
         }
 
         self.mapping_id = {
-          'Tipo':       '14',
-          'Incharge':   '7',
-          'Role':       '1',
-          'company_id': '2',
-          'piva':       '3',
-          'state':      '4',
-          'contact_id': '5',
-          'product':    '6',
-          'user_id':    '7'
+          'Role':            '1',
+          'company_id':      '2',
+          'piva':            '3',
+          'state':           '4',
+          'contact_id':      '5',
+          'product':         '6',
+          'user_id':         '7',
+          'subscription_id': '8',
+          'visible':         '10'
+
         }
 
     def __getitem__(self, key):
@@ -109,6 +110,88 @@ class ProductFamily(Model):
         return self
 
 
+class LPISubscription(Model):
+    def create(self, product, user_id, company_id):
+        deal = redmine.Deal()
+
+        custom_fields = [
+          {'id': self.mapping_id['product'], 'value': product},
+          {'id': self.mapping_id['user_id'], 'value': user_id},
+          {'id': self.mapping_id['state'], 'value': 'pending'} 
+        ]
+
+        deal.name = product
+        deal.project_id = settings.REDMINE_PROJECT
+        deal.currency = settings.CURRENCY
+        deal.contact_id = company_id
+        deal.custom_fields = custom_fields
+        deal.save()
+
+        self.load_from_resource(deal)
+
+        return self
+
+    def link_deal(self, subscription_id, user_id, product):
+        # load chargify subscription info
+        cs = self.chargify.Subscription().getBySubscriptionId(subscription_id)
+
+        # get right deal by userid/handle
+        subscriptions = self.find({'user_id': user_id, 'product': product})
+
+
+        if len(subscriptions) > 0:
+            subscription = subscriptions[0]
+            deal = redmine.Deal().find(id_=subscription['id'])
+
+            deal.due_date = cs.current_period_ends_at
+            for field in deal.custom_fields:
+                if field.id == self.mapping_id['subscription_id']:
+                    field.value = subscription_id
+                if field.id == self.mapping_id['state']:
+                    field.value = 'active'
+            
+
+            deal.save()
+
+            self.load_from_resource(deal)
+
+        return self
+
+    def load_from_resource(self, resource):
+        if resource.attributes.has_key('name'):
+            self['name'] = resource.name
+        self['id'] = resource.id
+        self['due_date'] = resource.due_date
+
+        custom_fields = {}
+
+        for field in resource.custom_fields:
+            custom_fields["cf_%s" % field.id] = field.value
+
+        self['company'] = False
+        if resource.attributes.has_key('contact'):
+            self['company'] = Company().find(resource.contact.id)
+
+        self['product'] = custom_fields[self.mapping['product']]
+        self['user_id'] = custom_fields[self.mapping['user_id']]
+        self['state'] = custom_fields[self.mapping['state']]
+
+        return self
+
+    def find(self, params={}):
+        #TOFIX: waiting from redmineCRM plugin patch
+        results = []
+        deals = redmine.Deal().find()
+        for deal in deals:
+            subscription = self.load_from_resource(deal)
+            results.append(subscription)
+
+        return results
+
+
+class Subscription(Model):
+    pass
+
 class Product(Model):
     def load_from_family(self, handle):
         products = []
@@ -124,20 +207,19 @@ class Product(Model):
 
     def family(self):
         for key, family in settings.PRODUCT_FAMILIES.iteritems():
-            if self['handle'].find(key):
+            if self['handle'].find(key) >= 0:
+                print "%s -> %s"  % (self['handle'], family)
                 return family
 
         return False
 
     def get_by_handle(self, handle):
         resource = self.chargify.Product().getByHandle(handle)
-
         return self.load_from_resource(resource)
 
-    def hostedURL(self, handle):
+    def hostedURL(self, handle, user_id):
         resource = self.chargify.Product().getByHandle(handle)
-        url = "%s%s/subscriptions/new" % (settings.CHARGIFY_HOSTED_PAGE, resource.id)
-
+        url = "%s%s/subscriptions/new?reference=%s" % (settings.CHARGIFY_HOSTED_PAGE, resource.id, user_id)
         return url
 
     def load_from_resource(self, resource):
@@ -148,6 +230,7 @@ class Product(Model):
         self['price_in_cents'] = resource.price_in_cents
         return self
         #self['price'] = "%.2f" % int(resource.price_in_cents)/100
+
 
 class Contact(Model):
     def find(self, id, **kwarg):
@@ -192,15 +275,16 @@ class Contact(Model):
 
     def find_all(self, params):
         params = self.encode_custom_fields(params)
-        resources = redmine.Contact.find_all(**params)
+        resources = redmine.Contact.find(**params)
         return resources
         
 
 class Company(Contact):
-    def create(self, company_name):
+    def create(self, company_name, company_industry):
         contact = redmine.Contact()
         contact.is_company = True
         contact.first_name = company_name
+        contact.job_title = company_industry
         contact.visibility = 1
         contact.custom_fields = [
             { 'value': 0, 'id': self.mapping_id['Incharge']}
@@ -356,32 +440,8 @@ class Person(Contact):
 
         return people
 
-class LPISubscription(Model):
-    def create(self, product, user_id):
-        deal = redmine.Deal()
-        custom_fields = {
-          self.mapping['product']: product,
-          self.mapping['user_id']: user_id,
-          self.mapping['state']: 'pending' 
-        }
-
-        deal.currency = settings.CURRENCY
-        deal.custom_fields = custom_fields
-        deal.save()
-
-        self.load_from_resource(deal)
-
-        return self
-
-    def load_from_resource(self, resource):
-        self['product'] = resource.custome_fields[self.mapping['product']]
-        self['user_id'] = resource.custome_fields[self.mapping['user_id']]
-        self['state'] = resource.custome_fields[self.mapping['state']]
-    
 
 
-class Subscription(Model):
-    pass
 
 class Reference(Model):
     pass
