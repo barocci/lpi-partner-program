@@ -287,7 +287,7 @@ class Company(Contact):
         contact.job_title = company_industry
         contact.visibility = 1
         contact.custom_fields = [
-            { 'value': 0, 'id': self.mapping_id['Incharge']}
+            { 'value': 'Company', 'id': self.mapping_id['Role']}
         ]
         contact.project_id = settings.REDMINE_PROJECT
         contact.save()

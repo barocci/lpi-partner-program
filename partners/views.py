@@ -28,9 +28,9 @@ def search(request):
     if request.GET.has_key['type']:
         if request.GET['type'] == 'services':
             contacts = Company.search_services()
-        else if request.GET['type'] == 'academic':
+        elif request.GET['type'] == 'academic':
             contacts = Company.search_academies()
-        else if request.GET['type'] == 'training':
+        elif request.GET['type'] == 'training':
             contacts = Company.search_trainers()
         else:
             contacts = []
