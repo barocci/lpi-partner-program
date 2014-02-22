@@ -216,12 +216,12 @@ class Product(Model):
         resource = self.chargify.Product().getByHandle(handle)
         return self.load_from_resource(resource)
 
-    def hostedURL(self, handle, user_id):
-        resource = self.chargify.Product().getByHandle(handle)
-        url = "%s%s/subscriptions/new?reference=%s" % (settings.CHARGIFY_HOSTED_PAGE, resource.id, user_id)
+    def hostedURL(self, product_id, user_id):
+        url = "%s%s/subscriptions/new?reference=%s" % (settings.CHARGIFY_HOSTED_PAGE, product_id, user_id)
         return url
 
     def load_from_resource(self, resource):
+        self['id'] = resource.id
         self['name'] = resource.name
         self['handle'] = resource.handle
         self['description'] = resource.description

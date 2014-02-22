@@ -128,10 +128,10 @@ def account_info(request):
             product = Product().get_by_handle(sub['product'])
             info = {}
             info['state'] = sub['state']  
-            info['product'] = product  
+            info['product'] = product
             info['id'] = sub['id']
             info['due_date'] = sub['due_date']
-            info['product']['url'] = product.hostedURL(product['handle'], request.user.id)
+            info['product']['url'] = Product().hostedURL(product['id'], request.user.id)
 
             family = product.family()
 
