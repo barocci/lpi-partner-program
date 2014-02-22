@@ -1,5 +1,5 @@
 var lpi = {
-  valid_pages: ['intro', 'training', 'companies', 'joinus', 'teachers',
+  valid_pages: ['intro', 'training', 'companies', 'joinus', 'teachers', 'academies',
                 'signup', 'login', 'wizard', 'offers', 'account', 'info'],
   selected_page: 'intro',
   pages: {},
@@ -151,6 +151,10 @@ var lpi = {
     // companies view
     this.pages.companies = new CompaniesListViewModel();
     ko.applyBindings(this.pages.companies, $('.prtn-page-companies')[0]);
+
+    // companies view
+    this.pages.academies = new AcademiesListViewModel();
+    ko.applyBindings(this.pages.academies, $('.prtn-page-academies')[0]);
 
     // teachers view
     this.pages.teachers = new TeachersListViewModel();

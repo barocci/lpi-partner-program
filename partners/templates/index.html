@@ -132,7 +132,7 @@
 			</div>
 
 			<div class='prtn-page prtn-page-companies' data-bind='css: selected'>
-			  <h1>Companies</h1>
+			  <h1>Servizi e Soluzioni</h1>
         <p>
         In questa sezione puoi trovare Aziende e Professionisti in grado di rispondere alle tue esigenze professionali. I nostri partner vengono accuratamente controllati per garantire la massima qualit&agrave; del servizio. Attraverso la funzione di ricerca puoi definire le competenze necessarie, i giudizi di precedenti clienti e l'area di lavoro. In questo modo potrai scegliere tutte le caratteristiche del tuo nuovo fornitore di servizi IT.
         </p>
@@ -146,6 +146,23 @@
            </li>
         </ul>
 			</div>
+      
+      <div class='prtn-page prtn-page-academies' data-bind='css: selected'>
+        <h1>Scuole e Universita</h1>
+        <p>
+        In questa sezione puoi trovare Scuole e Universita in grado di rispondere alle tue esigenze professionali. I nostri partner vengono accuratamente controllati per garantire la massima qualit&agrave; del servizio. Attraverso la funzione di ricerca puoi definire le competenze necessarie, i giudizi di precedenti clienti e l'area di lavoro. In questo modo potrai scegliere tutte le caratteristiche del tuo nuovo fornitore di servizi IT.
+        </p>
+        <ul data-bind="foreach: academies">
+           <li>
+              <img style='max-height:100px;display:none' data-bind='attr: {src: image_url}'>
+              <a data-bind='text: first_name, attr:{href: "#info/" + id}'></a>
+              <span data-bind='text: "(" + city + ")"'>
+                 
+              </span>
+           </li>
+        </ul>
+      </div>
+
 
       <div class='prtn-page prtn-page-teachers' data-bind='css: selected'>
         <h1>Docenti</h1>
@@ -979,6 +996,7 @@
 
   <script type='text/javascript' src='{% static "js/viewmodels/base.js" %}'></script>
   <script type='text/javascript' src='{% static "js/viewmodels/companies.js" %}'></script>
+  <script type='text/javascript' src='{% static "js/viewmodels/academies.js" %}'></script>
   <script type='text/javascript' src='{% static "js/viewmodels/teachers.js" %}'></script>
   <script type='text/javascript' src='{% static "js/viewmodels/training.js" %}'></script>
   <script type='text/javascript' src='{% static "js/viewmodels/joinus.js" %}'></script>
