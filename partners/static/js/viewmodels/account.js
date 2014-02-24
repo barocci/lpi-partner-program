@@ -11,12 +11,13 @@ var AccountViewModel = function() {
 
   self.require_login = true;
 
-  self.sections = [{name: 'Partnership', slug: 'partnership', products: []},
-                   {name: 'Azienda', slug: 'profile', products: []}, 
-                   {name: 'Sedi operative', slug: 'location', products: []}, 
-                   {name: 'Insegnanti', slug: 'teachers', products: []}, 
-                   {name: 'Account', slug: 'account', products: []}, 
-                   {name: 'Pagamenti', slug: 'billing', products: []}];
+  self.sections = [{name: 'Partnership', slug: 'partnership', visible: true},
+                   {name: 'Azienda', slug: 'profile', visible: true}, 
+                   {name: 'Sedi operative', slug: 'location', visible: true}, 
+                   {name: 'Insegnanti', slug: 'teachers', 
+                    visible: true}, 
+                   {name: 'Account', slug: 'account', visible: true}, 
+                   {name: 'Pagamenti', slug: 'billing', visible: true}];
 
 
   self.active_section = ko.observable('');
@@ -135,7 +136,6 @@ var AccountViewModel = function() {
   }
 
   self.del_tag = function(tag) {
-    console.log("del " + arg);
     var tags = self.profiles.company.tag_list().split(",");
     tags.splice(tags.indexOf(tag), 1);
     self.profiles.company.tag_list(tags.join(","));
@@ -198,11 +198,13 @@ var AccountViewModel = function() {
   self.show_section = function(section, data) {
     console.log('showing ' + section.slug + ' data ' + data);
     self.loading(true);
+    lpi.loading(true);
     lpi.request('account_info', {section: section.slug, data: data}, function(response) {
       if(self.ready[section.slug]) {
         self.ready[section.slug](response.data);
       }
       self.loading(false);
+      lpi.loading(false);
       self.active_section(section.slug);
     });
   }

@@ -7,7 +7,8 @@
   <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
   <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
   <link rel="stylesheet" href="{% static 'css/vendor/bootstrap/bootstrap.min.css' %}">
-	<link rel="stylesheet" href="{% static 'css/vendor/jquery.tagsinput.css' %}">
+  <link rel="stylesheet" href="{% static 'css/vendor/jquery.tagsinput.css' %}">
+	<link rel="stylesheet" href="{% static 'css/vendor/isotope.css' %}">
 	<link rel="stylesheet" href="{% static 'css/vendor/animate.css' %}">
 	<link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&subset=latin,latin-ext' 
 	      rel='stylesheet' type='text/css'>
@@ -114,21 +115,42 @@
 			</div>
 
 			<div class='prtn-page prtn-page-training' data-bind='css: selected'>
-			  <h1>Training</h1>
+			  <h1>Formazione</h1>
         <p>
         In questa sezione puoi trovare Aziende ed Agenzie formative in grado di erogare corsi certificati LPI: Linux Essentials, LPIC-1, LPIC-2 ed LPIC-3.<br />
         La certificazione professionale LPI &egrave; indice di garanzia e competenza nei confronti di clienti e datori di lavoro.<br />
         Cerca adesso la sede più vicina a casa tua!
         </p>
-        <ul data-bind="foreach: trainers">
-           <li>
+
+        <div class='list-filters'>
+          <fieldset data-bind='visible: cities().length > 0'>
+            <h3>Citt&agrave;</h3>
+            <ul data-bind='foreach: cities'>
+              <li data-bind='text: $data, click: function() { $parent.filter($data); },
+                             css: {active:$parent.tag_is_active($data)}'></li>
+
+            </ul>
+          </fieldset>
+
+          <fieldset data-bind='visible: tags().length > 0'>
+            <h3>Competenze</h3>
+            <ul data-bind='foreach: tags'>
+              <li data-bind='text: $data, click: function() { $parent.filter($data); },
+                             css: {active:$parent.tag_is_active($data)}'></li>
+
+            </ul>
+          </fieldset>
+        </div>
+
+        <div id='trainers-isotope' class='isotope' data-bind="foreach: trainers">
+           <div class='item' data-bind='visible: visible()'>
               <img style='max-height:100px;display:none' data-bind='attr: {src: image_url}'>
               <a data-bind='text: first_name, attr:{href: "#info/" + id}'></a>
               <span data-bind='text: "(" + city + ")"'>
                  
               </span>
-           </li>
-        </ul>
+           </div>
+        </div>
 
 			</div>
 
@@ -137,21 +159,40 @@
         <p>
         In questa sezione puoi trovare Aziende e Professionisti in grado di rispondere alle tue esigenze professionali. I nostri partner vengono accuratamente controllati per garantire la massima qualit&agrave; del servizio. Attraverso la funzione di ricerca puoi definire le competenze necessarie, i giudizi di precedenti clienti e l'area di lavoro. In questo modo potrai scegliere tutte le caratteristiche del tuo nuovo fornitore di servizi IT.
         </p>
-        <ul data-bind="foreach: companies">
-           <li>
+        <div class='list-filters'>
+          <fieldset data-bind='visible: cities().length > 0'>
+            <h3>Citt&agrave;</h3>
+            <ul data-bind='foreach: cities'>
+              <li data-bind='text: $data, click: function() { $parent.filter($data); },
+                             css: {active:$parent.tag_is_active($data)}'></li>
+
+            </ul>
+
+          </fieldset>
+          <fieldset data-bind='visible: tags().length > 0'>
+            <h3>Competenze</h3>
+            <ul data-bind='foreach: tags'>
+              <li data-bind='text: $data, click: function() { $parent.filter($data); },
+                             css: {active:$parent.tag_is_active($data)}'></li>
+
+            </ul>
+          </fieldset>
+        </div>
+        <div id='companies-isotope' class='isotope' data-bind="foreach: companies">
+           <div class='item' data-bind='visible: visible()'>
               <img style='max-height:100px;display:none' data-bind='attr: {src: image_url}'>
               <a data-bind='text: first_name, attr:{href: "#info/" + id}'></a>
               <span data-bind='text: "(" + city + ")"'>
                  
               </span>
-           </li>
-        </ul>
+           </div>
+        </div>
 			</div>
       
       <div class='prtn-page prtn-page-academies' data-bind='css: selected'>
-        <h1>Scuole e Universita</h1>
+        <h1>Scuole e Universit&agrave;</h1>
         <p>
-        In questa sezione puoi trovare Scuole e Universita in grado di rispondere alle tue esigenze professionali. I nostri partner vengono accuratamente controllati per garantire la massima qualit&agrave; del servizio. Attraverso la funzione di ricerca puoi definire le competenze necessarie, i giudizi di precedenti clienti e l'area di lavoro. In questo modo potrai scegliere tutte le caratteristiche del tuo nuovo fornitore di servizi IT.
+        In questa sezione puoi trovare Scuole e Universit&agrave; in grado di rispondere alle tue esigenze professionali. I nostri partner vengono accuratamente controllati per garantire la massima qualit&agrave; del servizio. Attraverso la funzione di ricerca puoi definire le competenze necessarie, i giudizi di precedenti clienti e l'area di lavoro. In questo modo potrai scegliere tutte le caratteristiche del tuo nuovo fornitore di servizi IT.
         </p>
         <ul data-bind="foreach: academies">
            <li>
@@ -190,8 +231,11 @@
               <div class='prtn-box-icon'></div>
               <div class='prtn-box-desc'>
               Certifica con LPI i tuoi corsi professionali per Amministratore di Sistema, garantisci qualit&agrave; ai tuoi studenti, renditi visibile attraverso il sito ufficiale del pi&uacute; importante ente di certificazione professionale in ambito Linux al mondo.</div>
-              <a data-bind='click: show_training' 
-                 class="btn prtn-box-button">maggiori dettagli</a>
+              <div class='prtn-box-button-cont'>
+                <a data-bind='click: show_training' 
+                   class="button">maggiori dettagli</a>
+              </div>
+
             </div>
           </li>
 
@@ -202,8 +246,10 @@
               <div class='prtn-box-desc'>
               Certifica la tua azienda con LPI, garantisci la qualità di servizi e consulenze, contraddistinguiti dalla concorrenza mostrando le tue competenze ed i tuoi servizi attraverso il sito ufficiale di LPI.
               </div>
-              <a data-bind='click: show_companies' 
-                 class="btn prtn-box-button">maggiori dettagli</a>
+              <div class='prtn-box-button-cont'>
+                <a data-bind='click: show_companies' 
+                   class="button">maggiori dettagli</a>
+              </div>
             </div>
           </li>
         </ul>
@@ -222,7 +268,7 @@
              <p class='col-sm-6 '>
                  <a href='#offers/training-company'>vai all'offerta per le aziende</a ><br><br>
 
-                  <a href="#offers/training-academy">vai all'offerta per scuole e universita</a>
+                  <a href="#offers/training-academy">vai all'offerta per scuole e universit&agrave;</a>
              </p>
 
 
@@ -320,7 +366,7 @@
               </div>
 
               <div data-bind='visible: academic().length > 0'>
-                <h3>Scuole e Universita'</h3>
+                <h3>Scuole e Universit&agrave;</h3>
 
                 <table class='table'>
                   <thead>
@@ -495,8 +541,7 @@
                         <h3>Responsabile aministrativo</h3>
                         <div data-bind='with:profiles.incharge'>
                           <div class='person-card'>
-                            <img src='image_url()'>
-                            <span data-bind='text: first_name() + " " + last_name()'>
+                            <b data-bind='text: first_name() + " " + last_name()'></b>
                           </div>
                           <a data-bind='click: function() { $parent.edit_profile("incharge") }'>
                             Modifica responsabile amministrativo</a>
@@ -514,8 +559,7 @@
                         <div data-bind='with:profiles.commercial'>
                           <div data-bind='visible: id() != ""'>
                             <div class='person-card'>
-                              <img src='image_url()'>
-                              <span data-bind='text: first_name() + " " + last_name()'>
+                              <b data-bind='text: first_name() + " " + last_name()'></b>
                             </div>
                             <a data-bind='click: function() { $parent.edit_profile("commercial") }'>
                               Modifica responsabile commerciale</a>
@@ -1050,6 +1094,7 @@
   <script type='text/javascript' src='{% static "js/vendor/jquery/jquery.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/jquery/jquery.cookie.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/jquery/jquery.tagsinput.min.js" %}'></script>
+  <script type='text/javascript' src='{% static "js/vendor/jquery/jquery.isotope.min.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/routie.min.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/knockout.js/knockout-3.0.0.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/knockout.js/knockout.mapping.js" %}'></script>

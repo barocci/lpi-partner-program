@@ -6,7 +6,8 @@ var NavViewModel = function() {
                               {hash:'companies', label:'Servizi e Soluzioni'},
                               {hash:'academies', label:'Scuole e Universita'},
                               {hash:'joinus', label:'Partnership'},
-                              {hash:'teachers', label:'Docenti'}]);
+                             // {hash:'teachers', label:'Docenti'}
+                             ]);
 
   self.selected = ko.observable('intro');
 

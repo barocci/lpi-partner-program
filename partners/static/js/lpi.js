@@ -7,6 +7,14 @@ var lpi = {
   username: '',
   user_id: '',
 
+  tags: { option: 'PHP', 
+                option: 'Python',
+                option: 'Web Servers',
+                option: 'Sysadmin',
+                option: 'Javascript',
+                option: 'Web'},
+
+
   init: function() {
     this.init_views();
     this.init_router(); 
@@ -51,6 +59,7 @@ var lpi = {
 
     return false;
   },
+
 
   routing: false,
 
@@ -227,3 +236,16 @@ var lpi = {
 
 }
 
+
+
+Array.prototype.unique = function() {
+    var a = this.concat();
+    for(var i=0; i<a.length; ++i) {
+        for(var j=i+1; j<a.length; ++j) {
+            if(a[i] === a[j])
+                a.splice(j--, 1);
+        }
+    }
+
+    return a;
+};

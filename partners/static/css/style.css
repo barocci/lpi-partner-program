@@ -264,7 +264,7 @@ footer .sitemap a:hover {
 
 .prtn-box-container {
   margin:60px 0px;
-  min-height:400px;
+  min-height:300px;
 }
 
 .prtn-box {
@@ -287,7 +287,7 @@ footer .sitemap a:hover {
 }
 
 .prtn-box-services {
-  height:800px;
+  height:700px;
 }
 
 .prtn-box-academies {
@@ -297,6 +297,7 @@ footer .sitemap a:hover {
 .prtn-box-trainers {
 
 }
+
 
 .prtn-box-price {
   font-size:20px;
@@ -376,6 +377,7 @@ footer .sitemap a:hover {
   font-weight: 100;
   padding:15px 0px;
   min-height:200px;
+  line-height:20px;
 }
 
 .prtn-box-button {
@@ -511,10 +513,12 @@ footer .sitemap a:hover {
   text-decoration: none;
 }
 
-.fixed-headers .input-group-addon {
+.input-group-addon {
   width:140px;
   vertical-align:top;
   text-align:left;
+  color:#fff;
+  background-color: #692630;
 }
 
 .input-group {
@@ -532,4 +536,26 @@ footer .sitemap a:hover {
 
 .avatar-box img {
   height:150px;
+}
+
+
+.isotope .item {
+  width:30%;
+  height: 100px;
+  background:#fff;
+  float:left;
+  margin:10px 5px;
+}
+
+.list-filters {
+
+}
+
+.list-filters ul li {
+
+}
+
+.list-filters ul li.active {
+  background:#692630;
+  color:#fff;
 }
