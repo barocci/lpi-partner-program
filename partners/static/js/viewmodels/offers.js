@@ -32,7 +32,7 @@ var OffersViewModel = function() {
 
   self.init = function(param) {
     if(param == undefined) {
-      redirect('joinus');
+      lpi.redirect('joinus');
     }
     self.type(param.type);
 
