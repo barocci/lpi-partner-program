@@ -31,7 +31,11 @@ var OffersViewModel = function() {
   }
 
   self.init = function(param) {
+    if(param == undefined) {
+      redirect('joinus');
+    }
     self.type(param.type);
+
     self.show(true);
     return;
    
