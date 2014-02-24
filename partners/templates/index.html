@@ -6,7 +6,8 @@
 	<title>Linux Professional Institute - Italia </title>
   <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
   <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-	<link rel="stylesheet" href="{% static 'css/vendor/bootstrap/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/vendor/bootstrap/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/vendor/jquery.tagsinput.css' %}">
 	<link rel="stylesheet" href="{% static 'css/vendor/animate.css' %}">
 	<link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&subset=latin,latin-ext' 
 	      rel='stylesheet' type='text/css'>
@@ -401,6 +402,16 @@
 
                       <div class="input-group">
                         <span class="input-group-addon">
+                          Competenze
+                        </span>
+                        <input id='tags' placeholder='Tags' type='text' class='form-control'
+                               data-bind='value: profiles.company.tag_list()'>
+                        
+                      </div>
+
+
+                      <div class="input-group">
+                        <span class="input-group-addon">
                           Indirizzo
                         </span>
                         <input type='text' class='form-control' 
@@ -469,16 +480,6 @@
                           <a data-bind=''>Cambia immagine</a>
                         </div>
 
-                      </div>
-                      <div class='row'>
-                        <form class='fixed-headers'>
-
-                          <h3>Competenze</h3>
-                          <div>
-                            <input placeholder='Tags' type='text' class='form-control'>
-                            <br><a class='button'>Aggiungi</a>
-                          </div>
-                        </form>
                       </div>
                     </div>
 
@@ -730,7 +731,7 @@
 
               <div class="row">
               <ul class='prtn-box-container'>
-                <li class='prtn-box col-sm-3'>
+                <li class='prtn-box col-sm-3 prtn-box-3'>
                   <div class='prtn-box-inner prtn-box-services'>
                     <h3>LPI SP</h3>
                     <div class='prtn-box-icon'></div>
@@ -756,7 +757,7 @@
                   </div>
                 </li>
 
-                <li class='prtn-box col-sm-3'>
+                <li class='prtn-box col-sm-3 prtn-box-3'>
                   <div class='prtn-box-inner prtn-box-services'>
                     <h3>LPI CSP</h3>
                     <div class='prtn-box-icon'></div>
@@ -786,7 +787,7 @@
                   </div>
                 </li>
 
-                <li class='prtn-box col-sm-3'>
+                <li class='prtn-box col-sm-3 prtn-box-3'>
                   <div class='prtn-box-inner prtn-box-services'>
                     <h3>LPI CSP GOLD</h3>
                     <div class='prtn-box-icon'></div>
@@ -1048,6 +1049,7 @@
   
   <script type='text/javascript' src='{% static "js/vendor/jquery/jquery.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/jquery/jquery.cookie.js" %}'></script>
+  <script type='text/javascript' src='{% static "js/vendor/jquery/jquery.tagsinput.min.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/routie.min.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/knockout.js/knockout-3.0.0.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/knockout.js/knockout.mapping.js" %}'></script>

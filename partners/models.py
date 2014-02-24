@@ -321,6 +321,10 @@ class Company(Contact):
         if resource.attributes.has_key('emails'):
             self['email'] = resource.emails[0].address
 
+        self['tag_list'] = ''
+        if resource.attributes.has_key('tag_list'):
+            self['tag_list'] = resource.tag_list
+
         self['street'] = ''
         self['postcode'] = ''
         self['city'] = ''
@@ -336,7 +340,7 @@ class Company(Contact):
         self['image_url'] = ''
 
         if resource.attributes.has_key('avatar'):
-            avatar = Attachment.get(resource.attributes['avatar'].attributes['attachment_id'])
+            avatar = redmine.Attachment.get(resource.attributes['avatar'].attributes['attachment_id'])
             self['image_url'] = avatar['content_url']
         
         self['Incharge'] = False
@@ -451,7 +455,7 @@ class Person(Contact):
 
         self['image_url'] = ''
         if resource.attributes.has_key('avatar'):
-            avatar = Attachment.get(resource.attributes['avatar'].attributes['attachment_id'])
+            avatar = redmine.Attachment.get(resource.attributes['avatar'].attributes['attachment_id'])
             self['image_url'] = avatar['content_url']
 
         return self

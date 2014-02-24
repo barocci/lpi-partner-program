@@ -270,8 +270,16 @@ footer .sitemap a:hover {
 .prtn-box {
 	float:left;
 	opacity:1;
-  width:29%;
   position:relative;
+}
+
+.prtn-box-2 {
+  width:45%;
+}
+
+
+.prtn-box-3 {
+  width:29%;
 }
 
 .animated {
@@ -338,6 +346,7 @@ footer .sitemap a:hover {
    height:120px;
    width:130px;
    margin:20px auto;
+   display:none;
    background-color:#fff;
    padding:20px;
    border-radius:100%;

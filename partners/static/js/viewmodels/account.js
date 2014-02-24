@@ -2,6 +2,13 @@ var AccountViewModel = function() {
   var self = this;
   ko.BaseViewModel.call(self);
 
+  self.tags = { option: 'PHP', 
+                option: 'Python',
+                option: 'Web Servers',
+                option: 'Sysadmin',
+                option: 'Javascript',
+                option: 'Web'};
+
   self.require_login = true;
 
   self.sections = [{name: 'Partnership', slug: 'partnership', products: []},
@@ -26,6 +33,7 @@ var AccountViewModel = function() {
   self.edit = { 
     incharge: ko.observable(false),
     commercial: ko.observable(false),
+    company: ko.observable(false)
   }
 
   self.profiles = {
@@ -44,6 +52,7 @@ var AccountViewModel = function() {
       'website': ko.observable(''),
       'phone': ko.observable(''),
       'email': ko.observable(''),
+      'tag_list': ko.observable(''),
       'image_url': ko.observable(''),
       'Role': ko.observable('Company'),
       'type': 'company',
@@ -119,6 +128,19 @@ var AccountViewModel = function() {
     self.edit[type](false);
   }
 
+  self.add_tag = function(tag) {
+    var tags = self.profiles.company.tag_list().split(",");
+    tags.push(tag);
+    self.profiles.company.tag_list(tags.join(","));
+  }
+
+  self.del_tag = function(tag) {
+    console.log("del " + arg);
+    var tags = self.profiles.company.tag_list().split(",");
+    tags.splice(tags.indexOf(tag), 1);
+    self.profiles.company.tag_list(tags.join(","));
+  }
+
   self.submit_profile = function(type) {
     var profile = ko.mapping.toJS(self.profiles[type]);
     console.log(profile);
@@ -156,8 +178,15 @@ var AccountViewModel = function() {
       if(self.selected_profile()) {
         console.log(data);
         self.observe_form(data);
-        console.log("----");
+        $('#tags').tagsInput({
+            'autocomplete': self.tags,
+            'interactive':true,
+            'width':'100%',
+            'onAddTag':self.add_tag,
+            'onRemoveTag':self.del_tag,
+        });
         console.log(self.profiles.company.first_name());
+
       } else {
         lpi.request('account_info', {section: 'partnership'}, function(response) {
           self.ready['partnership'](response);
