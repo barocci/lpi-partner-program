@@ -167,8 +167,8 @@
       <div class='prtn-page prtn-page-teachers' data-bind='css: selected'>
         <h1>Docenti</h1>
         <p>
-       Se sei un professionista certificato Linux Essentials, LPIC-1, LPIC-2 o LPIC-3, puoi aderire al nostro programma di partnership per docenti. Attraverso questo programma puoi collaborare attivamente con i nostri partner per la formazione ATP LE, ATP LE, AAP PRO e ATP PRO.<br />
-       Per erogare un corso certificato i partner hanno l'obbligo di impiegare un docente certificato di livello pari o superiore al corso che intendono organizzare, un'occasione unica per trovare nuove opportunit&agrave; lavorative!
+         Se sei un professionista certificato Linux Essentials, LPIC-1, LPIC-2 o LPIC-3, puoi aderire al nostro programma di partnership per docenti. Attraverso questo programma puoi collaborare attivamente con i nostri partner per la formazione ATP LE, ATP LE, AAP PRO e ATP PRO.<br />
+         Per erogare un corso certificato i partner hanno l'obbligo di impiegare un docente certificato di livello pari o superiore al corso che intendono organizzare, un'occasione unica per trovare nuove opportunit&agrave; lavorative!
         </p>
         
       </div>
@@ -470,9 +470,22 @@
                         </div>
 
                       </div>
+                      <div class='row'>
+                        <form class='fixed-headers'>
+
+                          <h3>Competenze</h3>
+                          <div>
+                            <input placeholder='Tags' type='text' class='form-control'>
+                            <br><a class='button'>Aggiungi</a>
+                          </div>
+                        </form>
+                      </div>
                     </div>
 
+
                   </div>
+
+                  
 
                   <div class="row">
                     <div data-bind='' class='col-sm-6'>
@@ -718,50 +731,97 @@
               <div class="row">
               <ul class='prtn-box-container'>
                 <li class='prtn-box col-sm-3'>
-                  <div class='prtn-box-inner'>
+                  <div class='prtn-box-inner prtn-box-services'>
                     <h3>LPI SP</h3>
                     <div class='prtn-box-icon'></div>
-                    <div class='prtn-box-desc'>
-                    <p>
-                    LPI SP (Service Provider) &egrave; il programma di partnership che ti permette di mostrare i servizi offerti legati a Linux e all'Open Source (es: installazione e configurazione CMS, amministrazione di sistema Linux, sviluppo e personalizzazione software).
-                    </p>
+                    <div class='prtn-box-price'>
+                      GRATUITO
                     </div>
-                    <a data-bind='attr:{href: "#signup/" + product_low.handle()}' 
-                       class="btn prtn-box-button">Acquista</a>
+
+                    <div class='prtn-box-desc'>
+
+                    <p>
+                    LPI SP (Service Provider) &egrave; il programma di partnership che ti permette di mostrare i servizi offerti legati a Linux e all'Open Source (es: installazione e configurazione CMS, amministrazione di sistema Linux, sviluppo e personalizzazione software).<br>
+                    </div>
+                    <ul class='prtn-box-bonus-list'>
+                        <li>Certifizazione LPIC-1</li>
+                        <li>Disponibilita' utilizzo logo LPI</li>
+                    </ul>
+                    </p>
+                    <div class='prtn-box-button-cont'>
+                      <a href="#signup/lpi-sp" class="button">Acquista</a>
+          
+                    </div>
+                    
                   </div>
                 </li>
 
-                <li class='prtn-box col-sm-3 col-sm-offset-1'>
-                  <div class='prtn-box-inner'>
+                <li class='prtn-box col-sm-3'>
+                  <div class='prtn-box-inner prtn-box-services'>
                     <h3>LPI CSP</h3>
                     <div class='prtn-box-icon'></div>
-                    <div class='prtn-box-desc'>
-                    <p>
-                    LPI CSP (Certified Solution Provider) &egrave; il programma di partnership che ti permette di mostrare i servizi offerti legati a Linux e all'Open Source (es: installazione e configurazione CMS, amministrazione di sistema Linux, sviluppo e personalizzazione software).<br />
-                    Attraverso questo programma lo staff di LPI Italia controlla e certifica la qualit&agrave; dei servizi offerti dalla tua azienda attraverso la certificazione LPIC-1 dei tuoi collaboratori e la referenza di almeno uno dei tuoi clienti.
-                    </p>
+                    <div class='prtn-box-price'>
+                      250  &euro;
                     </div>
-                    <a data-bind='attr:{href: "#signup/" + product_middle.handle()}' 
-                       class="btn prtn-box-button">Acquista</a>
+                    <div class='prtn-box-desc'>
+                      <p>
+                      LPI CSP (Certified Solution Provider) &egrave; il programma di partnership che ti permette di mostrare i servizi offerti legati a Linux e all'Open Source (es: installazione e configurazione CMS, amministrazione di sistema Linux, sviluppo e personalizzazione software).<br />
+                      </p>
+                      
+                    </div>
+                      <ul class='prtn-box-bonus-list'>
+                        <li>Certifizazione LPIC-1</li>
+                        <li>Disponibilita' utilizzo logo LPI</li>
+                        <li>Posizionamento nel portale LPI</li>
+                        <li>Banner su lpi-italia.org</li>
+                        <li>Accesso database docenti LCT</li>
+                        <li>Referenze clienti certificate</li>
+                      </ul>
+
+                    <div class='prtn-box-button-cont'>
+                      <a href="#signup/lpi-csp" class="button">Acquista</a>
+                      
+                    </div>
+
                   </div>
                 </li>
 
-                <li class='prtn-box col-sm-3 col-sm-offset-1'>
-                  <div class='prtn-box-inner'>
+                <li class='prtn-box col-sm-3'>
+                  <div class='prtn-box-inner prtn-box-services'>
                     <h3>LPI CSP GOLD</h3>
                     <div class='prtn-box-icon'></div>
-                    <div class='prtn-box-desc'>
-                    <p>
-                    LPI CSP (Certified Solution Provider) &egrave; il programma di partnership che ti permette di mostrare i servizi offerti legati a Linux e all'Open Source (es: installazione e configurazione CMS, amministrazione di sistema Linux, sviluppo e personalizzazione software).<br />
-                    Attraverso questo programma lo staff di LPI Italia controlla e certifica la qualit&agrave; dei servizi offerti dalla tua azienda attraverso la certificazione LPIC-1 ed LPIC-2 dei tuoi collaboratori e la referenza di almeno due tuoi clienti.
-                    </p>
+                    <div class='prtn-box-price'>
+                      850  &euro;
                     </div>
-                    <a data-bind='attr:{href: "#signup/" + product_pro.handle()}' 
-                       class="btn prtn-box-button">Acquista</a>
+
+                    <div class='prtn-box-desc'>
+                      <p>
+                      LPI CSP (Certified Solution Provider) &egrave; il programma di partnership che ti permette di mostrare i servizi offerti legati a Linux e all'Open Source (es: installazione e configurazione CMS, amministrazione di sistema Linux, sviluppo e personalizzazione software).<br />
+                      </p>
+                    </div>
+                      <ul class='prtn-box-bonus-list'>
+                        <li>Certifizazione LPIC-1</li>
+                        <li>Disponibilita' utilizzo logo LPI</li>
+                        <li>Posizionamento nel portale LPI</li>
+                        <li>Banner su lpi-italia.org</li>
+                        <li>Accesso database docenti LCT</li>
+                        <li>Referenze clienti certificate</li>
+                        <li>SEO Friendly Partner Page</li>
+                        <li>Premium Presence nel Training Portal</li>
+                        <li>Tracker and CRM Services</li>
+                        <li>Top Search Result</li>
+                      </ul>
+
+
+                    <div class='prtn-box-button-cont'>
+                      <a href="#signup/lpi-csp-gold" class="button">Acquista</a>
+                    </div>
                   </div>
                 </li>
 
               </ul>
+
+              <div style='clear:both'></div>
 
 
               </div>

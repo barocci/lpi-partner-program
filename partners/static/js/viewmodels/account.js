@@ -4,12 +4,13 @@ var AccountViewModel = function() {
 
   self.require_login = true;
 
-  self.sections = [{name: 'Partnership', slug: 'partnership'},
-                   {name: 'Profilo', slug: 'profile'}, 
-                   {name: 'Account', slug: 'account'}, 
-                   {name: 'Pagamenti', slug: 'billing'}, 
-                   {name: 'Ordini', slug: 'orders'}, 
-                   {name: 'Messaggi', slug: 'messages'}];
+  self.sections = [{name: 'Partnership', slug: 'partnership', products: []},
+                   {name: 'Azienda', slug: 'profile', products: []}, 
+                   {name: 'Sedi operative', slug: 'location', products: []}, 
+                   {name: 'Insegnanti', slug: 'teachers', products: []}, 
+                   {name: 'Account', slug: 'account', products: []}, 
+                   {name: 'Pagamenti', slug: 'billing', products: []}];
+
 
   self.active_section = ko.observable('');
 

@@ -270,33 +270,56 @@ footer .sitemap a:hover {
 .prtn-box {
 	float:left;
 	opacity:1;
-  height:300px;
+  width:29%;
   position:relative;
 }
-
-.prtn-box-3 {
-  width:33%;
-}
-
-.prtn-box-2 {
-  width:50%;
-
-}
-.prtn-box-1 {
-  width:100%;
-}
-
 
 .animated {
 	opacity:1;
 }
 
-.prtn-box-inner {
+.prtn-box-services {
+  height:800px;
+}
+
+.prtn-box-academies {
+
+}
+
+.prtn-box-trainers {
+
+}
+
+.prtn-box-price {
+  font-size:20px;
+  font-weight:bold;
+  text-align:center;
+  margin:15px 0px;
+}
+
+.prtn-box-button-cont {
+  text-align:center;
+  padding:20px 0px;
   position:absolute;
+  bottom:30px;
+  left:30%;
+}
+
+.prtn-box-bonus-list {
+  list-style-type: circle;
+}
+
+.prtn-box-bonus-list li {
+  font-weight:bold;
+}
+
+
+.prtn-box-inner {
   left:0px;
 	background:#fff;
 	margin:0px auto;
 	padding:15px;
+  position:relative;
 	border-radius:3px;
 	-webkit-border-radius:3px;
 	-moz-border-radius:3px;
@@ -342,6 +365,8 @@ footer .sitemap a:hover {
 
 .prtn-box-desc {
   font-weight: 100;
+  padding:15px 0px;
+  min-height:200px;
 }
 
 .prtn-box-button {

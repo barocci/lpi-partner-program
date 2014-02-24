@@ -25,7 +25,6 @@ var lpi = {
       this.pages.nav.login();
     } else {
       console.log('not logged');
-      //this.pages.nav.logout();
     }
   },
 
@@ -53,12 +52,25 @@ var lpi = {
     return false;
   },
 
+  routing: false,
+
   init_router: function() {
     var that = this;
 
     function route(page, args) {
+      console.log('Page sel' + that.selected_page);
+      console.log('Page ' + page);
+      if(that.routing) {
+        console.log('redirecting ' + page);  
+        that.redirect(that.selected_page);
+        return;
+      }
+
       if(that.valid_pages.indexOf(page) >= 0) {
+        that.routing = true;
+        var different = that.selected_page != page;
         var old_view = that.pages[that.selected_page];
+        that.selected_page = page;
         var new_view = that.pages[page];
 
         if(!lpi.is_logged() && new_view.require_login) {
@@ -72,15 +84,16 @@ var lpi = {
         old_view.end(page, args);
         new_view.init(args);
 
-        if(page != that.selected_page) {
+        if(different) {
           old_view.out_transition(function() {
-              that.selected_page = page;
               new_view.in_transition();
               that.loading(false);
+              that.routing = false;
           });
         } else {
-           new_view.in_transition();
-           that.loading(false);
+          new_view.in_transition();
+          that.loading(false);
+          that.routing = false;
         }
 
         $('body,html').animate({scrollTop: 0}, 500);

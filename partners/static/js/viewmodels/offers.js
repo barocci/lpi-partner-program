@@ -32,6 +32,8 @@ var OffersViewModel = function() {
 
   self.init = function(param) {
     self.type(param.type);
+    self.show(true);
+    return;
    
     lpi.request('load_products',{family: self.type()}, function(response) {
       var products = self.order_by_price(response);
