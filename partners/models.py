@@ -170,8 +170,9 @@ class LPISubscription(Model):
 
         self['company'] = False
         if resource.attributes.has_key('contact'):
-            print "looking for %s" % resource.contact.id
-            self['company'] = Company().find(resource.contact.id)
+            self['company'] = resource.contact.id
+        #    print "looking for %s" % resource.contact.id
+        #    self['company'] = Company().find(resource.contact.id)
 
         self['product'] = custom_fields[self.mapping['product']]
         self['user_id'] = custom_fields[self.mapping['user_id']]
