@@ -169,9 +169,9 @@ class LPISubscription(Model):
             custom_fields["cf_%s" % field.id] = field.value
 
         self['company'] = False
-        if resource.attributes.has_key('contact'):
-            print "looking for %s" % resource.contact.id
-            self['company'] = Company().find(resource.contact.id)
+        #if resource.attributes.has_key('contact'):
+        #    print "looking for %s" % resource.contact.id
+        #    self['company'] = Company().find(resource.contact.id)
 
         self['product'] = custom_fields[self.mapping['product']]
         self['user_id'] = custom_fields[self.mapping['user_id']]
@@ -349,7 +349,7 @@ class Company(Contact):
         if resource.attributes.has_key('contacts'):
             for contact_resource in resource.attributes['contacts']:
                 contact = Person().find(id=contact_resource.attributes['id'])
-                self[contact['Role']] = contact
+                self[contact['Role']] = Person().load_from_resource(contact)
 
         return self
 
