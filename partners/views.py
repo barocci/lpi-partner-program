@@ -65,8 +65,8 @@ def logout(request):
 def subscribe(request):
     ret = {'error': 0, 'data:': ''}
     subscription = LPISubscription().link_deal(request.GET['id'],
-                                                    request.GET['ref'],
-                                                    request.GET['product'])
+                                               request.GET['ref'],
+                                               request.GET['product'])
 
     return HttpResponseRedirect("/#account")
 
@@ -161,9 +161,6 @@ def account_info(request):
         if len(subscriptions) > 0:
             subscription = subscriptions[0]
             company = Company().find(subscription['company'])
-            print company
-
-            return renderJSON(ret)
             commercial = company['Commercial']
             incharge = company['Incharge']
 
@@ -210,7 +207,6 @@ def register_contact(request):
 
 def register(request):
     ret = { 'error': 0, 'data': {} }
-    print "suca"
     try:
         user = LPIUser().register(request.GET['mail'], request.GET['password'])        
         user.save()

@@ -362,6 +362,9 @@
                       <td>
                         <a data-bind="attr: {href: product.url}, visible: state != 'active'" 
                            class='button'>Attiva</a>
+
+                        <a data-bind="click: $parent.goto_profile, visible: state == 'active'">
+                          <i class='glyphicon glyphicon-cog'></i></a>
                       </td>
                     </tr>
                   </tbody>
@@ -390,6 +393,8 @@
                       <td>
                         <a data-bind="attr: {href: product.url}, visible: state != 'active'" 
                            class='button'>Attiva</a>
+                        <a data-bind="click: $parent.goto_profile, visible: state == 'active'">
+                          <i class='glyphicon glyphicon-cog'></i></a>
                       </td>
                     </tr>
                   </tbody>
@@ -418,6 +423,9 @@
                       <td>
                         <a data-bind="attr: {href: product.url}, visible: state != 'active'" 
                            class='button'>Attiva</a>
+
+                        <a data-bind="click: $parent.goto_profile, visible: state == 'active'">
+                          <i class='glyphicon glyphicon-cog'></i></a>
                       </td>
                     </tr>
                   </tbody>
@@ -612,22 +620,74 @@
 
                 
               </div>
-            </div>
 
-            <div data-bind='visible: active_section() == "account"'>
-              <h1>Account</h1>
-            </div>
+              <div data-bind='visible: active_section() == "account"'>
+                <h1>Account</h1>
+                <div class='row'>
+                    <h3>Cambio password</h3>
+                    <form class='fixed-headers'>
+                      <div class='col-sm-6'>
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            Vecchia password
+                          </span>
+                          <input type='text' class='form-control' 
+                                 data-bind='value: profiles.company.first_name'
+                                 placeholder='vecchia password'>
+                        </div>
 
-            <div data-bind='visible: active_section() == "billing"'>
-              <h1>Pagamenti</h1>
-            </div>
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            Nuova password
+                          </span>
+                          <input type='text' class='form-control' 
+                                 data-bind='value: profiles.company.first_name'
+                                 placeholder='nuova password'>
+                        </div>
 
-            <div data-bind='visible: active_section() == "orders"'>
-              <h1>Ordini</h1>
-            </div>
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            Conferma password
+                          </span>
+                          <input type='text' class='form-control' 
+                                 data-bind='value: profiles.company.first_name'
+                                 placeholder='conferma password'>
+                        </div>
 
-            <div data-bind='visible: active_section() == "messages"'>
-              <h1>Messages</h1>
+                        <a data-bind='click: function() { $parent.submit_profile(type); }' 
+                           class='button pull-right'>Salva</a>
+                      </div>
+                    </form>  
+                </div>
+
+                <div class='row'>
+                  <br><br><br>
+
+                  <h3>Dati pagamento</h3>
+                  <p>
+                    Per modificare i dati di pagamento come il numero di carta di credito, 
+                    o l'intestatario &egrave; necessario seguire la procedura di sicurezza
+                    facendo click su questo pulsante.
+                  </p>
+                  <br>
+
+                  <a class='button' data-bind='attr: {href: ""}'>
+                    Modifica dati pagamento
+                  </a>
+                </div>
+              </div>
+
+              <div data-bind='visible: active_section() == "billing"'>
+                <h1>Pagamenti</h1>
+              </div>
+
+              <div data-bind='visible: active_section() == "orders"'>
+                <h1>Ordini</h1>
+              </div>
+
+              <div data-bind='visible: active_section() == "messages"'>
+                <h1>Messages</h1>
+              </div>
             </div>
           </div>
 
@@ -934,7 +994,7 @@
 
               <ul class='prtn-box-container'>
                  <li class='prtn-box col-sm-5'>
-                  <div class='prtn-box-inner'>
+                  <div class='prtn-box-inner prtn-box-training'>
                     <h3>LPI ATP LE</h3>
                     <div class='prtn-box-icon'></div>
                     <div class='prtn-box-price'>
@@ -951,14 +1011,15 @@
                       <li>Approvazione del materiale promozionale incluso il sito web dell’organizzazione.</li>
                       <li>Pagamento quota annuale</li>
                         </ul>
-
-                    <a data-bind='attr:{href: "#signup/" + product_low.handle()}' 
-                       class="btn prtn-box-button">Aderisci ora</a>
+                    <div  class='prtn-box-button-cont'>
+                      <a href="#signup/lpi-atp" 
+                         class="button ">Aderisci ora</a>
+                    </div>
                   </div>
                 </li>
 
                 <li class='prtn-box col-sm-5 col-sm-offset-1'>
-                  <div class='prtn-box-inner'>
+                  <div class='prtn-box-inner prtn-box-training'>
                     <h3>LPI ATP PRO</h3>
                     <div class='prtn-box-icon'></div>
                     <div class='prtn-box-price'>
@@ -975,8 +1036,10 @@
                       <li>Approvazione del materiale promozionale incluso il sito web dell’organizzazione.</li>
                       <li>Pagamento quota annuale</li>
                     </ul>
-                    <a data-bind='attr:{href: "#signup/" + product_middle.handle()}' 
-                       class="btn prtn-box-button">Aderisci ora</a>
+                    <div  class='prtn-box-button-cont'>
+                      <a href="#signup/lpi-atp-pro"
+                         class="button ">Aderisci ora</a>
+                    </div>
                   </div>
                 </li>
               </ul>
@@ -1005,8 +1068,11 @@
                     <div class='prtn-box-desc'>
                     Attraverso questo programma il partner pu&ograve; organizzare corsi di certificazione dedicati a Linux Essentials, la certificazione indicata studenti che intendono intraprendere una carriera professionale con Linux.
                     </div>
-                    <a data-bind='attr:{href: "#signup/" + product_low.handle()}' 
-                       class="btn prtn-box-button">Aderisci ora</a>
+
+                    <div  class='prtn-box-button-cont'>
+                      <a href="#signup/lpi-aap"
+                         class="button">Aderisci ora</a>
+                    </div>
                   </div>
                 </li>
 
@@ -1020,8 +1086,10 @@
                     <div class='prtn-box-desc'>
                     Attraverso questo programma il partner pu&ograve; organizzare corsi di certificazione professionale su Linux. I corsi che possono essere erogati comprendono, oltre a Linux Essentials, le certificazioni LPIC-1, LPIC-2 ed LPIC-3.
                     </div>
-                    <a data-bind='attr:{href: "#signup/" + product_middle.handle()}' 
-                       class="btn prtn-box-button">Aderisci ora</a>
+                    <div  class='prtn-box-button-cont'>
+                      <a href="#signup/lpi-aap"
+                         class="button">Aderisci ora</a>
+                    </div>
                   </div>
                 </li>
               </ul>

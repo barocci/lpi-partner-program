@@ -205,7 +205,7 @@ class ChargifyBase(object):
         """
         headers = {
             "Authorization": "Basic %s" % self._get_auth_string(),
-            "User-Agent": "pyChargify",
+            "User-Agent": "LPI Italia",
             "Content-Type": 'text/xml'
         }
 
@@ -369,7 +369,7 @@ class ChargifyCustomer(ChargifyBase):
             self.__name__, 'customer')
 
     def getByReference(self, reference):
-        return self._applyS(self._get('/customers/lookup.xml?reference=' +
+        return self._applyS(self._get('/customers.xml?reference=%s' %
             str(reference)), self.__name__, 'customer')
 
     def getSubscriptions(self):

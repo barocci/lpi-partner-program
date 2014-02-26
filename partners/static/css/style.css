@@ -354,15 +354,15 @@ footer .sitemap a:hover {
 }
 
 .prtn-box-services {
-  min-height:1000px;
+  min-height:800px;
 }
 
 .prtn-box-academies {
-
+  min-height:600px;
 }
 
-.prtn-box-trainers {
-
+.prtn-box-training {
+  min-height:600px;
 }
 
 
@@ -408,6 +408,18 @@ footer .sitemap a:hover {
 .prtn-box h3 {
   font-weight:lighter;
   text-align:center;
+}
+
+table {
+  left:0px;
+  background:#fff;
+  margin:0px auto;
+  padding:15px;
+  position:relative;
+  border-radius:3px;
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+  box-shadow:0 1px 6px 0 #c2c2c2;
 }
 
 .prtn-box-icon {
@@ -552,7 +564,7 @@ footer .sitemap a:hover {
   box-shadow: 1px 1px 0px 0px rgb(15, 4, 6), 1px 1px 3px 0px rgb(76, 20, 27), 0px 1px 0px 0px rgb(176, 47, 64) inset;
   color: rgb(243, 210, 214);
   font-weight: bold;
-  padding: 0.5em 1.2em;
+  padding: 0.5em 0.8em;
   overflow: visible;
   position: relative;
   text-decoration: none;
@@ -597,6 +609,7 @@ footer .sitemap a:hover {
   margin-top:65px;
   text-align:center;
   height:250px;
+  width:300px;
   border:1px solid rgb(116, 31, 42);
   padding-top:20px;
 }
@@ -625,4 +638,31 @@ footer .sitemap a:hover {
 .list-filters ul li.active {
   background:#692630;
   color:#fff;
+}
+
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.uneditable-input:focus {
+  border-color: rgba(100, 100,100, 0.8);
+  outline: 0;
+  outline: thin dotted \9;
+  /* IE6-9 */
+
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(100,100,100,.6);
+  -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(100,100,100,.6);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(100,100,100,.6);
 }

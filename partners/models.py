@@ -7,12 +7,32 @@ import datetime
 
 class LPIUser(User):
     company = models.CharField(max_length=100)
+    management_url = models.CharField(max_length=255, null=True)
+    management_url_expire = models.DateField(null=True)
 
     def register(self, username, password):
         user = LPIUser.objects.create_user(username, username, password)
+        user.management_url = ""
+        user.management_url_expire = datetime.datetime.today()
         user.is_active = False
         user.save()
         return user
+
+    def get_managment_url(self):
+        if self.management_url_expire > datetime.datetime.today() \
+            or self.management_url == '':
+            url_info = self.request_new_management_url()
+            self.management_url = url_info['url']
+            self.management_url_expire = url_info['expires_at']
+            self.save()
+        
+        return self.management_url
+
+    def request_new_management_url(self):
+        customer = Customer().find(self.id)
+        data = settings.CHARGIFY_MANAGEMENT_URL % customer.id
+        return data
+
 
 
 
@@ -67,9 +87,9 @@ class Model(dict):
 
 class Customer(Model):
 
-    def get_managment_info(self):
+    def find(self, id):
         customer = self.chargify.Customer()
-        info = customer.getManagementInfo('4484267')
+        info = customer.getByReference(id)
         return info
 
     def create(self, email, first_name, last_name):
