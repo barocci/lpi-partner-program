@@ -8,11 +8,11 @@ var lpi = {
   user_id: '',
 
   tags: { option: 'PHP', 
-                option: 'Python',
-                option: 'Web Servers',
-                option: 'Sysadmin',
-                option: 'Javascript',
-                option: 'Web'},
+          option: 'Python',
+          option: 'Web Servers',
+          option: 'Sysadmin',
+          option: 'Javascript',
+          option: 'Web'},
 
 
   init: function() {

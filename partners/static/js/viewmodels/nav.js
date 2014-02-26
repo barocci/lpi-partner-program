@@ -4,8 +4,8 @@ var NavViewModel = function() {
   self.pages = ko.observable([{hash:'intro', label:'Home'},
                               {hash:'training', label:'Formazione'},
                               {hash:'companies', label:'Servizi e Soluzioni'},
-                              {hash:'academies', label:'Scuole e Universita'},
-                              {hash:'joinus', label:'Partnership'},
+                              {hash:'academies', label:'Scuole e Universit&agrave;'},
+                              //{hash:'joinus', label:'Partnership'},
                              // {hash:'teachers', label:'Docenti'}
                              ]);
 

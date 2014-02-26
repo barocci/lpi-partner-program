@@ -23,6 +23,11 @@ a {
   cursor:pointer;
 }
 
+
+
+
+
+
 header {
   background-color: #380f14;
   height:150px;
@@ -30,6 +35,8 @@ header {
   position:relative;
   z-index:10;
 }
+
+
 
 .lpi-layer-container {
   position:absolute;
@@ -115,6 +122,8 @@ header {
 
 .prtn-container {
   display:block;
+  width:1000px;
+  margin:0px auto;
 }
 
 
@@ -124,9 +133,12 @@ header {
   height:40px;
   padding:0px ;
   width:100%;
+
 }
 
 .navbar-lpi-inner {
+  width:1000px;
+  margin:0px auto;
   position:relative;
 }
 
@@ -135,6 +147,9 @@ header {
   float:auto !important;
   margin:0px auto;
 }
+
+:focus {outline:none;}
+::-moz-focus-inner {border:0;}
 
 .navbar-nav .active {
   position:relative;
@@ -168,18 +183,60 @@ header {
   font-weight: normal: ;
 }
 
-.account-controls {
+.topbar {
   position:absolute;
+  width:100%;
   top:-117px;
-  right:15px;
-  margin:0px 0px 0px 0px !important;
+  margin:0px 0px 0px 0px !important;  
+  margin:0px auto;
+}
+
+.topbar-wrap {
+  width:1000px;
+  margin:0px auto;
+}
+
+.socialbar {
+  float:left;
+  width:150px;
+  padding:0px;
+}
+
+.socialbar ul {
+  margin:10px 0px 0px -25px;
+}
+
+.socialbar li {
+  float:left;
+  opacity:1;
+}
+
+.social-btn {
+  display:block;
+  background-size:20px 20px;
+  float:left;
+  width:20px;
+  height:20px;
+  color:#fff;
+  margin-right:8px;
+}
+
+.twitter-btn {
+  background-image:url('../images/glyph_twitter.png');
+}
+.facebook-btn {
+  background-image:url('../images/glyph_facebook.png');
+}
+
+.account-controls {
+  float:right;
   min-height:0px;
 }
+
 .account-controls ul li{
   float:left;
   margin-left:15px;
 }
-
 
 .header-container {
   background:#681c26;
@@ -196,6 +253,16 @@ header {
 .header-container img {
   width:300px;
   margin:-20px auto 0px;
+}
+
+.joinus-image {
+  position:absolute;
+  right:290px;
+  top:40px;
+}
+
+.joinus-image img {
+  width:180px;
 }
 
 footer {
@@ -279,7 +346,7 @@ footer .sitemap a:hover {
 
 
 .prtn-box-3 {
-  width:29%;
+  width:33%;
 }
 
 .animated {
@@ -308,10 +375,10 @@ footer .sitemap a:hover {
 
 .prtn-box-button-cont {
   text-align:center;
-  padding:20px 0px;
+  padding:0px 0px;
   position:absolute;
   bottom:30px;
-  left:30%;
+  width:92%;
 }
 
 .prtn-box-bonus-list {

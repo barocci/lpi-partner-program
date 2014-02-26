@@ -4,14 +4,12 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Linux Professional Institute - Italia </title>
-  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
   <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
   <link rel="stylesheet" href="{% static 'css/vendor/bootstrap/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/vendor/jquery.tagsinput.css' %}">
 	<link rel="stylesheet" href="{% static 'css/vendor/isotope.css' %}">
 	<link rel="stylesheet" href="{% static 'css/vendor/animate.css' %}">
-	<link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&subset=latin,latin-ext' 
-	      rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
@@ -25,32 +23,50 @@
       <a href=''>
         <img src='{% static "images/logo-lpi-white.png" %}'>
       </a>  
+
+      <div class='joinus-image'>
+        <a href='#joinus'>
+          <img src='{% static "images/joinus.png" %}'>
+        </a>
+      </div>
     </div>
 
     <nav id='prtn-navbar' class="navbar navbar-lpi" role="navigation">
-      <div class='account-controls navbar'>
-        <div class='navbar_inner'>
-          <ul>
-            <li data-bind="visible: logged()">
-              <span data-bind="text: 'Ciao ' + username()"></span>
-            </li>
-            <li data-bind="visible: logged()">
-              <a href="#account">Mio account</a>
-            </li>
-            <li data-bind="visible: logged()">
-              <a data-bind="click: logout">Logout</a>
-            </li>
-            <li data-bind="visible: logged() == false">
-              <a href='#login'>Login</a>
-            </li>
-          </ul>
+      <div class='topbar'>
+        <div class='topbar-wrap'>
+
+          <div class='account-controls navbar'>
+            <div class='navbar_inner'>
+              <ul>
+                <li data-bind="visible: logged()">
+                  <span data-bind="text: 'Ciao ' + username()"></span>
+                </li>
+                <li data-bind="visible: logged()">
+                  <a href="#account">Mio account</a>
+                </li>
+                <li data-bind="visible: logged()">
+                  <a data-bind="click: logout">Logout</a>
+                </li>
+                <li data-bind="visible: logged() == false">
+                  <a href='#login'>Login</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class='socialbar'>
+            <ul>
+              <li><a href='http://www.facebook.com/pages/Linux-Professional-Institute-LPI/215021328528418' class='facebook-btn social-btn'></a></li>
+              <li><a href='http://twitter.com/lpiconnect' class='twitter-btn social-btn'></a></li>
+            </ul>
+          </div>
         </div>
       </div>
 
       <div class="navbar-lpi-inner">
         <ul class="nav navbar-nav" data-bind='foreach: pages'>
           <li data-bind='css: { active: hash == $root.selected() }'>
-             <a  data-bind='text:label, attr:{href: "#" + hash}'></a>
+             <a  data-bind='html:label, attr:{href: "#" + hash}'></a>
           </li>
         </ul>
       </div>
@@ -64,40 +80,45 @@
 			<div class='prtn-page prtn-page-intro' data-bind='css: selected'>
 			  <h1>Partnerships</h1>
 			  <p>
-			  	LPI Italia, attraverso i suoi programmi di partnership, mette in relazione i soggetti legati al mondo del lavoro in ambito Linux e FOSS (Free ed Open Source Software).<br />
-          Con il programma dedicato alla Formazione intendiamo dare una risposta ai professionisti che vogliono ottenere una certificazione professionale in ambito Linux.<br />
-          Con il programma dedicato a Servizi e Soluzioni intendiamo soddisfare la richiesta di aziende e professionisti nella ricerca di consulenti competenti su Linux ed Open Source.
+			  	LPI Italia, attraverso i suoi programmi di partnership, mette in relazione i soggetti legati al mondo del lavoro in ambito<br> Linux e FOSS (Free ed Open Source Software).<br /><br>
+          Con il programma dedicato alla Formazione intendiamo dare una risposta ai professionisti che vogliono ottenere<br> una certificazione professionale in ambito Linux.<br /><br>
+          Con il programma dedicato a Servizi e Soluzioni intendiamo soddisfare la richiesta di aziende e professionisti<br> nella ricerca di consulenti competenti su Linux ed Open Source.
 			  </p>
 
-  			<div class='prtn-box-container'>
-			 	  <div class='prtn-box prtn-box-3 prtn-box-left' data-bind='css: box_left_show'>
+  			<section class='prtn-box-container'>
+			 	  <section class='prtn-box col-sm-3 prtn-box-3' data-bind='css: box_left_show'>
 			 	  	<div class='prtn-box-inner'>
 				 	  	<h3>Formazione</h3>
-				 	  	<div class='prtn-box-icon prtn-box-icon-training'>
-
-				 	  	</div>
+				 	  	<div class='prtn-box-icon prtn-box-icon-training'></div>
 				 	  	<div class='prtn-box-desc'>
 				 	  		Studia e certificati come amministratore di sistema professionale, cerca l'agenzia formativa certificata più vicina a te.
-                <a href='#training' class="btn prtn-box-button">cerca la sede pi&uacute; vicina</a>
-
+                
+                <div class='prtn-box-button-cont'>
+                  <a href="#training" class="button">cerca la sede pi&uacute; vicina</a>
+                </div>
 				 	  	</div>
 				 	  </div>
-			 	  </div>
+			 	  </section>
 
-			 	  <div class='prtn-box prtn-box-3 prtn-box-center' data-bind='css: box_center_show'>
+			 	  <section class='prtn-box col-sm-3 prtn-box-3' data-bind='css: box_center_show'>
 			 	  	<div class="prtn-box-inner">
 				 	  	<h3>Servizi e Soluzioni</h3>
 				 	  	<div class='prtn-box-icon prtn-box-icon-companies'>
 				 	  	</div>
-				 	  	<div class='prtn-box-desc'>
+				 	  	<div class='prtn-box-desc' style='padding:0.5em 0.8em'>
 				 	  		Aziende e professionisti certificati LPI, professionisti in grado di fornire servizi qualificati per le tue esigenze in ambito Linux ed Open Source.
 				 	  	</div>
-				 	  	<a href='#companies' class="btn prtn-box-button">cerca l'azienda pi&uacute; adatta a te</a>
+
+              <div class='prtn-box-button-cont'>
+                <a href="#companies" class="button">
+                  cerca l'azienda pi&uacute; adatta a te
+                </a>
+              </div>
 
 				 	  </div>
-			 	  </div>
+			 	  </section>
 
-			 	  <div class='prtn-box prtn-box-3 prtn-box-right' data-bind='css: box_right_show'>
+			 	  <section class='prtn-box col-sm-3 prtn-box-3' data-bind='css: box_right_show'>
 			 	  	<div class="prtn-box-inner">
 				 	  	<h3>Diventa partner</h3>
 				 	  	<div class='prtn-box-icon prtn-box-icon-partner'>
@@ -105,12 +126,16 @@
 				 	  	<div class='prtn-box-desc'>
 				 	  		Fornisci servizi legati a Linux ed Open Source? Sei un'agenzia formativa? Diventa partner LPI, attrai nuove opportunit&agrave; professionali!
 				 	  	</div>
-				 	  	<a href='#joinus' class="btn prtn-box-button">diventa partner LPI adesso</a>
+              <div class='prtn-box-button-cont'>
+                <a href="#joinus" class="button">
+                  diventa partner LPI adesso
+                </a>
+              </div>
 
 				 	  </div>
-			 	  </div>
+			 	  </section>
 			 	  <div style='clear:both'></div>
-	     	</div>
+	     	</section>
 
 			</div>
 
@@ -266,9 +291,13 @@
              </p>
 
              <p class='col-sm-6 '>
-                 <a href='#offers/training-company'>vai all'offerta per le aziende</a ><br><br>
+                <a href='#offers/training-company'>programma per le aziende</a ><br><br>
 
-                  <a href="#offers/training-academy">vai all'offerta per scuole e universit&agrave;</a>
+                <a href="#offers/training-academy">
+                  programma per le scuole e universit&agrave;
+                </a><br><br>
+
+                <a href="#offers/personal-teacher">programma per i professionisti</a>
              </p>
 
 

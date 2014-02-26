@@ -150,24 +150,23 @@ def account_info(request):
             info['product']['url'] = Product().hostedURL(product['id'], request.user.id)
 
             family = product.family()
-            print "Famili %s" % family
 
             if family:
                 data[family].append(info)
 
-
         ret['data'] = data
     
-    print request.GET
-
     if request.GET['section'] == 'profile' and request.GET.has_key('data'):
-
         subscriptions = LPISubscription().find(id=request.GET['data'])
         if len(subscriptions) > 0:
             subscription = subscriptions[0]
-            company = subscription['company']
+            company = Company().find(subscription['company'])
+            print company
+
+            return renderJSON(ret)
             commercial = company['Commercial']
             incharge = company['Incharge']
+
 
             del company['Incharge']
             del company['Commercial']
