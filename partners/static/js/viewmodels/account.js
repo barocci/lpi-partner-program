@@ -13,11 +13,11 @@ var AccountViewModel = function() {
 
   self.sections = [{name: 'Partnership', slug: 'partnership', visible: true},
                    {name: 'Azienda', slug: 'profile', visible: true}, 
-                   {name: 'Sedi operative', slug: 'location', visible: true}, 
-                   {name: 'Insegnanti', slug: 'teachers', 
-                    visible: true}, 
-                   {name: 'Account', slug: 'account', visible: true}, 
-                   {name: 'Pagamenti', slug: 'billing', visible: true}];
+                   {name: 'Sedi operative', slug: 'locations', visible: true}, 
+                   {name: 'Insegnanti', slug: 'teachers', visible: true}, 
+                   {name: 'Account', slug: 'account', visible: true},
+                   //{name: 'Pagamenti', slug: 'billing', visible: true}
+                   ];
 
 
   self.active_section = ko.observable('');
@@ -27,6 +27,9 @@ var AccountViewModel = function() {
   self.academic = ko.observableArray([]);
 
   self.loading = ko.observable(true);
+
+  self.management_url = ko.observable('');
+
 
   self.selected_profile = ko.observable(false);
   self.profile_product = ko.observable(false);
@@ -192,6 +195,10 @@ var AccountViewModel = function() {
           self.ready['partnership'](response);
         });
       }
+    },
+
+    account: function(data) {
+      self.management_url(data.url);
     }
   }
 

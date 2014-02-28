@@ -60,7 +60,6 @@ var lpi = {
     return false;
   },
 
-
   routing: false,
 
   init_router: function() {

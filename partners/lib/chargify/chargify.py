@@ -176,6 +176,7 @@ class ChargifyBase(object):
         """
         Apply the values of the passed data to a new class of the current type
         """
+        print xml
         dom = minidom.parseString(self.fix_xml_encoding(xml))
         nodes = dom.getElementsByTagName(node_name)
         objs = []
@@ -213,6 +214,8 @@ class ChargifyBase(object):
         print('url %s' % (self.request_host + url))
         r.request('GET', url, None, headers)
         response = r.getresponse()
+
+        print ("Response STATUS %s" % response.status)
 
         # Unauthorized Error
         if response.status == 401:
@@ -464,6 +467,31 @@ class ChargifyProduct(ChargifyBase):
     def getFormattedPrice(self):
         return "$%.2f" % (self.getPriceInDollars())
 
+class ChargifyMamagementURL(ChargifyBase):
+    """
+    Represents Chargify ManagementURL
+    @license    GNU General Public License
+    """
+    __name__ = 'ChargifyMamagementURL'
+    __attribute_types__ = {}
+    __xmlnodename__ = 'management_link'
+
+    url = ''
+    fetch_count = 0
+    created_at = ''
+    new_link_available_at = ''
+    expires_at = ''
+
+    def __init__(self, apikey, subdomain, nodename=''):
+        super(ChargifyMamagementURL, self).__init__(apikey, subdomain)
+        if nodename:
+            self.__xmlnodename__ = nodename
+
+    def get(self, customer_id):
+        return self._applyA(self._get('/portal/customers/%s/management_link.xml' % customer_id),
+            self.__name__, 'management_link')
+
+
 
 class Usage(object):
     def __init__(self, id, memo, quantity):
@@ -675,6 +703,9 @@ class Chargify:
 
     def ProductFamily(self, nodename=''):
         return ChargifyProductFamily(self.api_key, self.sub_domain, nodename)
+
+    def ManagementURL(self, nodename=''): 
+        return ChargifyMamagementURL(self.api_key, self.sub_domain, nodename)        
 
     def Subscription(self, nodename=''):
         return ChargifySubscription(self.api_key, self.sub_domain, nodename)

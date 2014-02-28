@@ -22,12 +22,12 @@ var LoginViewModel = function() {
 
     lpi.request('login', data, function(response) {
       lpi.login(response);
-        if(response.error != 1) {
-          lpi.authenticate();
-          lpi.redirect('#account');
-        } else {
-          self.error_message('Username o password errati.');
-        }
+      if(response.error != 1) {
+        lpi.authenticate();
+        lpi.redirect('#account');
+      } else {
+        self.error_message('Username o password errati.');
+      }
 
     });
   }

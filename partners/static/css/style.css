@@ -142,6 +142,41 @@ header {
   position:relative;
 }
 
+.toolbar-button {
+  padding:4px 8px;
+  border-radius:5px;
+  color:#fff;
+  font-weight:bold;
+}
+
+.toolbar-button:focus,
+.toolbar-button:hover {
+  text-decoration: none;
+  color:#fff;
+}
+
+.partner-button {
+  background: #ffb76b; /* Old browsers */
+  background: -moz-linear-gradient(top, #ffb76b 0%, #ffa73d 50%, #ff7c00 51%, #ff7f04 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffb76b), color-stop(50%,#ffa73d), color-stop(51%,#ff7c00), color-stop(100%,#ff7f04)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #ffb76b 0%,#ffa73d 50%,#ff7c00 51%,#ff7f04 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #ffb76b 0%,#ffa73d 50%,#ff7c00 51%,#ff7f04 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #ffb76b 0%,#ffa73d 50%,#ff7c00 51%,#ff7f04 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #ffb76b 0%,#ffa73d 50%,#ff7c00 51%,#ff7f04 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffb76b', endColorstr='#ff7f04',GradientType=0 ); /* IE6-9 */
+}
+
+.login-button {
+  background: #6db3f2; /* Old browsers */
+  background: -moz-linear-gradient(top, #6db3f2 0%, #54a3ee 50%, #3690f0 51%, #1e69de 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6db3f2), color-stop(50%,#54a3ee), color-stop(51%,#3690f0), color-stop(100%,#1e69de)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6db3f2', endColorstr='#1e69de',GradientType=0 ); /* IE6-9 */
+}
+
 .navbar-nav {
   width:1000px;
   float:auto !important;
@@ -167,9 +202,10 @@ header {
 
 .navbar-nav a {
   color: rgb(219, 217, 217);;
-  font-weight: lighter;
+  font-weight: bold;
   text-transform: uppercase;
   padding:10px !important;
+  text-shadow: 1px 1px 0px #24090D;
 }
 
 .navbar-nav a:hover {
@@ -181,6 +217,8 @@ header {
 .navbar-nav .active a {
   color: rgb(116, 31, 42);
   font-weight: normal: ;
+  text-shadow: none;
+
 }
 
 .topbar {
@@ -194,6 +232,7 @@ header {
 .topbar-wrap {
   width:1000px;
   margin:0px auto;
+  position:relative;
 }
 
 .socialbar {
@@ -257,12 +296,11 @@ header {
 
 .joinus-image {
   position:absolute;
-  right:290px;
+  right:100px;
   top:40px;
 }
 
 .joinus-image img {
-  width:180px;
 }
 
 footer {
@@ -340,6 +378,11 @@ footer .sitemap a:hover {
   position:relative;
 }
 
+.prtn-box-1 {
+  width:50%;
+}
+
+
 .prtn-box-2 {
   width:45%;
 }
@@ -353,9 +396,18 @@ footer .sitemap a:hover {
 	opacity:1;
 }
 
-.prtn-box-services {
-  min-height:800px;
+.prtn-box-teachers {
+  min-height:620px;
 }
+
+.prtn-box-services {
+  min-height:930px;
+}
+
+.prtn-box-services h3 {
+  min-height:80px;
+}
+
 
 .prtn-box-academies {
   min-height:600px;
@@ -555,6 +607,7 @@ table {
   padding:0px 20px 30px 280px;
 }
 
+
 .button {
   background-clip: padding-box;
   border-radius: 5px;
@@ -573,6 +626,11 @@ table {
   width: auto;
 }
 
+h1 .button {
+  font-size:15px;
+}
+
+.button:focus,
 .button:hover {
   color:#fff;
   text-decoration: none;
@@ -636,7 +694,14 @@ table {
 }
 
 .list-filters ul li.active {
-  background:#692630;
+  background: #a90329; /* Old browsers */
+background: -moz-linear-gradient(top, #a90329 46%, #6d0019 46%, #8f0222 46%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(46%,#a90329), color-stop(46%,#6d0019), color-stop(46%,#8f0222)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #a90329 46%,#6d0019 46%,#8f0222 46%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #a90329 46%,#6d0019 46%,#8f0222 46%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, #a90329 46%,#6d0019 46%,#8f0222 46%); /* IE10+ */
+background: linear-gradient(to bottom, #a90329 46%,#6d0019 46%,#8f0222 46%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a90329', endColorstr='#8f0222',GradientType=0 ); /* IE6-9 */
   color:#fff;
 }
 

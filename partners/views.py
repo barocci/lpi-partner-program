@@ -173,6 +173,10 @@ def account_info(request):
               'incharge': incharge
             }
 
+    if request.GET['section'] == 'account':
+        user = LPIUser.objects.get(id=request.user.id)
+        link = user.get_management_url()
+        ret['data'] = {'url': link}
   
     return renderJSON(ret)
 

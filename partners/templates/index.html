@@ -24,11 +24,7 @@
         <img src='{% static "images/logo-lpi-white.png" %}'>
       </a>  
 
-      <div class='joinus-image'>
-        <a href='#joinus'>
-          <img src='{% static "images/joinus.png" %}'>
-        </a>
-      </div>
+
     </div>
 
     <nav id='prtn-navbar' class="navbar navbar-lpi" role="navigation">
@@ -48,9 +44,17 @@
                   <a data-bind="click: logout">Logout</a>
                 </li>
                 <li data-bind="visible: logged() == false">
-                  <a href='#login'>Login</a>
+                  <a class='partner-button toolbar-button' href='#joinus'>Partners</a>
+                </li>
+                <li data-bind="visible: logged() == false">
+                  <a class='login-button toolbar-button' href='#login'>Login</a>
                 </li>
               </ul>
+              <div class='joinus-image' data-bind='visible: logged() == false'>
+                <a href='#joinus'>
+                  <img src='{% static "images/joinus.png" %}'>
+                </a>
+              </div>
             </div>
           </div>
 
@@ -144,7 +148,7 @@
         <p>
         In questa sezione puoi trovare Aziende ed Agenzie formative in grado di erogare corsi certificati LPI: Linux Essentials, LPIC-1, LPIC-2 ed LPIC-3.<br />
         La certificazione professionale LPI &egrave; indice di garanzia e competenza nei confronti di clienti e datori di lavoro.<br />
-        Cerca adesso la sede più vicina a casa tua!
+        <b>Cerca adesso la sede più vicina a casa tua!</b>
         </p>
 
         <div class='list-filters'>
@@ -217,7 +221,10 @@
       <div class='prtn-page prtn-page-academies' data-bind='css: selected'>
         <h1>Scuole e Universit&agrave;</h1>
         <p>
-        In questa sezione puoi trovare Scuole e Universit&agrave; in grado di rispondere alle tue esigenze professionali. I nostri partner vengono accuratamente controllati per garantire la massima qualit&agrave; del servizio. Attraverso la funzione di ricerca puoi definire le competenze necessarie, i giudizi di precedenti clienti e l'area di lavoro. In questo modo potrai scegliere tutte le caratteristiche del tuo nuovo fornitore di servizi IT.
+        In questa sezione puoi trovare Scuole e Universit&agrave; in grado di erogare corsi certificati LPI: Linux Essentials, LPIC-1, LPIC-2 ed LPIC-3.
+        La certificazione professionale LPI è indice di garanzia e competenza nei confronti di clienti e datori di lavoro.
+        <br>
+        <b>Cerca adesso la sede più vicina a casa tua!</b>
         </p>
         <ul data-bind="foreach: academies">
            <li>
@@ -291,13 +298,13 @@
              </p>
 
              <p class='col-sm-6 '>
-                <a href='#offers/training-company'>programma per le aziende</a ><br><br>
+                <a href='#offers/training-company'>Programma per le aziende</a ><br><br>
 
                 <a href="#offers/training-academy">
-                  programma per le scuole e universit&agrave;
+                  Programma per le scuole e universit&agrave;
                 </a><br><br>
 
-                <a href="#offers/personal-teacher">programma per i professionisti</a>
+                <a href="#offers/personal-teacher">Programma per i professionisti</a>
              </p>
 
 
@@ -307,8 +314,8 @@
         <div class="row">
 
         <div data-bind='visible: details() == "companies"'
-             class='companies_details col-sm-10 col-sm-offset-1 prtn-details-box'>
-             <div class='prtn-details-indicator'>
+             class='companies_details col-sm-10 col-sm-offset-1 prtn-details-box '>
+             <div class='prtn-details-indicator '>
              </div>
              <h3>Offerte per le societa' di servizi</h3>
              <p class='col-sm-6'>
@@ -338,7 +345,10 @@
 
           <div class='prtn-page-content' data-bind='visible: loading() == false'>
             <div data-bind='visible: active_section() == "partnership"'>
-              <h1>Partnership</h1>
+              <h1>
+                Partnership
+                <a class='button pull-right' href='#offers/test-center'>DIVENTA TEST CENTER</a>
+              </h1>
 
               <div data-bind='visible: training().length > 0'>
                 <h3>Azienda di formazione</h3>
@@ -355,7 +365,7 @@
                   <tbody data-bind='foreach: training()'>
                     <tr>
                       <td>
-                         <a data-bind='text: product.name, click: $parent.goto_profile'></a>
+                         <a data-bind='text: product.name, click: function() { $parent.goto_profile($data) }'></a>
                       </td>
                       <td data-bind='text: state'>
                       <td data-bind='text: due_date'> - </td>
@@ -363,7 +373,7 @@
                         <a data-bind="attr: {href: product.url}, visible: state != 'active'" 
                            class='button'>Attiva</a>
 
-                        <a data-bind="click: $parent.goto_profile, visible: state == 'active'">
+                        <a data-bind="click: function() { $parent.goto_profile($data) }, visible: state == 'active'">
                           <i class='glyphicon glyphicon-cog'></i></a>
                       </td>
                     </tr>
@@ -386,7 +396,7 @@
                   <tbody data-bind='foreach: services()'>
                     <tr>
                       <td>
-                         <a data-bind='text: product.name, click: $parent.goto_profile'></a>
+                         <a data-bind='text: product.name, click: function() {$parent.goto_profile($data) }'></a>
                       </td>
                       <td data-bind='text: state'>
                       <td data-bind='text: due_date'> - </td>
@@ -632,7 +642,7 @@
                             Vecchia password
                           </span>
                           <input type='text' class='form-control' 
-                                 data-bind='value: profiles.company.first_name'
+                                 data-bind=''
                                  placeholder='vecchia password'>
                         </div>
 
@@ -641,7 +651,7 @@
                             Nuova password
                           </span>
                           <input type='text' class='form-control' 
-                                 data-bind='value: profiles.company.first_name'
+                                 data-bind=''
                                  placeholder='nuova password'>
                         </div>
 
@@ -650,7 +660,7 @@
                             Conferma password
                           </span>
                           <input type='text' class='form-control' 
-                                 data-bind='value: profiles.company.first_name'
+                                 data-bind=''
                                  placeholder='conferma password'>
                         </div>
 
@@ -663,30 +673,29 @@
                 <div class='row'>
                   <br><br><br>
 
-                  <h3>Dati pagamento</h3>
+                  <h3>Portale pagamenti</h3>
                   <p>
-                    Per modificare i dati di pagamento come il numero di carta di credito, 
-                    o l'intestatario &egrave; necessario seguire la procedura di sicurezza
-                    facendo click su questo pulsante.
+                    Attraverso il nostro Portale Pagamenti &egrave; possibile visualizzare lo storico
+                    delle sottoscrizioni e modificare i propri dati di pagamento.
                   </p>
                   <br>
 
-                  <a class='button' data-bind='attr: {href: ""}'>
-                    Modifica dati pagamento
+                  <a class='button' data-bind='attr: {href: management_url}'>
+                    Accedi al Portale pagamenti
                   </a>
                 </div>
               </div>
 
+              <div data-bind='visible: active_section() == "locations"'>
+                <h1>Sedi operative</h1>
+              </div>
+
+              <div data-bind='visible: active_section() == "teachers"'>
+                <h1>Docenti</h1>
+              </div>
+
               <div data-bind='visible: active_section() == "billing"'>
                 <h1>Pagamenti</h1>
-              </div>
-
-              <div data-bind='visible: active_section() == "orders"'>
-                <h1>Ordini</h1>
-              </div>
-
-              <div data-bind='visible: active_section() == "messages"'>
-                <h1>Messages</h1>
               </div>
             </div>
           </div>
@@ -853,6 +862,8 @@
             <h3>
           </div>
 
+
+
           <div class='prtn-page prtn-page-offers' data-bind='css: selected'>
 
             <div data-bind='visible: type() == "service-company" && show'>
@@ -868,7 +879,7 @@
               <ul class='prtn-box-container'>
                 <li class='prtn-box col-sm-3 prtn-box-3'>
                   <div class='prtn-box-inner prtn-box-services'>
-                    <h3>LPI SP</h3>
+                    <h3>LPI Service Provider</h3>
                     <div class='prtn-box-icon'></div>
                     <div class='prtn-box-price'>
                       GRATUITO
@@ -879,11 +890,13 @@
                     <p>
                     LPI SP (Service Provider) &egrave; il programma di partnership che ti permette di mostrare i servizi offerti legati a Linux e all'Open Source (es: installazione e configurazione CMS, amministrazione di sistema Linux, sviluppo e personalizzazione software).<br>
                     </div>
+                    <h4>Benefit</h4>
                     <ul class='prtn-box-bonus-list'>
                         <li>Disponibilita' utilizzo logo LPI</li>
                         <li>Posizionamento nel portale LPI</li>
                     </ul>
-<br />
+                    <br />
+                    <h4>Requisiti</h4>
                     <ul class='prtn-box-bonus-list'>
                         <li>Fornitura servizi FOSS</li>
                         <li>Almeno 1 collaboratore certificato Linux Essentials</li>
@@ -900,7 +913,7 @@
 
                 <li class='prtn-box col-sm-3 prtn-box-3'>
                   <div class='prtn-box-inner prtn-box-services'>
-                    <h3>LPI CSP</h3>
+                    <h3>Certified Service Provider</h3>
                     <div class='prtn-box-icon'></div>
                     <div class='prtn-box-price'>
                       250  &euro;
@@ -911,16 +924,17 @@
                       </p>
                       
                     </div>
-                      <ul class='prtn-box-bonus-list'>
-                        <li>Certificazione LPIC-1</li>
-                        <li>Disponibilita' utilizzo logo LPI</li>
-                        <li>Posizionamento nel portale LPI</li>
-                        <li>Banner su lpi-italia.org</li>
-                        <li>Accesso database docenti LCT</li>
-                        <li>Referenze clienti certificate</li>
-                      </ul>
-<br />
-
+                    <h4>Benefit</h4>
+                    <ul class='prtn-box-bonus-list'>
+                      <li>Certificazione LPIC-1</li>
+                      <li>Disponibilita' utilizzo logo LPI</li>
+                      <li>Posizionamento nel portale LPI</li>
+                      <li>Banner su lpi-italia.org</li>
+                      <li>Accesso database docenti LCT</li>
+                      <li>Referenze clienti certificate</li>
+                    </ul>
+                    <br />
+                    <h4>Requisiti</h4>
                     <ul class='prtn-box-bonus-list'>
                        <li>Fornitura di servizi FOSS</li>
                        <li>Almeno 2 collaboratori certificati LPIC-1</li>
@@ -937,7 +951,7 @@
 
                 <li class='prtn-box col-sm-3 prtn-box-3'>
                   <div class='prtn-box-inner prtn-box-services'>
-                    <h3>LPI CSP GOLD</h3>
+                    <h3>Certified Service Provider<br> GOLD</h3>
                     <div class='prtn-box-icon'></div>
                     <div class='prtn-box-price'>
                       850  &euro;
@@ -948,8 +962,9 @@
                       LPI CSP (Certified Solution Provider) &egrave; il programma di partnership che ti permette di mostrare i servizi offerti legati a Linux e all'Open Source (es: installazione e configurazione CMS, amministrazione di sistema Linux, sviluppo e personalizzazione software).<br />
                       </p>
                     </div>
+                    <h4>Benefit</h4>
                       <ul class='prtn-box-bonus-list'>
-                        <li>Certificazione LPIC-1</li>
+                        <li>Certificazione LPIC-2</li>
                         <li>Disponibilita' utilizzo logo LPI</li>
                         <li>Posizionamento nel portale LPI</li>
                         <li>Banner su lpi-italia.org</li>
@@ -960,7 +975,8 @@
                         <li>Tracker and CRM Services</li>
                         <li>Top Search Result</li>
                       </ul>
-<br />
+                    <br />
+                    <h4>Requisiti</h4>
                     <ul class='prtn-box-bonus-list'>
                       <li>Fornitura servizi FOSS</li>
                       <li>Almeno 3 collaboratori certificati LPIC-1</li>
@@ -981,6 +997,145 @@
 
               </div>
             </div>
+
+            <div data-bind='visible: type() == "personal-teacher" && show'>
+              <div class="row">
+              <h1>Docenti</h1>
+              <p>
+              In questa sezione puoi trovare i nostri programmi di partnership dedicati al ai professionisti che intendo certificarsi LPI e <br>prestare servizio come insegnati nei corsi LPI.<br />
+              </p>
+              </div>
+
+              <div class="row">
+              <ul class='prtn-box-container'>
+                <li class='prtn-box col-sm-3 prtn-box-1 col-sm-offset-3'>
+                  <div class='prtn-box-inner prtn-box-teachers'>
+                    <h3>LPI CT</h3>
+                    <div class='prtn-box-icon'></div>
+                    <div class='prtn-box-price'>
+                      PRIMO ANNO GRATUITO + 50 &euro; annui
+                    </div>
+
+                    <div class='prtn-box-desc'>
+
+                    <p>
+                    LPI CP (Certified Trainer) &egrave; il programma di partnership che ti permette di mostrare i servizi offerti legati a Linux e all'Open Source (es: installazione e configurazione CMS, amministrazione di sistema Linux, sviluppo e personalizzazione software).<br>
+                    </div>
+                    <h4>Benefit</h4>
+                    <ul class='prtn-box-bonus-list'>
+                        <li>Disponibilita' utilizzo logo LPI</li>
+                        <li>Posizionamento nel portale LPI</li>
+                    </ul>
+                    <br />
+                    <h4>Requisiti</h4>
+                    <ul class='prtn-box-bonus-list'>
+                        <li>Fornitura servizi FOSS</li>
+                        <li>Almeno 1 collaboratore certificato Linux Essentials</li>
+                    </ul>
+
+                    </p>
+
+                    <div class='prtn-box-button-cont'>
+                      <a href="#signup/lpi-ct" class="button">Acquista</a>
+                    </div>
+                    
+                  </div>
+                </li>
+              </ul>
+
+              <div style='clear:both'></div>
+
+              </div>
+            </div>
+
+            <div data-bind='visible: type() == "test-center" && show'>
+              <div class="row">
+              <h1>Test center</h1>
+              <p>
+              In questa sezione puoi trovare i nostri programmi di partnership dedicati al ai professionisti che intendo certificarsi LPI e <br>prestare servizio come insegnati nei corsi LPI.<br />
+              </p>
+              </div>
+
+              <div class="row">
+              <ul class='prtn-box-container'>
+                <li class='prtn-box col-sm-3 prtn-box-2 '>
+                  <div class='prtn-box-inner prtn-box-teachers'>
+                    <h3>TEST CENTER<br>Linux Users Group (LUG)</h3>
+                    <div class='prtn-box-icon'></div>
+                    <div class='prtn-box-price'>
+                      250 &euro;<br>
+                      <small>5 esami</small>
+
+                    </div>
+
+                    <div class='prtn-box-desc'>
+
+                    <p>
+                    Diventare Test Center ufficiale per LPI ti permette di ospitare nella tua sede esami LPIC.
+                    <br>
+                    </div>
+                    <h4>Benefit</h4>
+                    <ul class='prtn-box-bonus-list'>
+                        <li>Sede d'esame LPIC</li>
+                    </ul>
+                    <br />
+                    <h4>Requisiti</h4>
+                    <ul class='prtn-box-bonus-list'>
+                        <li>Almeno 1 collaboratore certificato LPIC</li>
+                        <li>Essere un LUG</li>
+                    </ul>
+
+                    </p>
+
+                    <div class='prtn-box-button-cont'>
+                      <a href="#signup/lpi-ct" class="button">Acquista</a>
+                    </div>
+                    
+                  </div>
+                </li>
+
+                <li class='prtn-box col-sm-3 prtn-box-2 col-sm-offset-1'>
+                  <div class='prtn-box-inner prtn-box-teachers'>
+                    <h3>TEST CENTER</h3>
+                    <div class='prtn-box-icon'></div>
+                    <div class='prtn-box-price'>
+                      500 &euro;<br>
+                      <small>10 esami</small>
+
+                    </div>
+
+                    <div class='prtn-box-desc'>
+
+                    <p>
+                    Diventare Test Center ufficiale per LPI ti permette di ospitare nella tua sede esami LPIC.
+                    <br>
+                    </div>
+                    <h4>Benefit</h4>
+                    <ul class='prtn-box-bonus-list'>
+                        <li>Sede d'esame LPIC</li>
+                    </ul>
+                    <br />
+                    <h4>Requisiti</h4>
+                    <ul class='prtn-box-bonus-list'>
+                        <li>Almeno 1 collaboratore certificato LPIC</li>
+                    </ul>
+
+                    </p>
+
+                    <div class='prtn-box-button-cont'>
+                      <a href="#signup/lpi-ct" class="button">Acquista</a>
+                    </div>
+                    
+                  </div>
+                </li>
+
+              </ul>
+
+              <div style='clear:both'></div>
+
+              </div>
+            </div>
+
             <div data-bind='visible: type() == "training-company" && show'>
               <div class="row">               
               <h1>Formazione per aziende</h1>
@@ -1099,11 +1254,12 @@
           </div>
 
           <div class='prtn-page prtn-page-login' data-bind='css: selected'>
-            <h1>Login</h1>
-            <br>
-            <form action=''>
+            <div class="col-sm-5">
+
+              <h1>Login partners</h1>
+              <br>
+              <form action=''>
               
-              <div class="col-sm-5">
                 <div class="input-group">
                   <span class="input-group-addon">
                     <span class='glyphicon glyphicon-envelope'></span>
@@ -1119,6 +1275,9 @@
                   <input type='password' class='form-control' data-bind='value: password'
                          placeholder='La tua password'><br>
                 </div>
+                <p>
+                  <a data-bind='click: recover_password'>Dimenticato la password?</a>
+                </p>
 
 
                 <div class='alert alert-danger' 
@@ -1126,19 +1285,22 @@
                 </div>
                 <hr>
 
-                <a class='btn btn-default' data-bind='click: login'>Entra</a>
-              </div>
+                <a class='button' data-bind='click: login'>Entra</a>
+              </form>
+            </div>
 
-              <div class='col-sm-5 col-sm-offset-1'>
-                <p>
-                  Inserire le credenziali per effettuare il login.
-                </p>
-                <p>
-                  <a data-bind='click: recover_password'>Dimenticato la password?</a>
-                </p>
-              </div>
-
-            </form>
+            <div class='col-sm-5 col-sm-offset-2'>
+              <h1>Login studenti</h1>
+              <p>
+                <br>
+                Gli studenti gi&agrave; in possesso delle credenziali per accedere
+                all'area di gestione LPI, possono autenticarsi seguendo il questo link.
+              </p>
+              <br>
+              <a class='button' href='https://cs.lpi.org/caf/Xamman/candidate_area'>
+                accesso studenti LPI
+              </a>
+            </div>
           </div>
 
       </div>

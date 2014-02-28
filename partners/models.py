@@ -18,20 +18,22 @@ class LPIUser(User):
         user.save()
         return user
 
-    def get_managment_url(self):
-        if self.management_url_expire > datetime.datetime.today() \
+    def get_management_url(self):
+        if self.management_url_expire < datetime.date.today() \
             or self.management_url == '':
             url_info = self.request_new_management_url()
-            self.management_url = url_info['url']
-            self.management_url_expire = url_info['expires_at']
-            self.save()
+            if len(url_info) > 0:
+                self.management_url = url_info[0].url
+                self.management_url_expire = url_info[0].expires_at
+                self.save()
         
         return self.management_url
 
     def request_new_management_url(self):
         customer = Customer().find(self.id)
-        data = settings.CHARGIFY_MANAGEMENT_URL % customer.id
-        return data
+        link = customer.get_management_link()
+        print link
+        return link
 
 
 
@@ -90,7 +92,7 @@ class Customer(Model):
     def find(self, id):
         customer = self.chargify.Customer()
         info = customer.getByReference(id)
-        return info
+        return self.load_from_resource(info)
 
     def create(self, email, first_name, last_name):
         customer = self.chargify.Customer()
@@ -102,7 +104,12 @@ class Customer(Model):
 
         return self
 
+    def get_management_link(self):
+        link = self.chargify.ManagementURL()
+        return link.get(self['id'])
+
     def load_from_resource(self, resource):
+        self['id'] = resource.id
         self['first_name'] = resource.first_name
         self['last_name'] = resource.last_name
         self['email'] = resource.email
@@ -204,9 +211,11 @@ class LPISubscription(Model):
         results = []
         deals = redmine.Deal().find(**params)
         for deal in deals:
-            subscription = self.load_from_resource(deal)
+            subscription = LPISubscription().load_from_resource(deal)
             results.append(subscription)
 
+        print "----"
+        print results
         return results
 
 
