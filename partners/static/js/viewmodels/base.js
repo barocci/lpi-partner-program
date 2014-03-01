@@ -4,6 +4,8 @@
 
     self.selected = ko.observable("");
 
+    self.template = '';
+    self.template_loaded = true;
     self.require_login = false;
 
     self.init = function(args) {};

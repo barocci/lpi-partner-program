@@ -1,0 +1,54 @@
+<h1>
+  Registrati
+  
+</h1>
+<br>
+<form action=''>
+  <div class="col-sm-5">
+
+    <div class="input-group">
+      <span class="input-group-addon">
+        <span class='glyphicon glyphicon-envelope'></span>
+      </span>
+      <input type='text' class='form-control' data-bind='value: mail'
+             placeholder='La tua email'>
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon">
+        <span class="glyphicon glyphicon-lock"></span>
+      </span>
+      <input type='password' class='form-control' data-bind='value: password'
+             placeholder='Scegli una password'><br>
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon">
+        <span class="glyphicon glyphicon-asterisk"></span>
+      </span>          
+      <input type='password' class='form-control' data-bind='value: confirm_password'
+             placeholder='Conferma password'><br>
+    </div>
+    
+    <div class='alert alert-danger' 
+         data-bind='text: error_message, visible: error_message'>
+    </div>
+    <hr>
+
+    <a class='btn btn-default' data-bind='click: register'>Register</a>
+
+  </div>
+
+  <div class='col-sm-5 col-sm-offset-1'>
+    <p>
+      Questa procedura guidata vi guidera' attraverso la creazione
+      del vostro profilo pubblico e del pagamento per diventare 
+      partner LPI.
+    </p>
+    <p>
+      <a href='#login'>
+        Gia' registrato? 
+      </a>
+    </p>
+  </div>
+</form>

@@ -1,0 +1,16 @@
+<h1>Scuole e Universit&agrave;</h1>
+<p>
+In questa sezione puoi trovare Scuole e Universit&agrave; in grado di erogare corsi certificati LPI: Linux Essentials, LPIC-1, LPIC-2 ed LPIC-3.
+La certificazione professionale LPI è indice di garanzia e competenza nei confronti di clienti e datori di lavoro.
+<br>
+<b>Cerca adesso la sede più vicina a casa tua!</b>
+</p>
+<ul data-bind="foreach: academies">
+   <li>
+      <img style='max-height:100px;display:none' data-bind='attr: {src: image_url}'>
+      <a data-bind='text: first_name, attr:{href: "#info/" + id}'></a>
+      <span data-bind='text: "(" + city + ")"'>
+         
+      </span>
+   </li>
+</ul>

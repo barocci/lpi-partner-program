@@ -198,6 +198,7 @@ class LPISubscription(Model):
         self['company'] = False
         if resource.attributes.has_key('contact'):
             self['company'] = resource.contact.id
+            self['company_name'] = resource.contact.name
         #    print "looking for %s" % resource.contact.id
         #    self['company'] = Company().find(resource.contact.id)
 

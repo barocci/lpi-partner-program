@@ -1,0 +1,82 @@
+<div class="row">
+  <h1>Scegli la tua partnership</h1>
+  <p>
+ Partecipa ai nostri programmi di partnership, un modo per ottenere visibilit&agrave; e garantire le tue competenze. Attraverso le nostre partnership puoi fornire servizi professionali nel settore che più ti compete e garantire la qualità della tua formazione in aula. 
+  </p>
+  </div>
+
+  <div class="row">
+  <ul class='prtn-box-container'>
+    <li class='prtn-box col-sm-5'>
+      <div class='prtn-box-inner'>
+        <h3>Formazione</h3>
+        <div class='prtn-box-icon'></div>
+        <div class='prtn-box-desc'>
+        Certifica con LPI i tuoi corsi professionali per Amministratore di Sistema, garantisci qualit&agrave; ai tuoi studenti, renditi visibile attraverso il sito ufficiale del pi&uacute; importante ente di certificazione professionale in ambito Linux al mondo.</div>
+        <div class='prtn-box-button-cont'>
+          <a data-bind='click: show_training' 
+             class="button">maggiori dettagli</a>
+        </div>
+
+      </div>
+    </li>
+
+    <li class='prtn-box col-sm-5 col-sm-offset-1'>
+      <div class='prtn-box-inner'>
+        <h3>Servizi e Soluzioni</h3>
+        <div class='prtn-box-icon'></div>
+        <div class='prtn-box-desc'>
+        Certifica la tua azienda con LPI, garantisci la qualità di Servizi e Soluzioni, contraddistinguiti dalla concorrenza mostrando le tue competenze ed i tuoi servizi attraverso il sito ufficiale di LPI.
+        </div>
+        <div class='prtn-box-button-cont'>
+          <a data-bind='click: show_companies' 
+             class="button">maggiori dettagli</a>
+        </div>
+      </div>
+    </li>
+  </ul>
+  
+  </div>
+  <div class='row'>
+  <div data-bind='visible: details() == "training"' 
+       class='training_details col-sm-10 col-sm-offset-1 prtn-details-box'>
+       <div class='prtn-details-indicator'>
+       </div>
+       <h3>Offerte per la formazione</h3>
+       <p class='col-sm-6'>
+       Il programma per la formazione LPI si suddivide in ATP (Approved Training Partner) dedicato ad aziende, agenzie formative, associazione, Pubbliche Amministrazioni, organizzazioni e AAP (Approved Academic Partner) dedicato a scuole ed universit&agrave;.
+       </p>
+
+       <p class='col-sm-6 '>
+          <a href='#offers/training-company'>Programma per le aziende</a ><br><br>
+
+          <a href="#offers/training-academy">
+            Programma per le scuole e universit&agrave;
+          </a><br><br>
+
+          <a href="#offers/personal-teacher">Programma per i professionisti</a>
+       </p>
+
+
+  </div>
+  </div>
+
+  <div class="row">
+
+  <div data-bind='visible: details() == "companies"'
+       class='companies_details col-sm-10 col-sm-offset-1 prtn-details-box '>
+       <div class='prtn-details-indicator '>
+       </div>
+       <h3>Offerte per le societa' di servizi</h3>
+       <p class='col-sm-6'>
+       Il programma di certificazione di Servizi e Soluzioni &egrave; dedicata ad aziende e professionisti. Con un controllo da parte del nostro staff e le recensioni dei tuoi clienti, puoi dimostrare la tua competenza, esperienza e professionalità a nuovi potenziali clienti.
+       </p>
+       <p class='col-sm-6'>
+           <a href='#offers/service-company'>vai all'offerta per le aziende</a><br /><br />
+           <a href='http://nuovo.lpi-italia.org/faq/'>Domande frequenti</a><br /><br />
+
+       </p>
+  </div>
+</div>
+
+  <div style='clear:both'></div> <!-- end boxes -->

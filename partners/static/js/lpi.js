@@ -88,23 +88,37 @@ var lpi = {
         }
 
         that.loading(true);
-        that.pages.nav.set_page(page);
-        old_view.end(page, args);
-        new_view.init(args);
 
-        if(different) {
-          old_view.out_transition(function() {
-              new_view.in_transition();
-              that.loading(false);
-              that.routing = false;
-          });
-        } else {
-          new_view.in_transition();
-          that.loading(false);
-          that.routing = false;
+        function init_new_page() {
+          that.pages.nav.set_page(page);
+          old_view.end(page, args);
+          new_view.init(args);
+
+          if(different) {
+            old_view.out_transition(function() {
+                new_view.in_transition();
+                that.loading(false);
+                that.routing = false;
+            });
+          } else {
+            new_view.in_transition();
+            that.loading(false);
+            that.routing = false;
+          }
+
+          $('body,html').animate({scrollTop: 0}, 500);
         }
 
-        $('body,html').animate({scrollTop: 0}, 500);
+        if(!new_view.template_loaded) {
+          $.get('template',{id: new_view.template}, function(response) {
+            $('.prtn-page-' + new_view.template).html(response);
+            ko.applyBindings(new_view, $('.prtn-page-' + new_view.template)[0]);
+            new_view.template_loaded = true;
+            init_new_page();
+          })
+        } else {
+          init_new_page();
+        }
       }
     }
 
@@ -167,35 +181,35 @@ var lpi = {
     
     // training view
     this.pages.training = new TrainingListViewModel();
-    ko.applyBindings(this.pages.training, $('.prtn-page-training')[0]);
+    //ko.applyBindings(this.pages.training, $('.prtn-page-training')[0]);
   
     // companies view
     this.pages.companies = new CompaniesListViewModel();
-    ko.applyBindings(this.pages.companies, $('.prtn-page-companies')[0]);
+    //ko.applyBindings(this.pages.companies, $('.prtn-page-companies')[0]);
 
     // companies view
     this.pages.academies = new AcademiesListViewModel();
-    ko.applyBindings(this.pages.academies, $('.prtn-page-academies')[0]);
+    ko.a//pplyBindings(this.pages.academies, $('.prtn-page-academies')[0]);
 
     // teachers view
     this.pages.teachers = new TeachersListViewModel();
-    ko.applyBindings(this.pages.teachers, $('.prtn-page-teachers')[0]);
+    //ko.applyBindings(this.pages.teachers, $('.prtn-page-teachers')[0]);
 
     // joinus view
     this.pages.joinus = new JoinusViewModel();
-    ko.applyBindings(this.pages.joinus, $('.prtn-page-joinus')[0]);
+    //ko.applyBindings(this.pages.joinus, $('.prtn-page-joinus')[0]);
 
     // offers view
     this.pages.offers = new OffersViewModel();
-    ko.applyBindings(this.pages.offers, $('.prtn-page-offers')[0]);
+    //ko.applyBindings(this.pages.offers, $('.prtn-page-offers')[0]);
 
     // signup view
     this.pages.signup = new SignupViewModel();
-    ko.applyBindings(this.pages.signup, $('.prtn-page-signup')[0]);
+    //ko.applyBindings(this.pages.signup, $('.prtn-page-signup')[0]);
 
     // info view
     this.pages.info = new InfoViewModel();
-    ko.applyBindings(this.pages.info, $('.prtn-page-info')[0]);
+    //ko.applyBindings(this.pages.info, $('.prtn-page-info')[0]);
 
     // login view
     this.pages.login = new LoginViewModel();
@@ -203,11 +217,11 @@ var lpi = {
 
     // wizard view
     this.pages.wizard = new WizardViewModel();
-    ko.applyBindings(this.pages.wizard, $('.prtn-page-wizard')[0]);
+   // ko.applyBindings(this.pages.wizard, $('.prtn-page-wizard')[0]);
 
     // account view
     this.pages.account = new AccountViewModel();
-    ko.applyBindings(this.pages.account, $('.prtn-page-account')[0]);
+    //ko.applyBindings(this.pages.account, $('.prtn-page-account')[0]);
   },
 
   request: function(method, params, callback) {

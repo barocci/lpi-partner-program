@@ -2,34 +2,55 @@ var AccountViewModel = function() {
   var self = this;
   ko.BaseViewModel.call(self);
 
-  self.tags = { option: 'PHP', 
-                option: 'Python',
-                option: 'Web Servers',
-                option: 'Sysadmin',
-                option: 'Javascript',
-                option: 'Web'};
+  self.template_loaded = false;
+  self.template = 'account';
+
+  self.tags = [ 
+                 'PHP', 
+                 'Python',
+                 'Web Servers',
+                 'Sysadmin',
+                 'Javascript',
+                 'Web'
+              ];
 
   self.require_login = true;
 
-  self.sections = [{name: 'Partnership', slug: 'partnership', visible: true},
-                   {name: 'Azienda', slug: 'profile', visible: true}, 
-                   {name: 'Sedi operative', slug: 'locations', visible: true}, 
-                   {name: 'Insegnanti', slug: 'teachers', visible: true}, 
-                   {name: 'Account', slug: 'account', visible: true},
+  
+  self.sections = [{name: 'Partnership', slug: 'partnership', visible: '*'},
+                   {name: 'Azienda', slug: 'profile', visible: 'atp,aap,sp'}, 
+                   {name: 'Profilo', slug: 'profile', visible: 'ct'}, 
+                   {name: 'Sedi operative', slug: 'locations', visible: 'atp,aap,sp'}, 
+                   {name: 'Insegnanti', slug: 'teachers', visible: 'atp,aap'}, 
+                   {name: 'Account', slug: 'account', visible: '*'},
                    //{name: 'Pagamenti', slug: 'billing', visible: true}
                    ];
 
 
   self.active_section = ko.observable('');
 
-  self.training = ko.observableArray([]);
+  self.training  = ko.observableArray([]);
   self.services = ko.observableArray([]);
   self.academic = ko.observableArray([]);
+
+  self.active_subscriptions = ko.computed(function() {
+    var products = [];
+    var subs = self.training();
+    subs = subs.concat(self.services());
+    subs = subs.concat(self.academic());
+
+    for(i in subs) {
+      if(subs[i].product) {
+        products.push(subs[i].product.handle);
+      }
+    }
+
+    return products;
+  });
 
   self.loading = ko.observable(true);
 
   self.management_url = ko.observable('');
-
 
   self.selected_profile = ko.observable(false);
   self.profile_product = ko.observable(false);
@@ -52,7 +73,7 @@ var AccountViewModel = function() {
       'piva': ko.observable(''),
       'postcode': ko.observable(''),
       'country': ko.observable(''),
-      'piva': ko.observable(''),
+      'eccoeccoeccopiva': ko.observable(''),
       'website': ko.observable(''),
       'phone': ko.observable(''),
       'email': ko.observable(''),
@@ -103,7 +124,6 @@ var AccountViewModel = function() {
     }
   }
 
-  
   self.init = function() {
     if(!lpi.is_logged()) {
       lpi.redirect('#login');
@@ -112,11 +132,27 @@ var AccountViewModel = function() {
     self.show_section({slug: 'partnership'});
   }
 
+  self.check_family = function(family) {
+    var handles = self.active_subscriptions();
+    var families = family.split(',');
+    console.log(handles);
+    for(i in handles) {
+      if(typeof handles[i].indexOf == 'function') {
+        for(f in families) {
+          if(handles[i].indexOf(families[f]) >= 0 ||
+              families[f] == '*')
+            return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
   self.observe_form = function(data) {
     for(type in self.profiles) {
       if(data[type]) {
         for(i in data[type]) {
-          console.log("Setting[" + type + "] " + i + " = " + data[type][i]);
           self.profiles[type][i](data[type][i]?data[type][i]:'');
         }
       }
@@ -181,13 +217,15 @@ var AccountViewModel = function() {
       if(self.selected_profile()) {
         console.log(data);
         self.observe_form(data);
+        /*
         $('#tags').tagsInput({
-            'autocomplete': self.tags,
+            'autocomplete': {source: self.tags},
             'interactive':true,
             'width':'100%',
             'onAddTag':self.add_tag,
             'onRemoveTag':self.del_tag,
         });
+        */
         console.log(self.profiles.company.first_name());
 
       } else {

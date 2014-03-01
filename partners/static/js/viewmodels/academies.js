@@ -1,6 +1,10 @@
 var AcademiesListViewModel = function() {
   var self = this;
   ko.BaseViewModel.call(self);
+
+  self.template_loaded = false;
+  self.template = 'academies';
+  
   self.academies = ko.observableArray([])
   self.cities = ko.observableArray([]);
   self.tags = ko.observableArray([]);

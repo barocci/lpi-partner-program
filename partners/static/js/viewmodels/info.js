@@ -2,6 +2,9 @@ var InfoViewModel = function() {
   var self = this;
   ko.BaseViewModel.call(self);
 
+  self.template_loaded = false;
+  self.template = 'teachers';
+
   self.selected_company = ko.observable(-1);
 
   self.profiles = {

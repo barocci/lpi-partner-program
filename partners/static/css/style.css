@@ -655,7 +655,8 @@ h1 .button {
   vertical-align:top;
   text-align:left;
   color:#fff;
-  background-color: #692630;
+  background-color: rgb(116, 31, 42);
+  background-image: linear-gradient(rgb(156, 42, 57), rgb(96, 26, 35));
 }
 
 .input-group {

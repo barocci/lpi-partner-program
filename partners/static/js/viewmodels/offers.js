@@ -2,6 +2,9 @@ var OffersViewModel = function() {
   var self = this;
   ko.BaseViewModel.call(self);
 
+  self.template_loaded = false;
+  self.template = 'teachers';
+
   self.products = ko.observableArray();
   self.type = ko.observable();
   self.show = ko.observable(false);

@@ -2,6 +2,9 @@ var WizardViewModel = function() {
   var self = this;
   ko.BaseViewModel.call(self);
 
+  self.template_loaded = false;
+  self.template = 'wizard';
+
   self.company_name = ko.observable();
   self.company_sector = ko.observable();
   self.owner_firstname = ko.observable();

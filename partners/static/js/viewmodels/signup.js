@@ -2,6 +2,9 @@ var SignupViewModel = function() {
   var self = this;
   ko.BaseViewModel.call(self);
 
+  self.template_loaded = false;
+  self.template = 'signup';
+
   self.mail = ko.observable('');
   self.password = ko.observable('');
   self.confirm_password = ko.observable('');

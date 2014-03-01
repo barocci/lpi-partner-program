@@ -142,17 +142,13 @@ def account_info(request):
         print subscriptions
         for sub in subscriptions:
             product = Product().get_by_handle(sub['product'])
-            info = {}
-            info['state'] = sub['state']  
-            info['product'] = product
-            info['id'] = sub['id']
-            info['due_date'] = sub['due_date']
-            info['product']['url'] = Product().hostedURL(product['id'], request.user.id)
+            sub['product'] = product
+            sub['product']['url'] = Product().hostedURL(product['id'], request.user.id)
 
             family = product.family()
 
             if family:
-                data[family].append(info)
+                data[family].append(sub)
 
         ret['data'] = data
     
@@ -234,6 +230,9 @@ def register(request):
 
     return renderJSON(ret)
 
+def template(request):
+    return render_to_response('%s.html' % request.GET['id'], {}, 
+            context_instance=RequestContext(request))
 
 def renderJSON(data):
     return HttpResponse(json.dumps(data, separators=(',', ':')), 

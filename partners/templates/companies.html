@@ -1,0 +1,32 @@
+<h1>Servizi e Soluzioni</h1>
+<p>
+In questa sezione puoi trovare Aziende e Professionisti in grado di rispondere alle tue esigenze professionali. I nostri partner vengono accuratamente controllati per garantire la massima qualit&agrave; del servizio. Attraverso la funzione di ricerca puoi definire le competenze necessarie, i giudizi di precedenti clienti e l'area di lavoro. In questo modo potrai scegliere tutte le caratteristiche del tuo nuovo fornitore di servizi IT.
+</p>
+<div class='list-filters'>
+  <fieldset data-bind='visible: cities().length > 0'>
+    <h3>Citt&agrave;</h3>
+    <ul data-bind='foreach: cities'>
+      <li data-bind='text: $data, click: function() { $parent.filter($data); },
+                     css: {active:$parent.tag_is_active($data)}'></li>
+
+    </ul>
+
+  </fieldset>
+  <fieldset data-bind='visible: tags().length > 0'>
+    <h3>Competenze</h3>
+    <ul data-bind='foreach: tags'>
+      <li data-bind='text: $data, click: function() { $parent.filter($data); },
+                     css: {active:$parent.tag_is_active($data)}'></li>
+
+    </ul>
+  </fieldset>
+</div>
+<div id='companies-isotope' class='isotope' data-bind="foreach: companies">
+   <div class='item' data-bind='visible: visible()'>
+      <img style='max-height:100px;display:none' data-bind='attr: {src: image_url}'>
+      <a data-bind='text: first_name, attr:{href: "#info/" + id}'></a>
+      <span data-bind='text: "(" + city + ")"'>
+         
+      </span>
+   </div>
+</div>

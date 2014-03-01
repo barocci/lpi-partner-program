@@ -1,6 +1,10 @@
 var CompaniesListViewModel = function() {
 	var self = this;
 	ko.BaseViewModel.call(self);
+
+  self.template_loaded = false;
+  self.template = 'companies';
+
   self.companies = ko.observableArray([]);
   self.cities = ko.observableArray([]);
   self.tags = ko.observableArray([]);

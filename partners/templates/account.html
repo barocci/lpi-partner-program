@@ -1,0 +1,378 @@
+{% load static from staticfiles %}
+<div class="prtn-page-sidebar"> 
+  <ul data-bind='foreach: sections'>
+    <li data-bind='visible: $parent.check_family(visible), 
+                   css: { active: $parent.active_section() == slug}'>
+      <a data-bind='click: function() { $parent.show_section({slug: slug},{}); }, text: name'></a>
+      <span></span>
+    </li>
+  </ul>
+</div>
+
+<div class='prtn-page-content' data-bind='visible: loading() == false'>
+<div data-bind='visible: active_section() == "partnership"'>
+  <h1>
+    Partnership
+    <a data-bind='visible: check_family("aap,atp,csp")' class='button pull-right' href='#offers/test-center'>DIVENTA TEST CENTER</a>
+  </h1>
+
+  <div data-bind='visible: training().length > 0'>
+    <h3>Azienda di formazione</h3>
+
+    <table class='table'>
+      <thead>
+        <tr>
+          <th>Prodotto</th>
+          <th>Profilo</th>
+          <th>Stato</th>
+          <th>Scadenza</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody data-bind='foreach: training()'>
+        <tr>
+          <td data-bind='text: product.name'></td>
+          <td>
+            <a data-bind='text: company_name, click: function() {$parent.goto_profile($data) }'></a>
+          </td>
+          <td data-bind='text: state'>
+          <td data-bind='text: due_date'> - </td>
+          <td>
+            <a data-bind="attr: {href: product.url}, visible: state != 'active'" 
+               class='button'>Attiva</a>
+
+            <a data-bind="click: function() { $parent.goto_profile($data) }, visible: state == 'active'">
+              <i class='glyphicon glyphicon-cog'></i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div data-bind='visible: services().length > 0'>
+    <h3>Azienda di servizi</h3>
+
+    <table class='table'>
+      <thead>
+        <tr>
+          <th>Prodotto</th>
+          <th>Profilo</th>
+          <th>Stato</th>
+          <th>Scadenza</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody data-bind='foreach: services()'>
+        <tr>
+          <td data-bind='text: product.name'></td>
+          <td>
+            <a data-bind='text: company_name, click: function() {$parent.goto_profile($data) }'></a>
+          </td>
+          <td data-bind='text: state'></td>
+          <td data-bind='text: due_date'> - </td>
+          <td>
+            <a data-bind="attr: {href: product.url}, visible: state != 'active'" 
+               class='button'>Attiva</a>
+            <a data-bind="click: $parent.goto_profile, visible: state == 'active'">
+              <i class='glyphicon glyphicon-cog'></i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div data-bind='visible: academic().length > 0'>
+    <h3>Scuole e Universit&agrave;</h3>
+
+    <table class='table'>
+      <thead>
+        <tr>
+          <th>Prodotto</th>
+          <th>Profilo</th>
+          <th>Stato</th>
+          <th>Scadenza</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody data-bind='foreach: academic()'>
+        <tr>
+          <td data-bind='text: product.name'></td>
+          <td>
+            <a data-bind='text: company_name, click: function() {$parent.goto_profile($data) }'></a>
+          </td>
+          <td data-bind='text: state'>
+          <td data-bind='text: due_date'> - </td>
+          <td>
+            <a data-bind="attr: {href: product.url}, visible: state != 'active'" 
+               class='button'>Attiva</a>
+
+            <a data-bind="click: $parent.goto_profile, visible: state == 'active'">
+              <i class='glyphicon glyphicon-cog'></i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<div data-bind='visible: active_section() == "profile"'>
+  <h1>
+    <small data-bind='visible: selected_profile() != false' class='pull-right'>
+      <a data-bind='click: show_all_profiles'>Visualizza tutti i profili</a>
+    </small>
+    Profilo: 
+    <span data-bind='text: profile_product()!=false?profile_product():""'></span>
+    
+  </h1>
+  <div data-bind='visible: selected_profile() == false'>
+    <ul data-bind='foreach: services()'>
+      <li>
+        <a data-bind='text: product.name, click: $parent.goto_profile'></a>
+      </li>
+    </ul>
+    
+
+  </div>
+  <div data-bind='visible: selected_profile() != false'>
+    <div class="row">
+      <div data-bind='' class='col-sm-6'>
+        <h3>Azienda</h3>
+        <form class='fixed-headers'>
+          
+          <div class="input-group">
+            <span class="input-group-addon">
+              Nome
+            </span>
+            <input type='text' class='form-control' 
+                   data-bind='value: profiles.company.first_name'
+                   placeholder='Nome azienda'>
+          </div>
+
+          <div class="input-group">
+            <span class="input-group-addon">
+              Settore
+            </span>
+            <input type='text' class='form-control' 
+                   data-bind='value: profiles.company.job_title'
+                   placeholder='Settore'>
+          </div>
+
+          <div class="input-group">
+            <span class="input-group-addon">
+              Descrizione
+            </span>
+            <textarea class='form-control' style='height:100px' 
+                      data-bind='value: profiles.company.background'
+                      placeholder='Descrizione'></textarea>
+          </div>
+
+          <div class="input-group">
+            <span class="input-group-addon">
+              Partita IVA
+            </span>
+            <input type='text' class='form-control' 
+                   data-bind='value: profiles.company.piva'
+                   placeholder='Partita IVA'>
+          </div>
+
+          <div class="input-group">
+            <span class="input-group-addon">
+              Website
+            </span>
+            <input type='text' class='form-control' 
+                   data-bind='value: profiles.company.website'
+                   placeholder='Website'>
+          </div>
+
+          <div class="input-group">
+            <span class="input-group-addon">
+              Telefono
+            </span>
+            <input type='text' class='form-control'
+                   data-bind='value: profiles.company.phone'
+                   placeholder='Telefono'>
+          </div>
+
+          <div class="input-group">
+            <span class="input-group-addon">
+              Email
+            </span>
+            <input type='text' class='form-control'
+                   data-bind='value: profiles.company.email'
+                   placeholder='Email'>
+          </div>
+
+          
+        </form>
+        </div>
+
+        <div class='col-sm-4 col-sm-offset-1 image-avatar'>
+          <div class='avatar-container'>
+
+            <div class="row avatar-box">
+              <img src='{% static "images/logo-moc.jpg" %}'>
+            </div>
+            <hr>
+            <div class="row">
+              <a data-bind=''>Cambia immagine</a>
+            </div>
+
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="row">
+        <div data-bind='' class='col-sm-6'>
+          <form class='fixed-headers'>
+            <h3>Competenze</h3>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div data-bind='' class='col-sm-6'>
+          <form class='fixed-headers'>
+            <h3>Sede</h3>
+            <div class="input-group">
+              <span class="input-group-addon">
+                Indirizzo
+              </span>
+              <input type='text' class='form-control' 
+                     data-bind='value: profiles.company.street'
+                     placeholder='Indirizzo'>
+              <input type='text' class='form-control'
+                     data-bind='value: profiles.company.city'
+                     placeholder='Citta'>
+              <input type='text' class='form-control'
+                     data-bind='value: profiles.company.postcode'
+                     placeholder='CAP'>
+              <input type='text' class='form-control'
+                     data-bind='value: profiles.company.country'
+                     placeholder='Paese'>
+            </div>
+          </form>
+          <a data-bind='click: function() { submit_profile("company"); }' 
+             class='button pull-right'>Salva</a>  
+        </div>
+
+      </div>
+
+
+      <div class="row">
+        <div data-bind='' class='col-sm-6'>
+          <form class='fixed-headers'>
+
+            <h3>Responsabile aministrativo</h3>
+            <div data-bind='with:profiles.incharge'>
+              <div class='person-card'>
+                <b data-bind='text: first_name() + " " + last_name()'></b>
+              </div>
+              <a data-bind='click: function() { $parent.edit_profile("incharge") }'>
+                Modifica responsabile amministrativo</a>
+            </div>
+        </div>
+        <div data-bind='template: {name: "person-form", data: profiles.incharge},
+                        visible: edit.incharge()' class='col-sm-6'>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div data-bind='' class='col-sm-6'>
+            <h3>Responsabile commerciale</h3>
+            <div data-bind='with:profiles.commercial'>
+              <div data-bind='visible: id() != ""'>
+                <div class='person-card'>
+                  <b data-bind='text: first_name() + " " + last_name()'></b>
+                </div>
+                <a data-bind='click: function() { $parent.edit_profile("commercial") }'>
+                  Modifica responsabile commerciale</a>
+              </div>
+
+              <div data-bind='visible: id() == ""'>
+                <a data-bind='click: function() { $parent.edit_profile("commercial") }'>
+                  Aggiungi responsabile commerciale</a>
+              </div>
+            </div>
+            
+          </form>
+        </div>
+        <div data-bind='template: {name: "person-form", data: profiles.commercial},
+                        visible: edit.commercial()' class='col-sm-6'>
+        </div>
+      </div>
+    </div>
+
+    
+  </div>
+
+  <div data-bind='visible: active_section() == "account"'>
+    <h1>Account</h1>
+    <div class='row'>
+        <h3>Cambio password</h3>
+        <form class='fixed-headers'>
+          <div class='col-sm-6'>
+            <div class="input-group">
+              <span class="input-group-addon">
+                Vecchia password
+              </span>
+              <input type='text' class='form-control' 
+                     data-bind=''
+                     placeholder='vecchia password'>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-addon">
+                Nuova password
+              </span>
+              <input type='text' class='form-control' 
+                     data-bind=''
+                     placeholder='nuova password'>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-addon">
+                Conferma password
+              </span>
+              <input type='text' class='form-control' 
+                     data-bind=''
+                     placeholder='conferma password'>
+            </div>
+
+            <a data-bind='click: function() { $parent.submit_profile(type); }' 
+               class='button pull-right'>Salva</a>
+          </div>
+        </form>  
+    </div>
+
+    <div class='row'>
+      <br><br><br>
+
+      <h3>Portale pagamenti</h3>
+      <p>
+        Attraverso il nostro Portale Pagamenti &egrave; possibile visualizzare lo storico
+        delle sottoscrizioni e modificare i propri dati di pagamento.
+      </p>
+      <br>
+
+      <a class='button' data-bind='attr: {href: management_url}'>
+        Accedi al Portale pagamenti
+      </a>
+    </div>
+  </div>
+
+  <div data-bind='visible: active_section() == "locations"'>
+    <h1>Sedi operative</h1>
+  </div>
+
+  <div data-bind='visible: active_section() == "teachers"'>
+    <h1>Docenti</h1>
+  </div>
+
+  <div data-bind='visible: active_section() == "billing"'>
+    <h1>Pagamenti</h1>
+  </div>
+</div>

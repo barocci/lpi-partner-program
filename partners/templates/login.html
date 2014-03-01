@@ -1,0 +1,48 @@
+<div class="col-sm-5">
+
+    <h1>Login partners</h1>
+    <br>
+    <form action=''>
+    
+      <div class="input-group">
+        <span class="input-group-addon">
+          <span class='glyphicon glyphicon-envelope'></span>
+        </span>
+        <input type='text' class='form-control' data-bind='value: mail'
+               placeholder='La tua email'>
+      </div>
+
+      <div class="input-group">
+        <span class="input-group-addon">
+          <span class="glyphicon glyphicon-lock"></span>
+        </span>
+        <input type='password' class='form-control' data-bind='value: password'
+               placeholder='La tua password'><br>
+      </div>
+      <p>
+        <a data-bind='click: recover_password'>Dimenticato la password?</a>
+      </p>
+
+
+      <div class='alert alert-danger' 
+           data-bind='text: error_message, visible: error_message'>
+      </div>
+      <hr>
+
+      <a class='button' data-bind='click: login'>Entra</a>
+    </form>
+  </div>
+
+  <div class='col-sm-5 col-sm-offset-2'>
+    <h1>Login studenti</h1>
+    <p>
+      <br>
+      Gli studenti gi&agrave; in possesso delle credenziali per accedere
+      all'area di gestione LPI, possono autenticarsi seguendo il questo link.
+    </p>
+    <br>
+    <a class='button' href='https://cs.lpi.org/caf/Xamman/candidate_area'>
+      accesso studenti LPI
+    </a>
+  </div>
+</div>

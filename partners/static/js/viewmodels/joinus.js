@@ -2,6 +2,10 @@ var JoinusViewModel = function() {
 	var self = this;
 	ko.BaseViewModel.call(self);
 
+  self.template_loaded = false;
+  self.template = 'joinus';
+
+
 
   self.details = ko.observable("");
 
