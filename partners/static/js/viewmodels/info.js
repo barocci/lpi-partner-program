@@ -3,7 +3,7 @@ var InfoViewModel = function() {
   ko.BaseViewModel.call(self);
 
   self.template_loaded = false;
-  self.template = 'teachers';
+  self.template = 'info';
 
   self.selected_company = ko.observable(-1);
 

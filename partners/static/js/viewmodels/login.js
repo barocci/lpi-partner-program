@@ -1,6 +1,9 @@
 var LoginViewModel = function() {
   var self = this;
   ko.BaseViewModel.call(self);
+
+  self.template_loaded = false;
+  self.template = 'login';
   
   self.mail = ko.observable();
   self.password = ko.observable();

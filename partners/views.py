@@ -231,6 +231,7 @@ def register(request):
     return renderJSON(ret)
 
 def template(request):
+    print "redenring: %s" % request.GET['id'] 
     return render_to_response('%s.html' % request.GET['id'], {}, 
             context_instance=RequestContext(request))
 

@@ -213,7 +213,7 @@ var lpi = {
 
     // login view
     this.pages.login = new LoginViewModel();
-    ko.applyBindings(this.pages.login, $('.prtn-page-login')[0]);
+    //ko.applyBindings(this.pages.login, $('.prtn-page-login')[0]);
 
     // wizard view
     this.pages.wizard = new WizardViewModel();
