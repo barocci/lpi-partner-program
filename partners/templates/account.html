@@ -235,29 +235,7 @@
         </div>
       </div>
 
-      <div class="row">
-        <div data-bind='' class='col-sm-6'>
-          <h3>Sedi</h3>
-          <div data-bind='foreach: locations(), visible: !edit.location()'>
-            <div>
-              <b data-bind='text:$data.first_name,  click: function() {$parent.edit_location($data)}'></b>
-            </div>
-          </div>
-
-          <div data-bind='template:{name: "address-form", 
-                                    data: {profile: edit_location_buffer, 
-                                           parent:  $data} },
-                              visible: edit.location()'>
-          </div>
-          <a data-bind='click: function() { new_location() },
-                          visible: !edit.location()'>
-                Aggiungi sede operativa
-          </a>
-          
-        </div>
-
-      </div>
-
+      
 
       <div class="row">
         <div data-bind='' class='col-sm-8'>
@@ -307,6 +285,55 @@
                         visible: edit.commercial()' class='col-sm-6'>
         </div>
       </div>
+    </div>
+
+    <div class="row">
+      <div data-bind='' class='col-sm-6'>
+        <h3>Sedi</h3>
+        <div data-bind='if:locations().length > 0 '>
+          <div data-bind='foreach: locations(), visible: !edit.location()'>
+            <div data-bind='if:$data'>
+              <b data-bind='text:$data.first_name, click: function() {$parent.edit_location($data)}'></b>
+            </div>
+          </div>
+        </div>
+
+        <div data-bind='template:{name: "address-form", 
+                                  data: {profile: edit_location_buffer, 
+                                         parent:  $data} },
+                            visible: edit.location()'>
+        </div>
+        <a data-bind='click: function() { new_location() },
+                        visible: !edit.location()'>
+              Aggiungi sede operativa
+        </a>
+        
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div data-bind='visible: check_family("aap,atp", [profile_family()])' class='col-sm-6'>
+        <h3>Docenti</h3>
+        <div data-bind='foreach: teachers(), visible: !edit.teacher()'>
+          <div data-bind='if:$data'>
+            <b data-bind='text:$data.first_name() + " " + $data.last_name(),  
+                          click: function() {$parent.edit_teacher($data)}'></b>
+          </div>
+        </div>
+
+        <div data-bind='template:{name: "teacher-form", 
+                                  data: {profile: edit_teacher_buffer, 
+                                         parent:  $data} },
+                            visible: edit.teacher()'>
+        </div>
+        <a data-bind='click: function() { new_teacher() },
+                      visible: !edit.teacher()'>
+              Aggiungi docente certificato
+        </a>
+        
+      </div>
+
     </div>
 
     
@@ -461,5 +488,38 @@
   <a data-bind='click: function() { $parent.submit_location(); }' 
      class='button pull-right'>Salva</a>  
   <a data-bind='click: function() { $parent.abort_edit_location(); }'>Annulla</a>
+
+</script>
+
+<script type='text/html' id='teacher-form'>
+  <form class='fixed-headers'>
+    <div class="input-group">
+      <span class="input-group-addon">
+        Nome
+      </span>
+      <input type='text' class='form-control' data-bind='value: $parent.edit_teacher_buffer.first_name'
+             placeholder='Nome'>
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon">
+        Cognome
+      </span>
+      <input type='text' class='form-control' data-bind='value: $parent.edit_teacher_buffer.last_name'
+             placeholder='Cognome'>
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon">
+        LPIC ID
+      </span>
+      <input type='text' class='form-control' data-bind='value: $parent.edit_teacher_buffer.job_title'
+             placeholder='Nome'>
+    </div>
+
+  </form>
+  <a data-bind='click: function() { $parent.submit_teacher(); }' 
+     class='button pull-right'>Salva</a>  
+  <a data-bind='click: function() { $parent.abort_edit_teacher(); }'>Annulla</a>
 
 </script>

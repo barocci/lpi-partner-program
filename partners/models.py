@@ -387,11 +387,14 @@ class Company(Contact):
         self['Incharge'] = False
         self['Commercial'] = False
         self['Location'] = []
+        self['Teacher'] = []
 
         if resource.attributes.has_key('contacts'):
             for contact_resource in resource.attributes['contacts']:
                 contact = Person().find(id=contact_resource.attributes['id'])
+
                 print type(self[contact['Role']])
+                
                 if type(self[contact['Role']]) == type([]):
                     self[contact['Role']].append(contact)
                 else:

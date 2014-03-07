@@ -54,11 +54,13 @@ var AccountViewModel = function() {
 
   self.selected_profile = ko.observable(false);
   self.profile_product = ko.observable(false);
+  self.profile_handle = ko.observable(false);
 
   self.edit = { 
     incharge: ko.observable(false),
     commercial: ko.observable(false),
     location: ko.observable(false),
+    teacher: ko.observable(false),
     company: ko.observable(false)
   }
 
@@ -104,6 +106,7 @@ var AccountViewModel = function() {
       'type': 'incharge',
     },
 
+
     'commercial': {
       'id': ko.observable(''),
       'first_name': ko.observable(''),
@@ -145,7 +148,28 @@ var AccountViewModel = function() {
       'type': ko.observable('location')
     }
 
+  self.edit_teacher_buffer =  {
+      'id': ko.observable(''),
+      'first_name': ko.observable(''),
+      'last_name': ko.observable(''),
+      'job_title': ko.observable(''),
+      'background': ko.observable(''),
+      'street': ko.observable(''),
+      'city': ko.observable(''),
+      'postcode': ko.observable(''),
+      'country': ko.observable(''),
+      'piva': ko.observable(''),
+      'website': ko.observable(''),
+      'phone': ko.observable(''),
+      'email': ko.observable(''),
+      'image_url': ko.observable(''),
+      'company_id': ko.observable(''),
+      'Role': ko.observable('Teacher'),
+      'type': ko.observable('teacher')
+    }
+
   self.locations = ko.observableArray([]);
+  self.teachers = ko.observableArray([]);
 
   self.init = function() {
     if(!lpi.is_logged()) {
@@ -155,8 +179,13 @@ var AccountViewModel = function() {
     self.show_section({slug: 'partnership'});
   }
 
-  self.check_family = function(family) {
-    var handles = self.active_subscriptions();
+  self.check_family = function(family, set) {
+    var handles;
+    if(set != undefined) {
+      handles = set;
+    } else {
+      handles = self.active_subscriptions();
+    }
     var families = family.split(',');
     for(i in handles) {
       if(typeof handles[i].indexOf == 'function') {
@@ -171,16 +200,45 @@ var AccountViewModel = function() {
     return false;
   }
 
+  self.profile_family = function() {
+    var family = '';
+    console.log(self.profile_handle() + ' ,,,,,, ');
+    if(self.profile_handle()) {
+      var parts = self.profile_handle().split('-');
+      if(parts.length > 1) {
+        family = parts[1];
+      }
+    }
+
+    return family;
+  }
+
   self.observe_form = function(data) {
     for(type in self.profiles) {
       if(data[type]) {
         for(i in data[type]) {
+          console.log('setting ' + type + ' ' + i);
           self.profiles[type][i](data[type][i]?data[type][i]:'');
         }
       }
     }
 
-    for(i in data.locations) {
+    for(i =0; i < data.teachers.length; i++) {
+      var teacher = {};
+      console.log(i);
+      console.log(data.teachers[i]);
+      for(field in data.teachers[i]) {
+        var value = data.teachers[i][field];
+
+        teacher[field] = ko.observable(value)
+      }
+
+      console.log(teacher);
+
+      self.teachers.push(teacher);
+    }
+
+    for(i =0; i < data.locations.length; i++) {
       var location = {};
       for(field in data.locations[i]) {
         var value = data.locations[i][field];
@@ -190,7 +248,7 @@ var AccountViewModel = function() {
 
       console.log(location);
 
-      self.locations.push(location)
+      self.locations.push(location);
     }
   }
 
@@ -272,6 +330,74 @@ var AccountViewModel = function() {
     self.abort_edit_location();
   }
 
+  self.new_teacher = function() {
+    self.edit['teacher'](true);
+  }
+
+  self.edit_teacher = function(teacher) {
+    for(i in teacher) {
+      self.edit_teacher_buffer[i](teacher[i]());
+    }
+    self.edit['teacher'](true);
+  }
+
+  self.abort_edit_teacher = function() {
+    for(i in self.edit_teacher_buffer) {
+      if(typeof(self.edit_teacher_buffer[i]) == 'function')
+        self.edit_teacher_buffer[i]('');
+    }
+    self.edit_teacher_buffer['Role']('Teacher');
+    self.edit_teacher_buffer['type']('teacher');
+    self.edit['teacher'](false);
+  }
+
+  self.submit_teacher = function() {
+    var teacher = {};
+    for(i in self.edit_teacher_buffer) {
+      teacher[i] = self.edit_teacher_buffer[i]();
+    }
+
+    console.log(teacher);
+
+    teacher.company = self.profiles.company.first_name()
+    teacher.company_id = self.profiles.company.id()
+
+    lpi.post('edit_profile', teacher, function(response) {
+      console.log(response);
+      self.edit[type](false);
+    });
+
+    if(teacher.id == '') {
+      var teacher = {};
+
+      for (i in self.edit_teacher_buffer) {
+        teacher[i] = ko.observable(self.edit_teacher_buffer[i]());
+      };
+
+      console.log('pushing ' + teacher.first_name());
+
+      self.teachers.push(teacher);
+    } else {
+      var teachers = self.teachers()
+      for(i = 0; i< teachers.length;i++) {
+        console.log(teachers[i].id + ' === ' + teacher.id);
+        if(typeof(teachers[i].id) == 'function') {
+          if(teachers[i].id() == teacher.id) {
+              for(j in teachers[i]) {
+                if(typeof(teachers[i][j]) == 'function')
+                  teachers[i][j](teacher[j]);
+              }          
+          }
+        }
+      }
+
+      self.teachers([]);
+      self.teachers(teachers);
+    }
+
+    self.abort_edit_teacher();
+  }
+
   self.add_tag = function(tag) {
     var tags = self.profiles.company.tag_list().split(",");
     tags.push(tag);
@@ -299,6 +425,7 @@ var AccountViewModel = function() {
     console.log(obj);
     self.selected_profile(obj.id);
     self.profile_product(obj.product.name);
+    self.profile_handle(obj.product.handle);
     self.show_section({slug: 'profile'}, obj.id);
   }
 

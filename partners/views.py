@@ -178,15 +178,19 @@ def account_info(request):
             commercial = company['Commercial']
             incharge = company['Incharge']
             locations = company['Location']
+            teacher = company['Teacher']
 
 
             del company['Incharge']
             del company['Commercial']
             del company['Location']
+            del company['Teacher']
+
             ret['data'] = { 
               'company': company,
               'commercial': commercial,
               'incharge': incharge,
+              'teachers': teacher,
               'locations': locations
             }
 
