@@ -158,6 +158,18 @@ class LPISubscription(Model):
 
         return self
 
+    def is_owner(self, user_id, contact_id):
+        print 'checku %s  comp %s' % (user_id, contact_id)
+        deals = self.find(cf_7=user_id)
+        ret = False
+        for deal in deals:
+            if str(deal['company']) == str(contact_id):
+                ret = True
+                break
+
+        print "ret: %d" % ret
+        return ret
+
     def link_deal(self, subscription_id, user_id, product):
         # load chargify subscription info
         cs = self.chargify.Subscription().getBySubscriptionId(subscription_id)
@@ -215,8 +227,6 @@ class LPISubscription(Model):
             subscription = LPISubscription().load_from_resource(deal)
             results.append(subscription)
 
-        print "----"
-        print results
         return results
 
 
@@ -376,11 +386,16 @@ class Company(Contact):
         
         self['Incharge'] = False
         self['Commercial'] = False
+        self['Location'] = []
 
         if resource.attributes.has_key('contacts'):
             for contact_resource in resource.attributes['contacts']:
                 contact = Person().find(id=contact_resource.attributes['id'])
-                self[contact['Role']] = contact
+                print type(self[contact['Role']])
+                if type(self[contact['Role']]) == type([]):
+                    self[contact['Role']].append(contact)
+                else:
+                    self[contact['Role']] = contact
 
         return self
 
@@ -502,6 +517,65 @@ class Person(Contact):
 
         return people
 
+
+class Location(Contact):
+    def create(self, company_name, company_id, first_name, address, city, postcode, country):
+        contact = redmine.Contact()
+        contact.first_name = first_name
+        contact.address_attributes = {
+            'street1': address,
+            'city': city,
+            'country_code': 'IT',
+            'postcode': postcode
+        }
+        contact.company = company_name
+        contact.project_id = settings.REDMINE_PROJECT
+        contact.is_company = False
+        contact.custom_fields = [
+            { 'value': "Location", 'id': self.mapping_id['Role']},
+            { 'value': company_id, 'id': self.mapping_id['company_id']}
+        ]
+
+        contact.save()
+        
+        return self.load_from_resource(contact)
+
+    def find(self, id):
+        resource = Contact().find(id)
+        return self.load_from_resource(resource)
+
+    def load_from_resource(self, resource):
+        self['id'] = resource.id
+        self['first_name'] = resource.first_name
+
+        self['street'] = ''
+        self['postcode'] = ''
+        self['city'] = ''
+        self['country'] = ''
+        if resource.attributes.has_key('address'):
+            address = resource.attributes['address'].attributes
+
+            self['city'] = address['city']
+            self['postcode'] = address['postcode']
+            self['street'] = address['street']
+            self['country'] = address['country']
+
+
+        for cf in resource.custom_fields:
+            self[cf.name] = cf.value
+
+        return self
+
+    def find_all(self, params):
+        params['is_company'] = 0    
+        resources = Contact().find_all(params)
+        locations = []
+        for res in resources:
+            location = Location()
+            location.load_from_resource(res)
+            locations.append(location)
+
+        return locations
 
 
 

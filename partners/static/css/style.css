@@ -665,11 +665,9 @@ h1 .button {
 
 .avatar-container {
   background:#fff;
-  margin-top:65px;
   text-align:center;
   height:250px;
   width:300px;
-  border:1px solid rgb(116, 31, 42);
   padding-top:20px;
 }
 
@@ -677,6 +675,21 @@ h1 .button {
   height:150px;
 }
 
+.edit {
+    display: none;    
+}
+
+.editing .edit {
+    display: block;    
+}
+
+.editing .view {
+    display: none;
+}
+
+.profile-page h1.editable:hover {
+  background:red;
+}
 
 .isotope .item {
   width:30%;
@@ -706,6 +719,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a90329', end
   color:#fff;
 }
 
+
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
 
 textarea:focus,
 input[type="text"]:focus,

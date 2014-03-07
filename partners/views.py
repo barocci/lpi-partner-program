@@ -99,13 +99,24 @@ def edit_profile(request):
     if profile.has_key('id'):
         if profile['id'] == '':
             print "Creating contact"
-            contact = Person().create(profile['company'], 
-                                      profile['company_id'], 
-                                      profile['first_name'], 
-                                      profile['last_name'],
-                                      profile['job_title'], 
-                                      profile['Role'])
+            if profile['Role'] == 'Location':
+                contact = Location().create(profile['company'], 
+                                            profile['company_id'], 
+                                            profile['first_name'], 
+                                            profile['street'],
+                                            profile['city'], 
+                                            profile['postcode'],
+                                            profile['country'])
 
+            else:
+                contact = Person().create(profile['company'], 
+                                          profile['company_id'], 
+                                          profile['first_name'], 
+                                          profile['last_name'],
+                                          profile['job_title'], 
+                                          profile['Role'])
+
+            
             profile['id'] = contact['id']
 
         print profile
@@ -116,17 +127,24 @@ def edit_profile(request):
 
 def details(request):
     ret = {'error': 0, 'data': []}
+
     if request.GET.has_key('id'):
         company = Company().find(request.GET['id'])
         commercial = company['Commercial']
         incharge = company['Incharge']
+
+        user = LPIUser.objects.get(id=request.user.id)
+
+
+
 
         del company['Incharge']
         del company['Commercial']
         ret['data'] = { 
           'company': company,
           'commercial': commercial,
-          'incharge': incharge
+          'incharge': incharge,
+          'owner': LPISubscription().is_owner(request.user.id, company['id'])
         }
         
     return renderJSON(ret);
@@ -159,14 +177,17 @@ def account_info(request):
             company = Company().find(subscription['company'])
             commercial = company['Commercial']
             incharge = company['Incharge']
+            locations = company['Location']
 
 
             del company['Incharge']
             del company['Commercial']
+            del company['Location']
             ret['data'] = { 
               'company': company,
               'commercial': commercial,
-              'incharge': incharge
+              'incharge': incharge,
+              'locations': locations
             }
 
     if request.GET['section'] == 'account':

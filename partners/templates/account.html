@@ -136,8 +136,26 @@
   </div>
   <div data-bind='visible: selected_profile() != false'>
     <div class="row">
-      <div data-bind='' class='col-sm-6'>
-        <h3>Azienda</h3>
+        <div data-bind='' class='col-sm-6'>
+          <h3>Logo</h3>
+          <div class='avatar-container'>
+
+            <div class="row avatar-box">
+              <img src='{% static "images/logo-moc.jpg" %}'>
+            </div>
+            <hr>
+            <div class="row">
+              <a data-bind=''>Cambia immagine</a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    <div class="row">
+      <div data-bind='' class='col-sm-8'>
+        <h3>Informazioni</h3>
+
+        
         <form class='fixed-headers'>
           
           <div class="input-group">
@@ -206,23 +224,8 @@
           
         </form>
         </div>
-
-        <div class='col-sm-4 col-sm-offset-1 image-avatar'>
-          <div class='avatar-container'>
-
-            <div class="row avatar-box">
-              <img src='{% static "images/logo-moc.jpg" %}'>
-            </div>
-            <hr>
-            <div class="row">
-              <a data-bind=''>Cambia immagine</a>
-            </div>
-
-          </div>
-        </div>
-
-
       </div>
+
 
       <div class="row">
         <div data-bind='' class='col-sm-6'>
@@ -234,73 +237,73 @@
 
       <div class="row">
         <div data-bind='' class='col-sm-6'>
-          <form class='fixed-headers'>
-            <h3>Sede</h3>
-            <div class="input-group">
-              <span class="input-group-addon">
-                Indirizzo
-              </span>
-              <input type='text' class='form-control' 
-                     data-bind='value: profiles.company.street'
-                     placeholder='Indirizzo'>
-              <input type='text' class='form-control'
-                     data-bind='value: profiles.company.city'
-                     placeholder='Citta'>
-              <input type='text' class='form-control'
-                     data-bind='value: profiles.company.postcode'
-                     placeholder='CAP'>
-              <input type='text' class='form-control'
-                     data-bind='value: profiles.company.country'
-                     placeholder='Paese'>
+          <h3>Sedi</h3>
+          <div data-bind='foreach: locations(), visible: !edit.location()'>
+            <div>
+              <b data-bind='text:$data.first_name,  click: function() {$parent.edit_location($data)}'></b>
             </div>
-          </form>
-          <a data-bind='click: function() { submit_profile("company"); }' 
-             class='button pull-right'>Salva</a>  
+          </div>
+
+          <div data-bind='template:{name: "address-form", 
+                                    data: {profile: edit_location_buffer, 
+                                           parent:  $data} },
+                              visible: edit.location()'>
+          </div>
+          <a data-bind='click: function() { new_location() },
+                          visible: !edit.location()'>
+                Aggiungi sede operativa
+          </a>
+          
         </div>
 
       </div>
 
 
       <div class="row">
-        <div data-bind='' class='col-sm-6'>
-          <form class='fixed-headers'>
+        <div data-bind='' class='col-sm-8'>
+          <form class='fixed-headers' data-bind='with:profiles.incharge'>
 
             <h3>Responsabile aministrativo</h3>
-            <div data-bind='with:profiles.incharge'>
-              <div class='person-card'>
-                <b data-bind='text: first_name() + " " + last_name()'></b>
-              </div>
-              <a data-bind='click: function() { $parent.edit_profile("incharge") }'>
-                Modifica responsabile amministrativo</a>
+            <div class='person-card'>
+              <b data-bind='text: first_name() + " " + last_name(), visible: !$parent.edit.incharge()'></b>
             </div>
+
+            <div data-bind='template: {name: "person-form", data: {profile: $parent.profiles.incharge, 
+                                                                   parent:  $parent}},
+                            visible: $parent.edit.incharge()'>
+            </div>
+
+            <a data-bind='click: function() { $parent.edit_profile("incharge") },
+                          visible: !$parent.edit.incharge()'>
+                Modifica responsabile amministrativo
+            </a>
         </div>
-        <div data-bind='template: {name: "person-form", data: profiles.incharge},
-                        visible: edit.incharge()' class='col-sm-6'>
-        </div>
+        
 
       </div>
 
       <div class="row">
-        <div data-bind='' class='col-sm-6'>
+        <div data-bind='with:profiles.commercial' class='col-sm-6'>
             <h3>Responsabile commerciale</h3>
-            <div data-bind='with:profiles.commercial'>
-              <div data-bind='visible: id() != ""'>
-                <div class='person-card'>
-                  <b data-bind='text: first_name() + " " + last_name()'></b>
-                </div>
-                <a data-bind='click: function() { $parent.edit_profile("commercial") }'>
-                  Modifica responsabile commerciale</a>
-              </div>
 
-              <div data-bind='visible: id() == ""'>
-                <a data-bind='click: function() { $parent.edit_profile("commercial") }'>
-                  Aggiungi responsabile commerciale</a>
-              </div>
+            <div class='person-card'>
+              <b data-bind='text: first_name() + " " + last_name(), visible: !$parent.edit.commercial()'></b>
             </div>
+
+            <div data-bind='template: {name: "person-form", data: {profile: $parent.profiles.commercial, 
+                                                                   parent:  $parent}},
+                            visible: $parent.edit.commercial()'>
+            </div>
+
+            <a data-bind='click: function() { $parent.edit_profile("commercial") },
+                          visible: !$parent.edit.commercial()'>
+                Modifica responsabile commerciale
+            </a>
+
             
           </form>
         </div>
-        <div data-bind='template: {name: "person-form", data: profiles.commercial},
+        <div data-mind='template: {name: "person-form", data: profiles.commercial},
                         visible: edit.commercial()' class='col-sm-6'>
         </div>
       </div>
@@ -352,15 +355,15 @@
       <br><br><br>
 
       <h3>Portale pagamenti</h3>
-      <p>
+      <div class='col-sm-6'>
         Attraverso il nostro Portale Pagamenti &egrave; possibile visualizzare lo storico
         delle sottoscrizioni e modificare i propri dati di pagamento.
-      </p>
-      <br>
+        <br><br>
 
-      <a class='button' data-bind='attr: {href: management_url}'>
-        Accedi al Portale pagamenti
-      </a>
+        <a class='button' data-bind='attr: {href: management_url}'>
+          Accedi al Portale pagamenti
+        </a>
+      </div>
     </div>
   </div>
 
@@ -384,58 +387,31 @@
       <span class="input-group-addon">
         Nome
       </span>
-      <input type='text' class='form-control' data-bind='value: first_name'
+      <input type='text' class='form-control' data-bind='value: profile.first_name'
              placeholder='Nome'>
     </div>
      <div class="input-group">
       <span class="input-group-addon">
         Cognome
       </span>
-      <input type='text' class='form-control' data-bind='value: last_name'
+      <input type='text' class='form-control' data-bind='value: profile.last_name'
              placeholder='Cognome'>
     </div>
      <div class="input-group">
       <span class="input-group-addon">
         Titolo
       </span>
-      <input type='text' class='form-control' data-bind='value: job_title'
+      <input type='text' class='form-control' data-bind='value: profile.job_title'
              placeholder='Titolo'>
     </div>
-    <div class="input-group">
-      <span class="input-group-addon">
-        Indirizzo
-      </span>
-      <input type='text' class='form-control' data-bind='value: street'
-             placeholder='Indirizzo'>
-      <input type='text' class='form-control' data-bind='value: city'
-             placeholder='Citta'>
-      <input type='text' class='form-control' data-bind='value: postcode'
-             placeholder='CAP'>
-      <input type='text' class='form-control' data-bind='value: country'
-             placeholder='Paese'>
-    </div>
 
-    <div class="input-group">
-      <span class="input-group-addon">
-        Partita IVA
-      </span>
-      <input type='text' class='form-control' data-bind='value: piva'
-             placeholder='Partita IVA'>
-    </div>
 
-    <div class="input-group">
-      <span class="input-group-addon">
-        Website
-      </span>
-      <input type='text' class='form-control' data-bind='value: website'
-             placeholder='Website'>
-    </div>
 
     <div class="input-group">
       <span class="input-group-addon">
         Telefono
       </span>
-      <input type='text' class='form-control' data-bind='value: phone'
+      <input type='text' class='form-control' data-bind='value: profile.phone'
              placeholder='Telefono'>
     </div>
 
@@ -443,13 +419,47 @@
       <span class="input-group-addon">
         Email
       </span>
-      <input type='text' class='form-control' data-bind='value: email'
+      <input type='text' class='form-control' data-bind='value: profile.email'
              placeholder='Email'>
     </div>
 
     <div>
-      <a data-bind='click: function() { $parent.submit_profile(type); }' 
+      <a data-bind='click: function() { parent.submit_profile(profile.type); }' 
          class='button pull-right'>Salva</a>
-      <a data-bind='click: function() { $parent.abort_edit_profile(type); }'>Annulla</a>
+      <a data-bind='click: function() { parent.abort_edit_profile(profile.type); }'>Annulla</a>
     </div>
   </script>
+
+
+<script type='text/html' id='address-form'>
+  <form class='fixed-headers'>
+    <div class="input-group">
+      <span class="input-group-addon">
+        Nome
+      </span>
+      <input type='text' class='form-control' data-bind='value: $parent.edit_location_buffer.first_name'
+             placeholder='Nome'>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon">
+        Indirizzo
+      </span>
+      <input type='text' class='form-control' 
+             data-bind='value: $parent.edit_location_buffer.street'
+             placeholder='Indirizzo'>
+      <input type='text' class='form-control'
+             data-bind='value: $parent.edit_location_buffer.city'
+             placeholder='Citta'>
+      <input type='text' class='form-control'
+             data-bind='value: $parent.edit_location_buffer.postcode'
+             placeholder='CAP'>
+      <input type='text' class='form-control'
+             data-bind='value: $parent.edit_location_buffer.country'
+             placeholder='Paese'>
+    </div>
+  </form>
+  <a data-bind='click: function() { $parent.submit_location(); }' 
+     class='button pull-right'>Salva</a>  
+  <a data-bind='click: function() { $parent.abort_edit_location(); }'>Annulla</a>
+
+</script>

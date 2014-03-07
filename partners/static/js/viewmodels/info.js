@@ -1,3 +1,5 @@
+
+
 var InfoViewModel = function() {
   var self = this;
   ko.BaseViewModel.call(self);
@@ -6,6 +8,11 @@ var InfoViewModel = function() {
   self.template = 'info';
 
   self.selected_company = ko.observable(-1);
+
+  self.is_owner = ko.observable();
+  self.changed = ko.observable(false);
+
+  self.locations = ko.observableArray([]);
 
   self.profiles = {
     'company': {
@@ -23,6 +30,7 @@ var InfoViewModel = function() {
       'website': ko.observable(''),
       'phone': ko.observable(''),
       'email': ko.observable(''),
+      'tag_list': ko.observable(''),
       'image_url': ko.observable(''),
       'Role': ko.observable('Company'),
       'type': 'company',
@@ -75,13 +83,13 @@ var InfoViewModel = function() {
 
     lpi.request('details', {id: arg.id}, function(response) {
       var data = response.data;
+      console.log(data);
+      self.is_owner(data.owner);
+
       for(type in self.profiles) {
-        console.log(data);
-        console.log(data[type]);
-        console.log(type);
         if(data[type]) {
           for(i in data[type]) {
-            console.log("Setting[" + type + "] " + i + " = " + data[type][i]);
+            //console.log("Setting[" + type + "] " + i + " = " + data[type][i]);
             self.profiles[type][i](data[type][i]?data[type][i]:'');
           }
         }

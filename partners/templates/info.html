@@ -1,21 +1,34 @@
-<h1 data-bind="text: profiles.company.first_name()"></h1>
-<p data-bind="text: profiles.company.background()"></p>
-<address>
-  <div class='street-address' data-bind='text: profiles.company.street()'></div>
-  <div class='city' data-bind='text: profiles.company.city()'></div>
-  <div class='country' data-bind='text: profiles.company.country()'></div>
-  <div class='phone' data-bind='text: profiles.company.phone()'></div>
-  <div class='email' data-bind='text: profiles.company.email()'></div>
-</address>
+<div class='profile-page'>
+  <div class='col-sm-6'>
+        <h1 data-bind="text: profiles.company.first_name()"></h1>
+        <p data-bind="text: profiles.company.background()"></p>
+  </div>
 
-<div data-bind='visible: profiles.incharge.first_name() != ""'>
-  <h3>Responsabile legale</h3>
-  <b data-bind='text: profiles.incharge.first_name() + " " + profiles.incharge.last_name()'></b>
+  <div class='col-sm-6'>
+    <div class='logo'>
+    </div>
+  </div>
+
+  <address>
+    <div class='street-address' data-bind='text: profiles.company.street()'></div>
+    <div class='city' data-bind='text: profiles.company.city()'></div>
+    <div class='country' data-bind='text: profiles.company.country()'></div>
+    <div class='phone' data-bind='text: profiles.company.phone()'></div>
+    <div class='email' data-bind='text: profiles.company.email()'></div>
+  </address>
+
+  <div data-bind='visible: profiles.incharge.first_name() != ""'>
+    <h3>Responsabile legale</h3>
+    <b data-bind='text: profiles.incharge.first_name() + " " + profiles.incharge.last_name()'></b>
+  </div>
+
+  <div data-bind='visible: profiles.commercial.first_name() != ""'>
+    <h3>Responsabile commerciale</h3>
+    <b data-bind='text: profiles.commercial.first_name() + " " + profiles.commercial.last_name()'></b>
+  </div>
 </div>
 
-<div data-bind='visible: profiles.commercial.first_name() != ""'>
-  <h3>Responsabile commerciale</h3>
-  <b data-bind='text: profiles.commercial.first_name() + " " + profiles.commercial.last_name()'></b>
-</div>
 
-<h3>
+<script type='text/html' id='address-form'>
+
+</script>

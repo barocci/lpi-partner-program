@@ -58,6 +58,7 @@ var AccountViewModel = function() {
   self.edit = { 
     incharge: ko.observable(false),
     commercial: ko.observable(false),
+    location: ko.observable(false),
     company: ko.observable(false)
   }
 
@@ -124,6 +125,28 @@ var AccountViewModel = function() {
     }
   }
 
+  self.edit_location_buffer =  {
+      'id': ko.observable(''),
+      'first_name': ko.observable(''),
+      'last_name': ko.observable(''),
+      'job_title': ko.observable(''),
+      'background': ko.observable(''),
+      'street': ko.observable(''),
+      'city': ko.observable(''),
+      'postcode': ko.observable(''),
+      'country': ko.observable(''),
+      'piva': ko.observable(''),
+      'website': ko.observable(''),
+      'phone': ko.observable(''),
+      'email': ko.observable(''),
+      'image_url': ko.observable(''),
+      'company_id': ko.observable(''),
+      'Role': ko.observable('Location'),
+      'type': ko.observable('location')
+    }
+
+  self.locations = ko.observableArray([]);
+
   self.init = function() {
     if(!lpi.is_logged()) {
       lpi.redirect('#login');
@@ -135,7 +158,6 @@ var AccountViewModel = function() {
   self.check_family = function(family) {
     var handles = self.active_subscriptions();
     var families = family.split(',');
-    console.log(handles);
     for(i in handles) {
       if(typeof handles[i].indexOf == 'function') {
         for(f in families) {
@@ -157,6 +179,19 @@ var AccountViewModel = function() {
         }
       }
     }
+
+    for(i in data.locations) {
+      var location = {};
+      for(field in data.locations[i]) {
+        var value = data.locations[i][field];
+
+        location[field] = ko.observable(value)
+      }
+
+      console.log(location);
+
+      self.locations.push(location)
+    }
   }
 
   self.edit_profile = function(type) {
@@ -165,7 +200,76 @@ var AccountViewModel = function() {
   }
 
   self.abort_edit_profile = function(type) {
+    console.log('aborting ' + type);
     self.edit[type](false);
+  }
+
+  self.new_location = function() {
+    self.edit['location'](true);
+  }
+
+  self.edit_location = function(location) {
+    for(i in location) {
+      self.edit_location_buffer[i](location[i]());
+    }
+    self.edit['location'](true);
+  }
+
+  self.abort_edit_location = function() {
+    for(i in self.edit_location_buffer) {
+      if(typeof(self.edit_location_buffer[i]) == 'function')
+        self.edit_location_buffer[i]('');
+    }
+    self.edit_location_buffer['Role']('Location');
+    self.edit_location_buffer['type']('location');
+    self.edit['location'](false);
+  }
+
+  self.submit_location = function() {
+    var location = {};
+    for(i in self.edit_location_buffer) {
+      location[i] = self.edit_location_buffer[i]();
+    }
+
+    console.log(location);
+
+    location.company = self.profiles.company.first_name()
+    location.company_id = self.profiles.company.id()
+
+    lpi.post('edit_profile', location, function(response) {
+      console.log(response);
+      self.edit[type](false);
+    });
+
+    if(location.id == '') {
+      var location = {};
+
+      for (i in self.edit_location_buffer) {
+        location[i] = ko.observable(self.edit_location_buffer[i]());
+      };
+
+      console.log('pushing ' + location.first_name());
+
+      self.locations.push(location);
+    } else {
+      var locations = self.locations()
+      for(i = 0; i< locations.length;i++) {
+        console.log(locations[i].id + ' === ' + location.id);
+        if(typeof(locations[i].id) == 'function') {
+          if(locations[i].id() == location.id) {
+              for(j in locations[i]) {
+                if(typeof(locations[i][j]) == 'function')
+                  locations[i][j](location[j]);
+              }          
+          }
+        }
+      }
+
+      self.locations([]);
+      self.locations(locations);
+    }
+
+    self.abort_edit_location();
   }
 
   self.add_tag = function(tag) {
@@ -217,15 +321,7 @@ var AccountViewModel = function() {
       if(self.selected_profile()) {
         console.log(data);
         self.observe_form(data);
-        /*
-        $('#tags').tagsInput({
-            'autocomplete': {source: self.tags},
-            'interactive':true,
-            'width':'100%',
-            'onAddTag':self.add_tag,
-            'onRemoveTag':self.del_tag,
-        });
-        */
+        
         console.log(self.profiles.company.first_name());
 
       } else {
@@ -244,10 +340,12 @@ var AccountViewModel = function() {
     console.log('showing ' + section.slug + ' data ' + data);
     self.loading(true);
     lpi.loading(true);
+
     lpi.request('account_info', {section: section.slug, data: data}, function(response) {
       if(self.ready[section.slug]) {
         self.ready[section.slug](response.data);
       }
+
       self.loading(false);
       lpi.loading(false);
       self.active_section(section.slug);
