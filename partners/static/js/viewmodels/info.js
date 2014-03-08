@@ -79,6 +79,7 @@ var InfoViewModel = function() {
 
   self.teachers = ko.observableArray([]);
   self.locations = ko.observableArray([]);
+  self.references = ko.observableArray([]);
 
 
   self.init = function(arg) {
@@ -92,12 +93,57 @@ var InfoViewModel = function() {
       for(type in self.profiles) {
         if(data[type]) {
           for(i in data[type]) {
-            console.log("Setting[" + type + "] " + i + " = " + data[type][i]);
             self.profiles[type][i](data[type][i]?data[type][i]:'');
           }
         }
       }
-    });
 
+      var contacts = ['teachers', 'locations', 'references'];
+
+      for(type = 0; type < contacts.length; type++) {
+        for(i =0; i < data[contacts[type]].length; i++) {
+          var contact_obs = {};
+          var contact = data[contacts[type]][i];
+          for(field in contact) {
+            var value = contact[field];
+
+            contact_obs[field] = ko.observable(value)
+          }
+
+          console.log(contact_obs);
+
+          self[contacts[type]].push(contact_obs);
+        }
+      }
+    });
+  }
+
+  self.end = function() {
+    self.teachers([]);
+    self.locations([]);
+    self.references([]);
+
+    for(type in self.profiles) {
+          for(i in self.profiles[type]) {
+            if(typeof(self.profiles[type][i]) == 'function') {
+              self.profiles[type][i]('');
+            }
+          }
+      }
+
+  }
+
+  self.tags = function() {
+    console.log(self.profiles.company.tag_list());
+    var tags = [];
+    if(self.profiles.company.tag_list().length > 0 ) {
+      tags = self.profiles.company.tag_list().split(',');
+      console.log(tags);
+      while(tags.indexOf("") >= 0) {
+        tags = tags.remove(tags.indexOf(""));
+      }
+    }
+    
+    return tags;
   }
 }

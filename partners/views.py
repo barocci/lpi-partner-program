@@ -134,6 +134,7 @@ def details(request):
         incharge = company['Incharge']
         locations = company['Location']
         teacher = company['Teacher']
+        references = company['Reference']
 
         user = LPIUser.objects.get(id=request.user.id)
 
@@ -141,6 +142,7 @@ def details(request):
         del company['Commercial']
         del company['Location']
         del company['Teacher']
+        del company['Reference']
 
         ret['data'] = { 
             'company': company,
@@ -148,6 +150,7 @@ def details(request):
             'incharge': incharge,
             'teachers': teacher,
             'locations': locations,
+            'references': references,
             'owner': LPISubscription().is_owner(request.user.id, company['id'])
         }
         
@@ -189,6 +192,7 @@ def account_info(request):
             del company['Commercial']
             del company['Location']
             del company['Teacher']
+            del company['Reference']
 
             ret['data'] = { 
               'company': company,
