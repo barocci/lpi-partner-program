@@ -388,6 +388,7 @@ class Company(Contact):
         self['Commercial'] = False
         self['Location'] = []
         self['Teacher'] = []
+        self['Reference'] = []
 
         if resource.attributes.has_key('contacts'):
             for contact_resource in resource.attributes['contacts']:
@@ -467,6 +468,7 @@ class Person(Contact):
         self['id'] = resource.id
         self['first_name'] = resource.first_name
         self['last_name'] = resource.last_name
+        self['background'] = resource.background
         self['job_title'] = resource.job_title
 
         self['job_title'] = ''

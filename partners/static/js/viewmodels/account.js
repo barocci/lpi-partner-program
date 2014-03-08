@@ -20,10 +20,8 @@ var AccountViewModel = function() {
   self.sections = [{name: 'Partnership', slug: 'partnership', visible: '*'},
                    {name: 'Azienda', slug: 'profile', visible: 'atp,aap,sp'}, 
                    {name: 'Profilo', slug: 'profile', visible: 'ct'}, 
-                   {name: 'Sedi operative', slug: 'locations', visible: 'atp,aap,sp'}, 
-                   {name: 'Insegnanti', slug: 'teachers', visible: 'atp,aap'}, 
                    {name: 'Account', slug: 'account', visible: '*'},
-                   //{name: 'Pagamenti', slug: 'billing', visible: true}
+                   {name: 'Pagamenti', slug: 'billings', visible: '*'}, 
                    ];
 
 

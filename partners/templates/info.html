@@ -1,34 +1,171 @@
 <div class='profile-page'>
-  <div class='col-sm-6'>
-        <h1 data-bind="text: profiles.company.first_name()"></h1>
-        <p data-bind="text: profiles.company.background()"></p>
+  <div class='col-sm-8'>
+    <section class='section-info row box-section'>
+      <div class='col-sm-12'>
+        <ul class='info-social-buttons pull-right'>
+          <li><a class='fa fa-google-plus-square'></a></li>
+          <li><a class='fa fa-linkedin-square'></a></li>
+          <li><a class='fa fa-twitter-square'></a></li>
+          <li><a class='fa fa-facebook-square'></a></li>
+        </ul>
+
+        <h1 data-bind='text: profiles.company.first_name()'></h1>
+        <p data-bind='text: profiles.company.background()'></p>
+      </div>
+    </section>
+
+    <section class='section-info row' data-bind='visible: tags().length > 0'> 
+      <div class='col-sm-3 section-label'>
+        <div>Competenze<span></span></div>
+      </div>
+      <div class='col-sm-9 section-container'>
+        <ul class='info-tag-list' data-bind='foreach: tags()'>
+          <li><span data-bind='text: $data'></span> <b class='fa  fa-tag'></b></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class='section-info row' data-bind='visible: locations().length > 0'>
+      <div class='col-sm-3 section-label'>
+        <div>Sedi<span></span></div>
+      </div>
+      <div class='col-sm-9 section-container' data-bind='foreach: locations()'>
+        <div class='row'> 
+          <section class='map-section'>
+              <div class='col-sm-6'>
+                <div class='col-sm-1'>
+                  <b class='fa fa-map-marker info-map-marker'></b>
+                </div>
+
+                <div class='col-sm-10'>
+                  <address>
+                    <div><b data-bind='text:first_name()'></b></div>
+                    <div class='street-address' 
+                         data-bind='text:street()'></div>
+                    <div class='city' 
+                         data-bind='text:city()'></div>
+                    <div class='country' 
+                         data-bind='text: country()'></div>
+                    <div class='phone' 
+                         data-bind='text: phone()'></div>
+                    <div class='email' 
+                         data-bind='text: email()'></div>
+                  </address>
+                </div>
+              </div>
+
+              <div class='col-sm-6'>
+                <div class='info-map'>
+                </div>
+              </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class='section-info row' data-bind='visible: teachers().length > 0'>
+      <div class='col-sm-3 section-label'>
+        <div>Docenti<span></span></div>
+      </div>
+      <div class='col-sm-9 section-container' data-bind='foreach: teachers()'>
+        <div class="row">
+          <section class="teacher-section">
+            <div class="col-sm-3">
+              <div class='lpic-icon'>
+                LPIC-2
+              </div>
+            </div>
+            <div class='col-sm-8'>
+              <b data-bind='text: first_name() + " " + last_name()'></b>
+              <address class='small'>
+                <div class='phone' data-bind='visible: phone().length > 0'>
+                  <b>Tel:</b>
+                  <span data-bind='text: phone()'></span>
+                </div>
+                <div class='email'  data-bind='visible: email().length > 0'>
+                  <b>Email:</b> 
+                  <span data-bind='text: email()'></span>
+                </div>
+              </address>
+
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class='section-info row' data-bind='visible: references().length > 0'>
+      <div class='col-sm-3 section-label'>
+        <div>Referenze<span></span></div>
+      </div>
+      <div class='col-sm-9 section-container' data-bind='foreach: references()'>
+        <div class='row'>
+          <section class="reference-section">
+            <blockquote class='reference-content'>
+              <i class="fa fa-quote-left pull-left"></i>
+              <p data-bind='text: background'></p>
+              <cite data-bind='text: first_name() + " " + last_name()'></cite>
+              <i class="fa fa-quote-right pull-right"></i>
+            </blockquote>
+          </section>
+        </div>
+      </div>
+    </section>
+
   </div>
 
-  <div class='col-sm-6'>
-    <div class='logo'>
-    </div>
-  </div>
+  <div class='col-sm-4'>
+    <section class='logo-section box-section'>
+      <div class="row">
+        <img src='http://partners.lpi-italia.org/static/images/logo-meta-wp.png'/>
+      </div>
+      <div class="row">
+        <img class='lpi-partnership-logo' 
+             src='http://partners.lpi-italia.org/static/images/logo-lpi-big.png'/>
+      </div> 
+      <div class='row'>
+      </div>
+    </section>
 
-  <address>
-    <div class='street-address' data-bind='text: profiles.company.street()'></div>
-    <div class='city' data-bind='text: profiles.company.city()'></div>
-    <div class='country' data-bind='text: profiles.company.country()'></div>
-    <div class='phone' data-bind='text: profiles.company.phone()'></div>
-    <div class='email' data-bind='text: profiles.company.email()'></div>
-  </address>
+    <section class='box-section' data-bind='visible: profiles.commercial.first_name() != ""'>
+      <section class='person-section' data-bind='with:profiles.commercial'>
+        <h4>Commerciale</h4>
+        <b class='fa fa-user pull-left'></b>
+        <div class='person-data'>
+          <b data-bind='text: first_name() + " " + last_name()'></b>
+          <address class='small'>
+            <div class='phone' data-bind='visible: phone().length > 0'>
+              <b>Tel:</b>
+              <span data-bind='text: phone()'></span>
+            </div>
+            <div class='email'  data-bind='visible: email().length > 0'>
+              <b>Email:</b> 
+              <span data-bind='text: email()'></span>
+            </div>
+              
+          </address>
+        </div>
+      </section>
+    </section>
 
-  <div data-bind='visible: profiles.incharge.first_name() != ""'>
-    <h3>Responsabile legale</h3>
-    <b data-bind='text: profiles.incharge.first_name() + " " + profiles.incharge.last_name()'></b>
-  </div>
-
-  <div data-bind='visible: profiles.commercial.first_name() != ""'>
-    <h3>Responsabile commerciale</h3>
-    <b data-bind='text: profiles.commercial.first_name() + " " + profiles.commercial.last_name()'></b>
+    <section class='box-section' data-bind='visible: profiles.incharge.first_name() != ""'>
+      <section class='person-section' data-bind='with: profiles.incharge'>
+        <h4>Responsabile</h4>
+        <b class='fa fa-user pull-left'></b>
+        <div class='person-data'>
+          <b>Tizio Caio</b>
+          <address class='small'>
+            <div class='phone' data-bind='visible: phone().length > 0'>
+              <b>Tel:</b>
+              <span data-bind='text: phone()'></span>
+            </div>
+            <div class='email'  data-bind='visible: email().length > 0'>
+              <b>Email:</b> 
+              <span data-bind='text: email()'></span>
+            </div>
+          </address>
+        </div>
+      </section>
+    </section>
   </div>
 </div>
-
-
-<script type='text/html' id='address-form'>
-
-</script>

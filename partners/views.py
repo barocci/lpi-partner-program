@@ -132,19 +132,26 @@ def details(request):
         company = Company().find(request.GET['id'])
         commercial = company['Commercial']
         incharge = company['Incharge']
+        locations = company['Location']
+        teacher = company['Teacher']
+        references = company['Reference']
 
         user = LPIUser.objects.get(id=request.user.id)
 
-
-
-
         del company['Incharge']
         del company['Commercial']
+        del company['Location']
+        del company['Teacher']
+        del company['Reference']
+
         ret['data'] = { 
-          'company': company,
-          'commercial': commercial,
-          'incharge': incharge,
-          'owner': LPISubscription().is_owner(request.user.id, company['id'])
+            'company': company,
+            'commercial': commercial,
+            'incharge': incharge,
+            'teachers': teacher,
+            'locations': locations,
+            'references': references,
+            'owner': LPISubscription().is_owner(request.user.id, company['id'])
         }
         
     return renderJSON(ret);
@@ -185,6 +192,7 @@ def account_info(request):
             del company['Commercial']
             del company['Location']
             del company['Teacher']
+            del company['Reference']
 
             ret['data'] = { 
               'company': company,
