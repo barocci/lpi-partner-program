@@ -77,6 +77,9 @@ var InfoViewModel = function() {
     }
   }
 
+  self.teachers = ko.observableArray([]);
+  self.locations = ko.observableArray([]);
+
 
   self.init = function(arg) {
     self.selected_company(arg.id);
@@ -89,7 +92,7 @@ var InfoViewModel = function() {
       for(type in self.profiles) {
         if(data[type]) {
           for(i in data[type]) {
-            //console.log("Setting[" + type + "] " + i + " = " + data[type][i]);
+            console.log("Setting[" + type + "] " + i + " = " + data[type][i]);
             self.profiles[type][i](data[type][i]?data[type][i]:'');
           }
         }

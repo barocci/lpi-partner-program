@@ -1,14 +1,221 @@
 <div class='profile-page'>
-  <div class='col-sm-6'>
-        <h1 data-bind="text: profiles.company.first_name()"></h1>
-        <p data-bind="text: profiles.company.background()"></p>
+  <div class='col-sm-8'>
+    <section class='section-info row box-section'>
+      <div class='col-sm-12'>
+        <ul class='info-social-buttons pull-right'>
+          <li><a class='fa fa-google-plus-square'></a></li>
+          <li><a class='fa fa-linkedin-square'></a></li>
+          <li><a class='fa fa-twitter-square'></a></li>
+          <li><a class='fa fa-facebook-square'></a></li>
+        </ul>
+        <h1>Nome azienda</h1>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor.
+        </p>
+      </div>
+      
+    </section>
+
+    <section class='section-info row'>
+      <div class='col-sm-3 section-label'>
+        <div>Competenze<span></span></div>
+      </div>
+      <div class='col-sm-9 section-container'>
+        <ul class='info-tag-list'>
+          <li>Python <b class='fa  fa-tag'></b></li>
+          <li>PHP <b class='fa  fa-tag'></b></li>
+          <li>Javascript <b class='fa  fa-tag'></b></li>
+          <li>Dataware <b class='fa  fa-tag'></b></li>
+          <li>Hacking <b class='fa  fa-tag'></b></li>
+          <li>Antani <b class='fa  fa-tag'></b></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class='section-info row'>
+      <div class='col-sm-3 section-label'>
+        <div>Sedi<span></span></div>
+      </div>
+      <div class='col-sm-9 section-container'>
+        <div class='row'>
+          <section class='map-section'>
+              <div class='col-sm-6'>
+                <div class='col-sm-1'>
+                  <b class='fa fa-map-marker info-map-marker'></b>
+                </div>
+
+                <div class='col-sm-10'>
+                  <address>
+                    <div data-bind=''><b>Sede Centrale</b></div>
+                    <div class='street-address' data-bind=''>Via Iacopo Nardi, 71</div>
+                    <div class='city' data-bind=''>Firenze</div>
+                    <div class='country' data-bind=''>Italia</div>
+                    <div class='phone' data-bind=''>055 123243</div>
+                    <div class='email' data-bind=''>info@info.it</div>
+                  </address>
+                </div>
+              </div>
+
+              <div class='col-sm-6'>
+                <div class='info-map'>
+                </div>
+              </div>
+          </section>
+        </div>
+        <div class="row">
+          <section class='map-section'>
+              <div class='col-sm-6'>
+                <div class='col-sm-1'>
+                  <b class='fa fa-map-marker info-map-marker'></b>
+                </div>
+
+                <div class='col-sm-10'>
+                  <address>
+                    <div data-bind=''><b>Sede secondaria</b></div>
+                    <div class='street-address' data-bind=''>Via Iacopo Nardi, 71</div>
+                    <div class='city' data-bind=''>Firenze</div>
+                    <div class='country' data-bind=''>Italia</div>
+                    <div class='phone' data-bind=''>055 123243</div>
+                    <div class='email' data-bind=''>info@info.it</div>
+                  </address>
+                </div>
+              </div>
+
+              <div class='col-sm-6'>
+                <div class='info-map'>
+                </div>
+              </div>
+          </section>
+        </div>
+
+      </div>
+    </section>
+
+    <section class='section-info row'>
+      <div class='col-sm-3 section-label'>
+        <div>Docenti<span></span></div>
+      </div>
+      <div class='col-sm-9 section-container'>
+        <div class="row">
+          <section class="teacher-section">
+            <div class="col-sm-3">
+              <div class='lpic-icon'>
+                LPIC-2
+              </div>
+            </div>
+            <div class='col-sm-8'>
+              <b>Mario Lupo</b>
+              <address class='small'>
+                <div class='phone'><b>Tel:</b> 0554567893</div>
+                <div class="email"><b>Email:</b> test@test.it</div>
+              </address>
+
+            </div>
+          </section>
+        </div>
+        <div class="row">
+          <section class="teacher-section">
+            <div class="col-sm-3">
+              <div class='lpic-icon'>
+                LPIC-1
+              </div>
+            </div>
+            <div class='col-sm-8'>
+              <b>Gennaro Luigi</b>
+              <address class='small'>
+                <div class='phone'><b>Tel:</b> 0554567893</div>
+                <div class="email"><b>Email:</b> test@test.it</div>
+              </address>
+
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class='section-info row'>
+      <div class='col-sm-3 section-label'>
+        <div>Referenze<span></span></div>
+      </div>
+      <div class='col-sm-9 section-container'>
+        <div class='row'>
+          <section class="reference-section">
+            <blockquote class='reference-content'>
+              <i class="fa fa-quote-left pull-left"></i>
+              <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. 
+              Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec 
+              consectetur ante hendrerit. Donec et mollis dolor.
+              </p>
+
+              <cite>Caio Semprionio</cite>
+              <i class="fa fa-quote-right pull-right"></i>
+            </blockquote>
+          </section>
+        </div>
+
+        <div class='row'>
+          <section class="reference-section">
+            <blockquote class='reference-content'>
+              <i class="fa fa-quote-left pull-left"></i>
+              <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. 
+              Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec 
+              consectetur ante hendrerit. Donec et mollis dolor.
+              </p>
+
+              <cite>Caio Semprionio</cite>
+              <i class="fa fa-quote-right pull-right"></i>
+            </blockquote>
+          </section>
+        </div>
+      </div>
+    </section>
+
   </div>
 
-  <div class='col-sm-6'>
-    <div class='logo'>
-    </div>
-  </div>
+  <div class='col-sm-4'>
+    <section class='logo-section box-section'>
+      <div class="row">
+        <img src='http://partners.lpi-italia.org/static/images/logo-meta-wp.png'/>
+      </div>
+      <div class="row">
+        <img class='lpi-partnership-logo' 
+             src='http://partners.lpi-italia.org/static/images/logo-lpi-big.png'/>
+      </div> 
+    </section>
 
+    <section class='box-section'>
+      <section class='person-section'>
+        <h4>Commerciale</h4>
+        <b class='fa fa-user pull-left'></b>
+        <div class='person-data'>
+          <b>Caio Sempronio</b>
+          <address class='small'>
+            <div class='phone'><b>Tel:</b> 055 32173211</div>
+            <div class='email'><b>Email:</b> test@test.it</div>
+          </address>
+        </div>
+      </section>
+    </section>
+
+    <section class='box-section'>
+      <section class='person-section'>
+        <h4>Responsabile</h4>
+        <b class='fa fa-user pull-left'></b>
+        <div class='person-data'>
+          <b>Tizio Caio</b>
+          <address class='small'>
+            <div class='phone'><b>Tel:</b> 055 32173211</div>
+            <div class='email'><b>Email:</b> test@test.it</div>
+          </address>
+        </div>
+      </section>
+    </section>
+  </div>
+</div>
+
+<!--
   <address>
     <div class='street-address' data-bind='text: profiles.company.street()'></div>
     <div class='city' data-bind='text: profiles.company.city()'></div>
@@ -32,3 +239,4 @@
 <script type='text/html' id='address-form'>
 
 </script>
+-->
