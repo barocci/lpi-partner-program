@@ -27,11 +27,11 @@ def search(request):
     ret = { 'error': 0, 'data': {} }
     if request.GET.has_key('type'):
         if request.GET['type'] == 'services':
-            contacts = Company().search_services()
+            contacts = LPIIndexes().search_services()
         elif request.GET['type'] == 'academic':
-            contacts = Company().search_academies()
+            contacts = LPIIndexes().search_academies()
         elif request.GET['type'] == 'training':
-            contacts = Company().search_trainers()
+            contacts = LPIIndexes().search_trainers()
         else:
             contacts = []
 
@@ -136,7 +136,6 @@ def details(request):
         teacher = company['Teacher']
         references = company['Reference']
 
-        user = LPIUser.objects.get(id=request.user.id)
 
         del company['Incharge']
         del company['Commercial']
@@ -150,8 +149,7 @@ def details(request):
             'incharge': incharge,
             'teachers': teacher,
             'locations': locations,
-            'references': references,
-            'owner': LPISubscription().is_owner(request.user.id, company['id'])
+            'references': references
         }
         
     return renderJSON(ret);

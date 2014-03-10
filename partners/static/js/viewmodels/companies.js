@@ -14,13 +14,22 @@ var CompaniesListViewModel = function() {
     lpi.request('search', {type: 'services'}, function(response) {
       self.update(response.data);
     });
-    console.log(self.active_tags);
+  };
+
+  self.partner_type = function(partner) {
+    var mapping = {
+      'lpi-sp': 'Service Provider',
+      'lpi-csp': 'Certified Service Provider',
+      'lpi-csp-gold': 'Certified Service Provider GOLD',
+    }
+
+    return mapping[partner.handle];
   };
 
   self.add_tag_filter = function(tag) {
     if(!self.tag_is_active(tag)) {
       var tags = self.active_tags();
-      tags.push(tag);
+      tags.push(tag.trim());
       self.active_tags(tags);
     }
   };
@@ -51,41 +60,72 @@ var CompaniesListViewModel = function() {
 
   self.filter_items = function() {
     var contacts = self.companies();
+    console.log(contacts);
     for(i in contacts) {
       var contact = contacts[i];
-      console.log('considering ' + contacts[i].first_name);
+
+      console.log(contacts.length + ' - ' + i + ' - considering ' + contact.contact_name);
+      
       if(self.match_filters(contacts[i])) {
-        console.log('showing: ' + contacts[i].first_name);
+        console.log('showing: ' + contact.contact_name);
         contact.visible(true);
       } else {
-        console.log('hiding: ' + contacts[i].first_name);
+        console.log('hiding: ' + contact.contact_name);
         contact.visible(false);
       }
+
     }
   };
 
   self.match_filters = function(contact) {
     var check_city = false;
     var check_tag = false;
+
     var active_tags = self.active_tags();
 
     if(active_tags.length == 0) {
       check_tag = check_city = true;
     } else {
+      if(contact.tags) {
+        var tags = contact.tags.split(',');
+        for(j=0; j < tags.length; j++) {
+          tags[j] = tags[j].trim();
+        }
 
-      if(contact.tag_list) {
-        var tags = contact.tag_list.split(',');
-        for(i in tags) {
-          if(active_tags.indexOf(tags[i]) >= 0) {
-            check_tag = true;
+        if(tags.length > 0) {
+          var counter = 0;
+          for(i =0; i < active_tags.length; i++) {
+            var check_tag = true;
+            if(tags.indexOf(active_tags[i].trim()) >= 0) {
+              counter++;
+            }
           }
-        }
-      } 
 
-      if(contact.city != '') {
-        if(active_tags.indexOf(contact.city) >= 0) {
-          check_city = true;
+          check_tag = (counter == active_tags.length);
+        } else {
+          check_tag = false;
         }
+      }
+
+      if(contact.cities != '' && contact.cities != undefined) {
+        var cities = contact.cities.split(',');
+        for(j=0; j < cities.length; j++) {
+          cities[j] = cities[j].trim();
+        }
+
+        if(cities.length >0 ) {
+          var counter = 0;
+          for(i =0; i < active_tags.length; i++) {
+            var check_tag = true;
+            if(cities.indexOf(active_tags[i].trim()) >= 0) {
+              counter++;
+            }
+          }
+
+          check_city = (counter == active_tags.length);
+        } else {
+          check_city = false;
+        }   
       }
     }
 
@@ -102,6 +142,7 @@ var CompaniesListViewModel = function() {
     } 
 
     if(!check_tag) {
+      console.log('ehiehiehi');
       var tags = self.tags()
       var flag = false;
       for(i in tags) {
@@ -110,15 +151,15 @@ var CompaniesListViewModel = function() {
         }
       }
 
-      check_tag = !flag;
+    //  check_tag = !flag;
     }
 
-    return check_tag && check_city;
+    return check_tag;// && check_city;
   }
 
   self.tag_is_active = function(tag) {
     var tags =  self.active_tags()
-    return tags.indexOf(tag) >= 0;
+    return tags.indexOf(tag.trim()) >= 0;
   };
 
   self.update = function(data) {
@@ -126,26 +167,29 @@ var CompaniesListViewModel = function() {
     
     for(i in data) {
 
-      if(data[i].tag_list) {
-        var tags = data[i].tag_list.split(',');
+      if(data[i].tags) {
+        var tags = data[i].tags.split(',');
+        for(j = 0; j < tags; j++) {
+          tags[j] = tags[j].trim();
+        }
+
         self.tags(tags.unique(self.tags()));
       }
 
-      if(data[i].city) {
-        var city = data[i].city;
+      if(data[i].cities) {
+        var city = data[i].cities.split(', ');
         var cities = self.cities();
-        if(cities.indexOf(city) < 0) {
-          cities.push(city);
-        }
-
+        cities = city.unique(cities);
+        console.log(city);
+        console.log(cities);
         self.cities(cities);
       }
-      console.log(self.cities());
       
       data[i].visible = ko.observable(true);
     }
-    
-    console.log(self.tags());
+
+
     self.companies(data);
+    $('.list-icon-image').tooltip({animation:true});
   };
 }
