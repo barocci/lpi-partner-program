@@ -149,8 +149,10 @@ var lpi = {
     var animations = 'lpi-layer-active';
     if(flag) {
       $('.lpi-layer-image').addClass(animations);
+      $('footer').hide();
     } else {
       $('.lpi-layer-image').removeClass(animations);
+      $('footer').show();
     }
   },
 

@@ -6,6 +6,7 @@ body {
 	color: rgb(102, 102, 102);
 
   background:rgb(244, 242, 243);
+  position:relative;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -303,6 +304,10 @@ header {
 .joinus-image img {
 }
 
+.contact-logo {
+  max-width: 200px;
+}
+
 footer {
   background-color: rgb(50, 44, 47);
   height:100px;
@@ -311,6 +316,9 @@ footer {
   font-size: 13px;
   position: relative;
   clear:both;
+
+   position: absolute;  
+       bottom: -100px;  
 }
 
 footer .copyright {
