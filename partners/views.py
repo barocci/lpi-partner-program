@@ -136,7 +136,6 @@ def details(request):
         teacher = company['Teacher']
         references = company['Reference']
 
-        user = LPIUser.objects.get(id=request.user.id)
 
         del company['Incharge']
         del company['Commercial']
@@ -150,8 +149,7 @@ def details(request):
             'incharge': incharge,
             'teachers': teacher,
             'locations': locations,
-            'references': references,
-            'owner': LPISubscription().is_owner(request.user.id, company['id'])
+            'references': references
         }
         
     return renderJSON(ret);
