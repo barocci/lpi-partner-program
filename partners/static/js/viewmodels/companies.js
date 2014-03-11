@@ -26,7 +26,7 @@ var CompaniesListViewModel = function() {
     return mapping[partner.handle];
   };
 
-  self.add_tag_filter = function(tag) {
+  self.add_tag_filter = function(tag, type) {
     if(!self.tag_is_active(tag)) {
       var tags = self.active_tags();
       tags.push(tag.trim());
@@ -82,6 +82,8 @@ var CompaniesListViewModel = function() {
     var check_tag = false;
 
     var active_tags = self.active_tags();
+    var tags = [];
+    var cities = [];
 
     if(active_tags.length == 0) {
       check_tag = check_city = true;
@@ -91,20 +93,6 @@ var CompaniesListViewModel = function() {
         for(j=0; j < tags.length; j++) {
           tags[j] = tags[j].trim();
         }
-
-        if(tags.length > 0) {
-          var counter = 0;
-          for(i =0; i < active_tags.length; i++) {
-            var check_tag = true;
-            if(tags.indexOf(active_tags[i].trim()) >= 0) {
-              counter++;
-            }
-          }
-
-          check_tag = (counter == active_tags.length);
-        } else {
-          check_tag = false;
-        }
       }
 
       if(contact.cities != '' && contact.cities != undefined) {
@@ -112,47 +100,26 @@ var CompaniesListViewModel = function() {
         for(j=0; j < cities.length; j++) {
           cities[j] = cities[j].trim();
         }
+      }
 
-        if(cities.length >0 ) {
-          var counter = 0;
-          for(i =0; i < active_tags.length; i++) {
-            var check_tag = true;
-            if(cities.indexOf(active_tags[i].trim()) >= 0) {
-              counter++;
-            }
+      tags = tags.concat(cities);
+      console.log(tags);
+
+      if(tags.length > 0) {
+        var counter = 0;
+        for(i =0; i < active_tags.length; i++) {
+          var check_tag = true;
+          if(tags.indexOf(active_tags[i].trim()) >= 0) {
+            counter++;
           }
+        }
 
-          check_city = (counter == active_tags.length);
-        } else {
-          check_city = false;
-        }   
+        check_tag = (counter == active_tags.length);
+      } else {
+        check_tag = false;
       }
     }
 
-    if(!check_city) {
-      var cities = self.cities()
-      var flag = false;
-      for(i in cities) {
-        if(self.active_tags().indexOf(cities[i]) >= 0) {
-           flag = true;
-        }
-      }
-
-      check_city = !flag;
-    } 
-
-    if(!check_tag) {
-      console.log('ehiehiehi');
-      var tags = self.tags()
-      var flag = false;
-      for(i in tags) {
-        if(self.active_tags().indexOf(tags[i]) >= 0) {
-           flag = true;
-        }
-      }
-
-    //  check_tag = !flag;
-    }
 
     return check_tag;// && check_city;
   }

@@ -11,16 +11,26 @@ var AcademiesListViewModel = function() {
   self.active_tags = ko.observableArray([]);
 
   self.init = function() {
-    lpi.request('search', {type: 'services'}, function(response) {
+    lpi.request('search', {type: 'academic'}, function(response) {
       self.update(response.data);
     });
     console.log(self.active_tags);
   };
 
-  self.add_tag_filter = function(tag) {
+
+  self.partner_type = function(partner) {
+    var mapping = {
+      'lpi-aap': 'Approved Academic Partner',
+      'lpi-aap-pro': 'Approved Academic Partner PRO',
+    }
+
+    return mapping[partner.handle];
+  };
+
+  self.add_tag_filter = function(tag, type) {
     if(!self.tag_is_active(tag)) {
       var tags = self.active_tags();
-      tags.push(tag);
+      tags.push(tag.trim());
       self.active_tags(tags);
     }
   };
@@ -50,75 +60,74 @@ var AcademiesListViewModel = function() {
   };
 
   self.filter_items = function() {
-    var contacts = self.companies();
+    var contacts = self.academies();
+    console.log(contacts);
     for(i in contacts) {
       var contact = contacts[i];
-      console.log('considering ' + contacts[i].first_name);
+
+      console.log(contacts.length + ' - ' + i + ' - considering ' + contact.contact_name);
+      
       if(self.match_filters(contacts[i])) {
-        console.log('showing: ' + contacts[i].first_name);
+        console.log('showing: ' + contact.contact_name);
         contact.visible(true);
       } else {
-        console.log('hiding: ' + contacts[i].first_name);
+        console.log('hiding: ' + contact.contact_name);
         contact.visible(false);
       }
+
     }
   };
 
   self.match_filters = function(contact) {
     var check_city = false;
     var check_tag = false;
+
     var active_tags = self.active_tags();
+    var tags = [];
+    var cities = [];
 
     if(active_tags.length == 0) {
       check_tag = check_city = true;
     } else {
+      if(contact.tags) {
+        var tags = contact.tags.split(',');
+        for(j=0; j < tags.length; j++) {
+          tags[j] = tags[j].trim();
+        }
+      }
 
-      if(contact.tag_list) {
-        var tags = contact.tag_list.split(',');
-        for(i in tags) {
-          if(active_tags.indexOf(tags[i]) >= 0) {
-            check_tag = true;
+      if(contact.cities != '' && contact.cities != undefined) {
+        var cities = contact.cities.split(',');
+        for(j=0; j < cities.length; j++) {
+          cities[j] = cities[j].trim();
+        }
+      }
+
+      tags = tags.concat(cities);
+      console.log(tags);
+
+      if(tags.length > 0) {
+        var counter = 0;
+        for(i =0; i < active_tags.length; i++) {
+          var check_tag = true;
+          if(tags.indexOf(active_tags[i].trim()) >= 0) {
+            counter++;
           }
         }
-      } 
 
-      if(contact.city != '') {
-        if(active_tags.indexOf(contact.city) >= 0) {
-          check_city = true;
-        }
+        check_tag = (counter == active_tags.length);
+      } else {
+        check_tag = false;
       }
     }
 
-    if(!check_city) {
-      var cities = self.cities()
-      var flag = false;
-      for(i in cities) {
-        if(self.active_tags().indexOf(cities[i]) >= 0) {
-           flag = true;
-        }
-      }
 
-      check_city = !flag;
-    } 
-
-    if(!check_tag) {
-      var tags = self.tags()
-      var flag = false;
-      for(i in tags) {
-        if(self.active_tags().indexOf(tags[i]) >= 0) {
-           flag = true;
-        }
-      }
-
-      check_tag = !flag;
-    }
-
-    return check_tag && check_city;
+    return check_tag;// && check_city;
   }
 
   self.tag_is_active = function(tag) {
     var tags =  self.active_tags()
-    return tags.indexOf(tag) >= 0;
+    return tags.indexOf(tag.trim()) >= 0;
   };
 
   self.update = function(data) {
@@ -126,26 +135,29 @@ var AcademiesListViewModel = function() {
     
     for(i in data) {
 
-      if(data[i].tag_list) {
-        var tags = data[i].tag_list.split(',');
+      if(data[i].tags) {
+        var tags = data[i].tags.split(',');
+        for(j = 0; j < tags; j++) {
+          tags[j] = tags[j].trim();
+        }
+
         self.tags(tags.unique(self.tags()));
       }
 
-      if(data[i].city) {
-        var city = data[i].city;
+      if(data[i].cities) {
+        var city = data[i].cities.split(', ');
         var cities = self.cities();
-        if(cities.indexOf(city) < 0) {
-          cities.push(city);
-        }
-
+        cities = city.unique(cities);
+        console.log(city);
+        console.log(cities);
         self.cities(cities);
       }
-      console.log(self.cities());
       
       data[i].visible = ko.observable(true);
     }
-    
-    console.log(self.tags());
-    self.companies(data);
+
+
+    self.academies(data);
+    $('.list-icon-image').tooltip({animation:true});
   };
 }
