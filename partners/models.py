@@ -35,6 +35,62 @@ class LPIUser(User):
         print link
         return link
 
+class LPIIndexes(models.Model):
+    contact_id = models.IntegerField()
+    contact_name = models.CharField(max_length=250, db_index=True)
+    tags = models.CharField(db_index=True, max_length=250)
+    cities = models.CharField(db_index=True, max_length=250)
+    handle = models.CharField(max_length=100, db_index=True)
+    family = models.CharField(max_length=50, db_index=True)
+    lpic_id = models.CharField(max_length=20, db_index=True)
+    status = models.CharField(max_length=20, db_index=True)
+    references = models.IntegerField()
+    teachers = models.IntegerField()
+    locations = models.IntegerField()
+
+    def search_services(self, params={}):
+        result = []
+        contacts = LPIIndexes.objects.filter(family__endswith='sp')
+        for contact in contacts:
+            result.append(self.load_from_db(contact))
+
+        return result
+
+    def search_academies(self, params={}):
+        result = []
+        contacts = LPIIndexes.objects.filter(family__startswith='aa')
+        for contact in contacts:
+            result.append(self.load_from_db(contact))
+
+        return result
+
+    def search_trainers(self, params={}):
+        result = []
+        contacts = LPIIndexes.objects.filter(family__startswith='at')
+        for contact in contacts:
+            result.append(self.load_from_db(contact))
+
+        return result
+
+    def load_from_db(self, item):
+        contact = {}
+        contact['tags'] = item.tags
+        contact['contact_id'] = item.contact_id
+        contact['contact_name'] = item.contact_name
+        contact['cities'] = item.cities
+        contact['handle'] = item.handle
+        contact['family'] = item.family
+        contact['lpic_id'] = item.lpic_id
+        contact['status'] = item.status
+        contact['references'] = item.references
+        contact['teachers'] = item.teachers
+        contact['locations'] = item.locations
+        contact['image_url'] = ''
+
+        return contact
+        
+
+
 
 
 
@@ -586,4 +642,7 @@ class Location(Contact):
 
 class Reference(Model):
     pass
+
+
+
 

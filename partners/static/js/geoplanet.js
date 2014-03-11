@@ -31,6 +31,8 @@ var geoplanet = {
     if (item.toLowerCase().indexOf(this.query.trim().toLowerCase()) != -1) {
         return true;
     }
+
+    return false;
   },
 
   sorter: function(items) {

@@ -857,19 +857,50 @@ address.small {
 }
 
 .list-filters ul li {
-
+  cursor:pointer !important;
 }
 
+.list-filters ul li:hover {
+  text-decoration: underline;
+}
+
+
 .list-filters ul li.active {
-  background: #a90329; /* Old browsers */
-background: -moz-linear-gradient(top, #a90329 46%, #6d0019 46%, #8f0222 46%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(46%,#a90329), color-stop(46%,#6d0019), color-stop(46%,#8f0222)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top, #a90329 46%,#6d0019 46%,#8f0222 46%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top, #a90329 46%,#6d0019 46%,#8f0222 46%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top, #a90329 46%,#6d0019 46%,#8f0222 46%); /* IE10+ */
-background: linear-gradient(to bottom, #a90329 46%,#6d0019 46%,#8f0222 46%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a90329', endColorstr='#8f0222',GradientType=0 ); /* IE6-9 */
-  color:#fff;
+  font-size:20px;
+  font-weight:bold;
+}
+
+
+.list-logo-container {
+  height:150px;
+  overflow:hidden;
+}
+
+.list-logo {
+  width:100%;
+}
+
+.list-info {
+  padding:10px 15px;
+}
+
+.list-icons {
+  text-align:center;
+  cursor:pointer;
+}
+
+.list-icon-count {
+  font-size:23px;
+  padding:5px 0px 5px;
+}
+
+.list-icon-image {
+  font-size:20px;
+}
+
+
+.no-padding {
+  padding:0px !important;
 }
 
 

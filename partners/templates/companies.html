@@ -1,34 +1,87 @@
+{% load static from staticfiles %}
+
 <section class='box-section'>
   <h1>Servizi e Soluzioni</h1>
   <p>
   In questa sezione puoi trovare Aziende e Professionisti in grado di rispondere alle tue esigenze professionali. I nostri partner vengono accuratamente controllati per garantire la massima qualit&agrave; del servizio. Attraverso la funzione di ricerca puoi definire le competenze necessarie, i giudizi di precedenti clienti e l'area di lavoro. In questo modo potrai scegliere tutte le caratteristiche del tuo nuovo fornitore di servizi IT.
   </p>
 </section>
-<div class='list-filters'>
-  <fieldset data-bind='visible: cities().length > 0'>
-    <h3>Citt&agrave;</h3>
-    <ul data-bind='foreach: cities'>
-      <li data-bind='text: $data, click: function() { $parent.filter($data); },
-                     css: {active:$parent.tag_is_active($data)}'></li>
 
-    </ul>
 
-  </fieldset>
-  <fieldset data-bind='visible: tags().length > 0'>
-    <h3>Competenze</h3>
-    <ul data-bind='foreach: tags'>
-      <li data-bind='text: $data, click: function() { $parent.filter($data); },
-                     css: {active:$parent.tag_is_active($data)}'></li>
+<div class="row">
+  <div class="col-sm-6">
+    <section class='list-filters section-info row' data-bind='visible: cities().length > 0'> 
+        <div class='col-sm-3 section-label'>
+          <div>Citt&agrave;<span></span></div>
+        </div>
+        <div class='col-sm-9 section-container'>
+          <ul data-bind='foreach: cities'>
+            <li data-bind='text: $data, click: function() { $parent.filter($data); },
+                           css: {active:$parent.tag_is_active($data)}'></li>
 
-    </ul>
-  </fieldset>
+          </ul>
+        </div>
+    </section>
+  </div>
+
+  <div class="col-sm-6">
+    <section class='list-filters section-info row' data-bind='visible: tags().length > 0'> 
+        <div class='col-sm-3 section-label'>
+          <div>Tag<span></span></div>
+        </div>
+        <div class='col-sm-9 section-container'>
+          <ul data-bind='foreach: tags'>
+            <li data-bind='text: $data, click: function() { $parent.filter($data); },
+                           css: {active:$parent.tag_is_active($data)}'></li>
+
+          </ul>
+        </div>
+    </section>
+  </div>
 </div>
+
+
+
 <div id='companies-isotope' class='isotope' data-bind="foreach: companies">
-   <div class='item' data-bind='visible: visible()'>
-      <img style='max-height:100px;display:none' data-bind='attr: {src: image_url}'>
-      <a data-bind='text: first_name, attr:{href: "#info/" + id}'></a>
-      <span data-bind='text: "(" + city + ")"'>
-         
-      </span>
-   </div>
+
+  <div class='col-sm-4' data-bind='visible: visible()'>
+    <section class='box-section no-padding' >
+      <div class='list-logo-container'>
+        <a data-bind='attr:{href: "#info/" + contact_id}'>
+          <img class='list-logo'
+               data-bind='attr: {src: image_url}, visible: image_url.length > 0'>
+
+          <img class='list-logo' src='{% static "images/tux-gradient.png" %}'
+               data-bind='visible: image_url.length == 0'>
+        </a>
+      </div>
+
+      <div class='row list-info'>
+        <h3><a data-bind='text: contact_name, attr:{href: "#info/" + contact_id}'></a>
+        <div><small data-bind='text: $parent.partner_type($data)'></small></div>
+        </h3>
+
+        <div class='list-icons'>
+          <div class="col-sm-6">
+            <div class='list-icon-count' data-bind='text: references'></div>
+            <div data-toggle="tooltip" data-placement="bottom" title="Referenze" 
+                class='list-icon-image fa fa-users'></div>
+          </div>
+          <!--
+          <div class="col-sm-4" data-bind='visible: true'>
+            <div class='list-icon-count' data-bind='text: teachers'></div>
+            <div data-toggle="tooltip" data-placement="bottom" title="Docenti" 
+                 class='list-icon-image fa fa-user'></div>
+          </div>
+          -->
+
+          <div class="col-sm-6">  
+            <div class='list-icon-count' data-bind='text: locations'></div>
+            <div data-toggle="tooltip" data-placement="bottom" title="Sedi" 
+                 class='list-icon-image fa fa-map-marker'></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </div>

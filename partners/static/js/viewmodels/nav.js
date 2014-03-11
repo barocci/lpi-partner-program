@@ -40,7 +40,4 @@ var NavViewModel = function() {
     if(esclude.indexOf(page) >= 0) return;
     self.selected(page);
   }
-
-
-  
 }

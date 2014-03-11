@@ -27,11 +27,11 @@ def search(request):
     ret = { 'error': 0, 'data': {} }
     if request.GET.has_key('type'):
         if request.GET['type'] == 'services':
-            contacts = Company().search_services()
+            contacts = LPIIndexes().search_services()
         elif request.GET['type'] == 'academic':
-            contacts = Company().search_academies()
+            contacts = LPIIndexes().search_academies()
         elif request.GET['type'] == 'training':
-            contacts = Company().search_trainers()
+            contacts = LPIIndexes().search_trainers()
         else:
             contacts = []
 
