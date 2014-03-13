@@ -1,3 +1,5 @@
+{% load static from staticfiles %}
+
 <div data-bind='visible: type() == "service-company" && show'>
   <div class="row">
     <section class='box-section'>
@@ -14,7 +16,9 @@
     <li class='prtn-box col-sm-3 prtn-box-3'>
       <div class='prtn-box-inner prtn-box-services'>
         <h3>Service Provider</h3>
-        <div class='prtn-box-icon'></div>
+        <div class='prtn-box-icon'>
+          <img src='{% static "images/lpi-csp-logo.png" %}'>
+        </div>
         <div class='prtn-box-price'>
           GRATUITO
         </div>
@@ -49,7 +53,9 @@
     <li class='prtn-box col-sm-3 prtn-box-3'>
       <div class='prtn-box-inner prtn-box-services'>
         <h3>Certified Service Provider</h3>
-        <div class='prtn-box-icon'></div>
+        <div class='prtn-box-icon'>
+          <img src='{% static "images/lpi-csp-logo.png" %}'>
+        </div>
         <div class='prtn-box-price'>
           250  &euro;/anno
         </div>
@@ -84,7 +90,9 @@
     <li class='prtn-box col-sm-3 prtn-box-3'>
       <div class='prtn-box-inner prtn-box-services'>
         <h3>Certified Service Provider<br> GOLD</h3>
-        <div class='prtn-box-icon'></div>
+        <div class='prtn-box-icon'>
+          <img src='{% static "images/lpi-csp-gold-logo.png" %}'>
+        </div>
         <div class='prtn-box-price'>
           650  &euro;/anno
         </div>
@@ -271,7 +279,7 @@
   <div class="row">               
   <h1>Formazione per aziende</h1>
   <p>
-  Il programma di partnership &egrave; dedicato alle aziende che intendono offrire formazione certificata LPI.<br />
+  Il programma di partnership &egrave; dedicato alle aziende che intendono offrire Corsi Linux certificati LPI.<br />
   La suddivisione avviene per il grado di certificazione che è possibile insegnare, LPI ATP LE e LPI ATP PRO.
   </p>
   </div>
@@ -280,9 +288,11 @@
 
   <ul class='prtn-box-container'>
      <li class='prtn-box col-sm-6'>
-      <div class='prtn-box-inner prtn-box-training' style='height:800px'>
+      <div class='prtn-box-inner prtn-box-training' style='height:1050px'>
         <h3>Linx Essentials Approved Training Partner</h3>
-        <div class='prtn-box-icon'></div>
+        <div class='prtn-box-icon'>
+          <img src='{% static "images/lpi-atp-logo.png" %}'>
+        </div>
         <div class='prtn-box-price'>
         250  &euro;/anno
         </div>
@@ -316,9 +326,11 @@
     </li>
 
     <li class='prtn-box col-sm-6'>
-      <div class='prtn-box-inner prtn-box-training' style='height:800px'>
+      <div class='prtn-box-inner prtn-box-training' style='height:1050px'>
         <h3>Linux Professionals Approved Training Partner</h3>
-        <div class='prtn-box-icon'></div>
+        <div class='prtn-box-icon'>
+          <img src='{% static "images/lpi-atp-logo.png" %}'>
+        </div>
         <div class='prtn-box-price'>
           650  &euro;/anno
         </div>
@@ -372,9 +384,11 @@
   <div class="row">
     <ul class='prtn-box-container'>
       <li class='prtn-box col-sm-6'>
-        <div class='prtn-box-inner' style='height:600px'>
+        <div class='prtn-box-inner' style='height:800px'>
           <h3>Linux Essentials Academic<br> PARTNER</h3>
-          <div class='prtn-box-icon'></div>
+          <div class='prtn-box-icon'>
+            <img src='{% static "images/lpi-aap-logo.png" %}'>
+          </div>
           <div class='prtn-box-price'>
           250  &euro;/anno
           </div>
@@ -404,9 +418,11 @@
       </li>
 
       <li class='prtn-box col-sm-6'>
-        <div class='prtn-box-inner' style='height:600px'>
+        <div class='prtn-box-inner' style='height:800px'>
           <h3>Linux Professionals Academic <br>PARTNER</h3>
-          <div class='prtn-box-icon'></div>
+          <div class='prtn-box-icon'>
+            <img src='{% static "images/lpi-aap-logo.png" %}'>
+          </div>
           <div class='prtn-box-price'>
           250  &euro;/anno
           </div>
@@ -444,9 +460,11 @@
   <div class="row" style='padding-top:30px'>
     <ul>
       <li class='prtn-box col-sm-6'>
-        <div class='prtn-box-inner' style='height:700px'>
+        <div class='prtn-box-inner' style='height:950px'>
           <h3>Linux Essentials Academy<br>GOLD</h3>
-          <div class='prtn-box-icon'></div>
+          <div class='prtn-box-icon'>
+            <img src='{% static "images/lpi-aap-logo.png" %}'>
+          </div>
           <div class='prtn-box-price'>
           650  &euro;/anno
           </div>
@@ -481,9 +499,11 @@
       </li>
 
       <li class='prtn-box col-sm-6'>
-        <div class='prtn-box-inner' style='height:700px'>
+        <div class='prtn-box-inner' style='height:950px'>
           <h3>Linux Essentials Academy<br>PLATINUM</h3>
-          <div class='prtn-box-icon'></div>
+          <div class='prtn-box-icon'>
+            <img src='{% static "images/lpi-aap-logo.png" %}'>
+          </div>
           <div class='prtn-box-price'>
           1.150  &euro;/anno
           </div>

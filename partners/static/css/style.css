@@ -404,7 +404,7 @@ footer .sitemap a:hover {
 }
 
 .prtn-box-services {
-  min-height:930px;
+  min-height:1130px;
 }
 
 .prtn-box-services h3 {
@@ -478,20 +478,11 @@ table {
 }
 
 .prtn-box-icon {
-   height:120px;
-   width:130px;
-   margin:20px auto;
-   display:none;
-   background-color:#fff;
-   padding:20px;
-   border-radius:100%;
-   -webit-border-radius:100%;
-   -moz-border-radius:100%;
-   border:1px dotted rgb(100,200,100);
-   background:rgb(244, 242, 243);
-   background-size:60% auto;
-   background-repeat: no-repeat;
-   background-position: center center;
+  text-align:center;
+}
+
+.prtn-box-icon img {
+  width:50%;
 }
 
 .prtn-box-icon-training {
