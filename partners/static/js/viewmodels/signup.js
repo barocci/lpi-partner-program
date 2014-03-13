@@ -6,15 +6,29 @@ var SignupViewModel = function() {
   self.template = 'signup';
 
   self.mail = ko.observable('');
+  self.tos_accepted = ko.observable(false);
   self.password = ko.observable('');
   self.confirm_password = ko.observable('');
-  self.product_handle = '';
+  self.handle = ko.observable('');
 
   self.error_message = ko.observable(null);
 
   self.init = function(param) {
-      self.product_handle = param.handle;
+      self.handle(param.handle);
   };
+
+  self.check_family = function(family, set) {
+    var handles = [self.product_handle];
+    var families = family.split(',');
+
+    for(f in families) {
+      if(self.handle().indexOf(families[f]) >= 0 ||
+          families[f] == '*')
+        return true;
+    }
+
+    return false;
+  }
 
   self.register = function() {
      if(self.mail() == '') {
@@ -22,6 +36,8 @@ var SignupViewModel = function() {
       console.log("Il campo email non puo' essere vuoto.")
      }else if(self.password() == '') {
       self.error_message("Il campo password non puo' essere vuoto.")
+     }else if(!self.tos_accepted()) {
+      self.error_message("&Egrave; necessario accettare i Termini di Servizio per procedere.")
      }else if(self.password() == self.confirm_password()) {
        var params = {
           mail: self.mail(),

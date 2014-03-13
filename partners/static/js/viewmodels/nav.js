@@ -1,10 +1,10 @@
 var NavViewModel = function() {
   var self = this;
   ko.BaseViewModel.call(self);
-  self.pages = ko.observable([{hash:'intro', label:'Home'},
-                              {hash:'training', label:'Formazione'},
-                              {hash:'companies', label:'Servizi e Soluzioni'},
-                              {hash:'academies', label:'Scuole e Universit&agrave;'},
+  self.pages = ko.observable([{hash:'http://www.lpi-italia.org', label:'Home'},
+                              {hash:'#training', label:'Formazione'},
+                              {hash:'#companies', label:'Servizi e Soluzioni'},
+                              {hash:'#academies', label:'Scuole e Universit&agrave;'},
                               //{hash:'joinus', label:'Partnership'},
                              // {hash:'teachers', label:'Docenti'}
                              ]);

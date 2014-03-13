@@ -3,7 +3,7 @@ html, body {
 
 body {
 	font-family: Ubuntu;
-	color: rgb(102, 102, 102);
+	color: #2B2B2B;
 
   background:rgb(244, 242, 243);
 }
@@ -23,11 +23,6 @@ a {
   cursor:pointer;
 }
 
-
-
-
-
-
 header {
   background-color: #380f14;
   height:150px;
@@ -35,8 +30,6 @@ header {
   position:relative;
   z-index:10;
 }
-
-
 
 .lpi-layer-container {
   position:absolute;
@@ -341,6 +334,7 @@ footer .sitemap a {
 footer .sitemap a:hover {
   color: #fff;
 }
+
 
 
 
@@ -935,3 +929,23 @@ input[type="color"]:focus,
 }
 
 
+.prtn-box-button-offers {
+  padding:10px 0px 40px;
+}
+
+.tos-container {
+  background: none repeat scroll 0% 0% #FFF;
+  padding: 10px;
+  font-family:serif;
+  font-size:12px;
+  height: 400px;
+  overflow: auto;
+  box-shadow: 0px 0px 10px #BBB inset;
+}
+
+.signup-form pre {
+  background:#fff;
+  border:none;
+  font-family:serif;
+  font-size:13px;
+}

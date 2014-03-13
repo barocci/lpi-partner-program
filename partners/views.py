@@ -257,7 +257,7 @@ def register(request):
                 ret['data'] = 'Error registering user.'
     except Exception, e:
         ret['error'] = 1
-        ret['data'] = 'User --already exists. %s' % e
+        ret['data'] = "L'indirizzo email risulta gi&agrave; registrato."
 
     return renderJSON(ret)
 

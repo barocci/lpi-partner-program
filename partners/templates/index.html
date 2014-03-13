@@ -46,7 +46,7 @@
                   <a data-bind="click: logout">Logout</a>
                 </li>
                 <li data-bind="visible: logged() == false">
-                  <a class='partner-button toolbar-button' href='#joinus'>Partners</a>
+                  <a class='partner-button toolbar-button' href='#joinus'>Registrati</a>
                 </li>
                 <li data-bind="visible: logged() == false">
                   <a class='login-button toolbar-button' href='#login'>Login</a>
@@ -72,7 +72,7 @@
       <div class="navbar-lpi-inner">
         <ul class="nav navbar-nav" data-bind='foreach: pages'>
           <li data-bind='css: { active: hash == $root.selected() }'>
-             <a  data-bind='html:label, attr:{href: "#" + hash}'></a>
+             <a  data-bind='html:label, attr:{href: hash}'></a>
           </li>
         </ul>
       </div>
