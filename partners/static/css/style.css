@@ -6,6 +6,7 @@ body {
 	color: #2B2B2B;
 
   background:rgb(244, 242, 243);
+  position:relative;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -296,6 +297,10 @@ header {
 .joinus-image img {
 }
 
+.contact-logo {
+  max-width: 200px;
+}
+
 footer {
   background-color: rgb(50, 44, 47);
   height:100px;
@@ -304,6 +309,9 @@ footer {
   font-size: 13px;
   position: relative;
   clear:both;
+
+   position: absolute;  
+       bottom: -100px;  
 }
 
 footer .copyright {
@@ -370,6 +378,7 @@ footer .sitemap a:hover {
 	float:left;
 	opacity:1;
   position:relative;
+  margin-bottom:20px;
 }
 
 .prtn-box-1 {
@@ -948,4 +957,30 @@ input[type="color"]:focus,
   border:none;
   font-family:serif;
   font-size:13px;
+}
+
+@media (max-width: 768px) {
+  .navbar-nav {
+    display:none;
+  }
+
+  .prtn-container {
+    width:100%;
+  }
+
+  .navbar-lpi-inner {
+    width:100%;
+  }
+
+  .navbar-nav {
+    width:100%;
+  }
+
+  .topbar-wrap {
+    width:100%;
+  }
+
+  .joinus-image {
+    display:none;
+  }
 }
