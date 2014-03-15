@@ -310,6 +310,15 @@ class Product(Model):
 
         return False
 
+    def check_family(self, family, handle):
+        families = families.split(',')
+        for f in families:
+            if handle.find(f) >= 0:
+                return True
+
+        return False
+
+
     def get_by_handle(self, handle):
         resource = self.chargify.Product().getByHandle(handle)
         return self.load_from_resource(resource)
@@ -328,6 +337,28 @@ class Product(Model):
         return self
         #self['price'] = "%.2f" % int(resource.price_in_cents)/100
 
+class Issue(Model):
+    def create(self, tracker, subject, description):
+        issue = redmine.Issue()
+        issue.project_id = settings.REDMINE_PROJECT
+        issue.tracker = tracker
+        issue.subject = subject
+        issue.description = description
+        issue.save()
+
+        return self.load_from_resource(issue)
+
+    def new_registration(self, contact, product):
+        pass
+
+
+    def load_from_resource(self, resource):
+        self['id'] = resource.id
+        self['tracker'] = resource.tracker
+        self['subject'] = resource.subject
+        self['description'] = resource.description
+
+        return self
 
 class Contact(Model):
     def find(self, id, **kwarg):

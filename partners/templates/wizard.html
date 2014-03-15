@@ -1,77 +1,105 @@
-<h1>Account information</h1>
-<p>
-  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-</p>
-<div class='row'>
-  <div class='prtn-wizard-section prtn-wizard-section-a'> 
-    <h3>Company</h3>
-    <div class="col-sm-5">
+<div class='row' data-bind='visible: !confirm_registration()'>
+
+  <h1>Informazioni account</h1>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+
+
+  <div class="row">
+    <div class="col-sm-6" data-bind='visible: check_family("atp,sp");'>
+      <h3>Azienda</h3>
       <div class="input-group">
         <span class="input-group-addon">
-          <span class="glyphicon glyphicon-asterisk"></span>
+          Nome Azienda
         </span>          
         <input type='text' class='form-control' data-bind='value: company_name'
-               placeholder='Company name'><br>
+               placeholder='Nome Azienda'><br>
       </div>
 
       <div class="input-group">
         <span class="input-group-addon">
-          <span class="glyphicon glyphicon-asterisk"></span>
+          Settore
         </span>          
         <input type='text' class='form-control' data-bind='value: company_sector'
-               placeholder='Company sector'><br>
+               placeholder='Settore'><br>
       </div>
     </div>
 
-    <div class="col-sm-5 col-sm-offset-1">
-       Bla bla bla   
-    </div>
-  
-  </div>
-</div>
-
-<div class="row">
-  <div class='prtn-wizard-section prtn-wizard-section-b'>
-    <h3>Personal</h3>
-    <div class="col-sm-5">
+    <div class="col-sm-6" data-bind='visible: check_family("aap");'>
+      <h3>Istituto</h3>
       <div class="input-group">
         <span class="input-group-addon">
-          <span class="glyphicon glyphicon-asterisk"></span>
+          Nome Istituto
+        </span>          
+        <input type='text' class='form-control' data-bind='value: company_name'
+               placeholder="Nome dell'istituto"><br>
+      </div>
+
+      <div class="input-group">
+        <span class="input-group-addon">
+          Tipologia
+        </span>          
+        <input type='text' class='form-control' data-bind='value: company_sector'
+               placeholder='Tipologia'><br>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
+      <h3 data-bind='visible: !check_family("ct");'>Responsabile</h3>
+      <h3 data-bind='visible: check_family("ct");'>Dati docente</h3>
+      <div class="input-group">
+        <span class="input-group-addon">
+          Nome
         </span>          
         <input type='text' class='form-control' data-bind='value: owner_firstname'
-               placeholder='First name'><br>
+               placeholder='Nome'><br>
       </div>
 
       <div class="input-group">
         <span class="input-group-addon">
-          <span class="glyphicon glyphicon-asterisk"></span>
+          Cognome
         </span>          
         <input type='text' class='form-control' data-bind='value: owner_lastname'
-               placeholder='Surname'><br>
+               placeholder='Cognome'><br>
       </div>
 
       <div class="input-group">
         <span class="input-group-addon">
-          <span class="glyphicon glyphicon-asterisk"></span>
+          Titolo
         </span>          
         <input type='text' class='form-control' data-bind='value: owner_role'
-               placeholder='Role'><br>
+               placeholder='Titolo'><br>
       </div>
-    </div>
 
-    <div class="col-sm-5 col-sm-offset-1">
-       Bla bla bla   
-    </div>
+      <div class="input-group" data-bind='visible: check_family("ct");'>
+        <span class="input-group-addon">
+          LPIC ID
+        </span>          
+        <input type='text' class='form-control' data-bind='value: lpic_id'
+               placeholder='LPIC ID'><br>
+      </div>
 
+      <div class="input-group" data-bind='visible: check_family("ct");'>
+        <span class="input-group-addon">
+          Codice di Verifica
+        </span>          
+        <input type='text' class='form-control' data-bind='value: lpic_verification_code'
+               placeholder='Codice di verifica'><br>
+      </div>
+
+      <a class='button pull-right' data-bind='click: submit'>Avanti</a>
+
+    </div>
   </div>
 </div>
-<div class="row">
-  <div class='prtn-wizard-section prtn-wizard-section-a'>
-    <h3>Term of service</h3>
 
+<div class="row" data-bind='visible: confirm_registration()'>
+  <h1>Registrazione confermata</h1>
+  <p>
+    Il nostro staff ha preso in carico la vostra registrazione. <br>Al piu' presto
+    verrete contattati per una verifica dei requisiti.
+    <br><br>
+  </p>
+</div>
 
-  </div>
-</div>
-<div class="row">
-  <a class='btn btn-default' data-bind='click: submit'>Avanti</a>
-</div>

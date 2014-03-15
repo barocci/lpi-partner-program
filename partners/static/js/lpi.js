@@ -44,11 +44,13 @@ var lpi = {
     }
   },
 
-  logout: function() {
+  logout: function(noredirect) {
     $.cookie('csrftoken', '');
     $.cookie('sessionid', '');
     this.username = this.user_id = '';
-    this.redirect('#login');
+    if(!noredirect) {
+      this.redirect('#login');
+    }
   },
 
   is_logged: function() {

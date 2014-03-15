@@ -227,7 +227,10 @@ def register_contact(request):
                                                 user_id=request.user.id,
                                                 company_id=company['id'])
 
-            
+        
+        if Product().check_family("aap", request.GET['product']):
+            issues = Issue().create('')
+
         if person is not None and company is not None:
             ret['error'] = 0
 

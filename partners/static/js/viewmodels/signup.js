@@ -47,7 +47,7 @@ var SignupViewModel = function() {
 
        lpi.request('register', params, function(response) {
           if(!response.error) {
-            lpi.redirect('wizard/' + response.data.id + '/' + self.product_handle);
+            lpi.redirect('wizard/' + response.data.id + '/' + self.handle());
           } else {
             self.error_message(response['data']);
           }

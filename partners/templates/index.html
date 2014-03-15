@@ -25,19 +25,17 @@
       <a href=''>
         <img src='{% static "images/logo-lpi-white.png" %}'>
       </a>  
-
-
     </div>
 
     <nav id='prtn-navbar' class="navbar navbar-lpi" role="navigation">
       <div class='topbar'>
         <div class='topbar-wrap'>
-
+          
           <div class='account-controls navbar'>
             <div class='navbar_inner'>
               <ul>
                 <li data-bind="visible: logged()">
-                  <span data-bind="text: 'Ciao ' + username()"></span>
+                  <span style='color:#DBD9D9' data-bind="text: 'Ciao ' + username()"></span>
                 </li>
                 <li data-bind="visible: logged()">
                   <a href="#account">Mio account</a>
@@ -183,15 +181,17 @@
 
 	  </div> <!-- end .container -->
   </div>
+
   <div style='clear:both'></div>
+  
   <footer>
     <div class='container'>
       <ul class="sitemap">
-        <li><a href="">LPI.org</a></li>
-        <li><a href="">News</a></li>
-        <li><a href="">About</a></li>
-        <li><a href="">Contatti</a></li>
-        <li><a href="">Privacy</a></li>        
+        <li><a href="http://www.lpi.org">LPI.org</a></li>
+        <li><a href="http://nuovo.lpi-italia.org/news">News</a></li>
+        <li><a href="http://nuovo.lpi-italia.org/chi-siamo">About</a></li>
+        <li><a href="http://nuovo.lpi-italia.org/contatti">Contatti</a></li>
+        <li><a href="http://nuovo.lpi-italia.org/privacy">Privacy</a></li>        
       </ul>
 
       <div class="copyright">
