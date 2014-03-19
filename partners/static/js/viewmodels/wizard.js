@@ -12,6 +12,8 @@ var WizardViewModel = function() {
   self.owner_firstname = ko.observable();
   self.owner_lastname = ko.observable();
   self.owner_role = ko.observable();
+  self.owner_phone = ko.observable();
+  self.owner_email = ko.observable();
   self.lpic_id = ko.observable();
   self.lpic_verification_code = ko.observable();
   self.confirm_registration = ko.observable(false);
@@ -41,12 +43,16 @@ var WizardViewModel = function() {
       'owner_firstname': self.owner_firstname(),
       'owner_lastname': self.owner_lastname(),
       'owner_role': self.owner_role(),
+      'owner_email': self.owner_email(),
+      'owner_phone': self.owner_phone(),
+      'lpic_id': self.lpic_id(),
+      'lpic_verification_code': self.lpic_verification_code(),
       'userID': self.userID,
       'product': self.handle
-    }
+    };
 
     lpi.request('register_contact', data, function(response) {
-      if(self.check_family("aap")) {
+      if(self.check_family("aap,ct")) {
         lpi.logout(true);
         self.confirm_registration(true);
         $('body,html').animate({scrollTop: 0}, 500);

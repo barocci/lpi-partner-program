@@ -2,8 +2,10 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
+from forms import *
 from models import *
 import json
+import os
 from functools import wraps
 
 def check_login(view):
@@ -160,7 +162,7 @@ def account_info(request):
     ret = {'error': 0, 'data': []}
 
     if request.GET['section'] == 'partnership':
-        data = {'training':[], 'services':[], 'academic':[]}
+        data = {'training':[], 'services':[], 'academic':[], 'teachers': []}
         subscriptions = LPISubscription().find(cf_7=request.user.id)
         print subscriptions
         for sub in subscriptions:
@@ -185,7 +187,6 @@ def account_info(request):
             locations = company['Location']
             teacher = company['Teacher']
 
-
             del company['Incharge']
             del company['Commercial']
             del company['Location']
@@ -195,6 +196,7 @@ def account_info(request):
             ret['data'] = { 
               'company': company,
               'commercial': commercial,
+              'subscription': subscription,
               'incharge': incharge,
               'teachers': teacher,
               'locations': locations
@@ -208,34 +210,80 @@ def account_info(request):
     return renderJSON(ret)
 
 @check_login
+def avatar_upload(request):
+    print request.FILES['avatar']
+    ret = {
+        "name": "",
+        "size": 0,
+    }
+
+    form = AvatarForm(request.POST, request.FILES)
+
+    if form.is_valid():
+        avatar = LPIAvatar(
+            image = form.cleaned_data['avatar'],
+            contact_id = form.cleaned_data['contact_id']
+        )
+        avatar.save()
+
+        ret['name'] = "%s" % form.cleaned_data['avatar']
+        ret['size'] = 0
+        ret['url'] = 'http://partners.lpi-italia.org/static/logos/%s' % ret['name']
+        ret['thumbnailUrl'] = 'http://partners.lpi-italia.org/static/logos/%s' % ret['name']
+    else:
+        ret['error'] = 'file not allowed.'
+
+
+    return renderJSON(ret)
+
+@check_login
 def register_contact(request):
     ret = {'error': 1, 'data:': ''}
 
-    try:
+    #try:
+    if not Product().check_family("ct", request.GET['product']):
         company = Company().create(request.GET['company_name'], request.GET['company_sector'])
+        company['owner'] = person
 
         person = Person().create(request.GET['company_name'],
                                  company['id'],
                                  request.GET['owner_firstname'],
                                  request.GET['owner_lastname'],
                                  request.GET['owner_role'],
+                                 request.GET['owner_email'],
+                                 request.GET['owner_phone'],
+                                 '',
+                                 '',
                                  'Incharge')
-        company['owner'] = person
-
 
         subscription = LPISubscription().create(product=request.GET['product'],
-                                                user_id=request.user.id,
-                                                company_id=company['id'])
+                                            user_id=request.user.id,
+                                            company_id=company['id'])
+    else:
+        person = Person().create('',
+                                 '',
+                                 request.GET['owner_firstname'],
+                                 request.GET['owner_lastname'],
+                                 request.GET['owner_role'],
+                                 request.GET['owner_email'],
+                                 request.GET['owner_phone'],
+                                 'Teacher',
+                                 request.GET['lpic_id'],
+                                 request.GET['lpic_verification_code'])
 
-        
-        if Product().check_family("aap", request.GET['product']):
-            issues = Issue().create('')
+        subscription = LPISubscription().create(product=request.GET['product'],
+                                            user_id=request.user.id,
+                                            company_id=person['id'])
 
-        if person is not None and company is not None:
-            ret['error'] = 0
+    
+    if Product().check_family("aap", request.GET['product']):
+        issues = Issue().create('')
 
-    except Exception, e:
-        ret['data'] = "Chargify error %s" % e
+    if person is not None:
+        ret['error'] = 0
+
+    #except Exception, e:
+    #    ret['data'] = "Chargify error %s" % e
     
     return renderJSON(ret)
 
@@ -248,7 +296,7 @@ def register(request):
         if user:
             
             user = auth.authenticate(username=request.GET['mail'], 
-                                             password=request.GET['password'])
+                                     password=request.GET['password'])
             if user:
                 auth.login(request, user)
                 ret['data'] = {'login': user.username, 'id': user.id}

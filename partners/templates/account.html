@@ -114,6 +114,39 @@
     </table>
   </div>
 
+  <div data-bind='visible: teachers().length > 0'>
+    <h3>Docente Certificato</h3>
+
+    <table class='table'>
+      <thead>
+        <tr>
+          <th>Prodotto</th>
+          <th>Profilo</th>
+          <th>Stato</th>
+          <th>Scadenza</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody data-bind='foreach: teachers()'>
+        <tr>
+          <td data-bind='text: product.name'></td>
+          <td>
+            <a data-bind='text: company_name, click: function() {$parent.goto_profile($data) }'></a>
+          </td>
+          <td data-bind='text: state'>
+          <td data-bind='text: due_date'> - </td>
+          <td>
+            <a data-bind="attr: {href: product.url}, visible: state != 'active'" 
+               class='button'>Attiva</a>
+
+            <a data-bind="click: $parent.goto_profile, visible: state == 'active'">
+              <i class='glyphicon glyphicon-cog'></i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
 </div>
 
 <div data-bind='visible: active_section() == "profile"'>
@@ -147,6 +180,11 @@
             <div class="row">
               <a data-bind=''>Cambia immagine</a>
             </div>
+            <form>
+              {% csrf_token %}
+              <input type='hidden' name='contact_id' data-bind='value: profiles.company.id'>
+              <input id='fileupload' type="file" name="avatar" data-url="avatar_upload/" >
+            </form>
 
           </div>
         </div>

@@ -30,6 +30,7 @@ var AccountViewModel = function() {
   self.training  = ko.observableArray([]);
   self.services = ko.observableArray([]);
   self.academic = ko.observableArray([]);
+  self.teachers = ko.observableArray([]);
 
   self.active_subscriptions = ko.computed(function() {
     var products = [];
@@ -79,6 +80,8 @@ var AccountViewModel = function() {
       'phone': ko.observable(''),
       'email': ko.observable(''),
       'tag_list': ko.observable(''),
+      'Verification': ko.observable(''),
+      'LPICID': ko.observable(''),
       'image_url': ko.observable(''),
       'Role': ko.observable('Company'),
       'type': 'company',
@@ -98,6 +101,8 @@ var AccountViewModel = function() {
       'website': ko.observable(''),
       'phone': ko.observable(''),
       'email': ko.observable(''),
+      'Verification': ko.observable(''),
+      'LPICID': ko.observable(''),
       'image_url': ko.observable(''),
       'company_id': ko.observable(''),
       'Role': ko.observable('Incharge'),
@@ -119,6 +124,8 @@ var AccountViewModel = function() {
       'website': ko.observable(''),
       'phone': ko.observable(''),
       'email': ko.observable(''),
+      'Verification': ko.observable(''),
+      'LPICID': ko.observable(''),
       'image_url': ko.observable(''),
       'company_id': ko.observable(''),
       'Role': ko.observable('Commercial'),
@@ -448,6 +455,14 @@ var AccountViewModel = function() {
         self.observe_form(data);
         
         console.log(self.profiles.company.first_name());
+        $('#fileupload').fileupload({
+              dataType: 'json',
+              done: function (e, data) {
+                $.each(data.result.files, function (index, file) {
+                    $('<p/>').text(file.name).appendTo(document.body);
+                });
+              }
+        });
 
       } else {
         lpi.request('account_info', {section: 'partnership'}, function(response) {

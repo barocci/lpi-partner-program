@@ -115,16 +115,18 @@
   </div>
 
   <div class='col-sm-4'>
-    <section class='logo-section box-section'>
-      <div class="row" data-bind='visible: profiles.company.image_url().length > 0'>
+    <section class='logo-section box-section'  
+             data-bind='visible: profiles.company.image_url().length > 0'>
+      <div class="row">
         <img class='contact-logo' data-bind='attr: { src: profiles.company.image_url() }'/>
       </div>
+    </section>
+
+    <section class='box-section logo-section'>
       <div class="row">
         <img class='lpi-partnership-logo' 
              src='http://partners.lpi-italia.org/static/images/logo-lpi-big.png'/>
       </div> 
-      <div class='row'>
-      </div>
     </section>
 
     <section class='box-section' data-bind='visible: profiles.commercial.first_name() != ""'>

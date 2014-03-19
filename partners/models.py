@@ -2,8 +2,10 @@ from django.db import models
 from lib.chargify.chargify import Chargify
 from lib.redmine import redmine
 from django.conf import settings
+from django.templatetags.static import static
 from django.contrib.auth.models import User
 import datetime
+import os
 
 class LPIUser(User):
     company = models.CharField(max_length=100)
@@ -85,12 +87,26 @@ class LPIIndexes(models.Model):
         contact['references'] = item.references
         contact['teachers'] = item.teachers
         contact['locations'] = item.locations
-        contact['image_url'] = ''
+        contact['image_url'] = LPIAvatar().company_avatar_url(contact['contact_id'])
 
         return contact
-        
 
+def LPIAvatar_filename(instance, filename):
+    name, ext = os.path.splitext(filename)
+    filename = "%s%s" % (instance.contact_id, ext)
+    return "/".join(['logos', filename])
 
+class LPIAvatar(models.Model):
+    image = models.ImageField(null=True, upload_to=LPIAvatar_filename)
+    contact_id = models.IntegerField()
+
+    def company_avatar_url(self, contact_id):
+        path = ''
+        avatar = LPIAvatar.objects.filter(contact_id=contact_id).first()
+        if avatar is not None:
+            path = static(avatar.image.name)
+
+        return path
 
 
 
@@ -110,7 +126,9 @@ class Model(dict):
           'product':         'cf_6',
           'user_id':         'cf_7',
           'subscription_id': 'cf_8',
-          'visible':         'cf_10'
+          'visible':         'cf_10',
+          'LPICID':          'cf_11',
+          'Verification':    'cf_12',
         }
 
         self.mapping_id = {
@@ -122,8 +140,9 @@ class Model(dict):
           'product':         '6',
           'user_id':         '7',
           'subscription_id': '8',
-          'visible':         '10'
-
+          'visible':         '10',
+          'LPICID':          '11',
+          'Verification':    '12'
         }
 
     def __getitem__(self, key):
@@ -311,7 +330,7 @@ class Product(Model):
         return False
 
     def check_family(self, family, handle):
-        families = families.split(',')
+        families = family.split(',')
         for f in families:
             if handle.find(f) >= 0:
                 return True
@@ -465,12 +484,8 @@ class Company(Contact):
             self['street'] = address['street']
             self['country'] = address['country']
 
-        self['image_url'] = ''
+        self['image_url'] = LPIAvatar().company_avatar_url(self['id'])
 
-        if resource.attributes.has_key('avatar'):
-            avatar = redmine.Attachment.get(resource.attributes['avatar'].attributes['attachment_id'])
-            self['image_url'] = avatar['content_url']
-        
         self['Incharge'] = False
         self['Commercial'] = False
         self['Location'] = []
@@ -530,22 +545,33 @@ class Company(Contact):
 
 
 class Person(Contact):
-    def create(self, company_name, company_id, first_name, last_name, job, role):
+    def create(self, company_name, company_id, first_name, last_name, job, email, phone, role,
+                     lpicid=None, verification_code=None):
         contact = redmine.Contact()
         contact.first_name = first_name
         contact.last_name = last_name
         contact.job_title = job
         contact.company = company_name
+        contact.email = email
+        contact.phone = phone
         contact.project_id = settings.REDMINE_PROJECT
         contact.is_company = False
         contact.custom_fields = [
             { 'value': role, 'id': self.mapping_id['Role']},
             { 'value': company_id, 'id': self.mapping_id['company_id']}
         ]
-        print contact.custom_fields
+
+        if lpicid is not None:
+            contact.custom_fields.append({'value': lpicid, 'id': self.mapping_id['LPICID']})
+            contact.custom_fields.append({'value': verification_code, 
+                                           'id': self.mapping_id['Verification']})
+
         contact.save()
-        
-        return self.load_from_resource(contact)
+
+        resource = Contact().find(contact.id)
+
+        return self.load_from_resource(resource)
+
 
     def find(self, id):
         resource = Contact().find(id)
@@ -555,12 +581,14 @@ class Person(Contact):
         self['id'] = resource.id
         self['first_name'] = resource.first_name
         self['last_name'] = resource.last_name
-        self['background'] = resource.background
-        self['job_title'] = resource.job_title
 
         self['job_title'] = ''
         if resource.attributes.has_key('job_title'):
             self['job_title'] = resource.job_title
+
+        self['background'] = ''
+        if resource.attributes.has_key('background'):
+            self['background'] = resource.background
 
         self['website'] = ''
         if resource.attributes.has_key('website'):
@@ -586,15 +614,10 @@ class Person(Contact):
             self['street'] = address['street']
             self['country'] = address['country']
 
-
-
         for cf in resource.custom_fields:
             self[cf.name] = cf.value
 
-        self['image_url'] = ''
-        if resource.attributes.has_key('avatar'):
-            avatar = redmine.Attachment.get(resource.attributes['avatar'].attributes['attachment_id'])
-            self['image_url'] = avatar['content_url']
+        self['image_url'] = LPIAvatar().company_avatar_url(self['id'])
 
         return self
 
