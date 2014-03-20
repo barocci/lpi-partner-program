@@ -145,7 +145,7 @@ var CompaniesListViewModel = function() {
       if(data[i].cities) {
         var city = data[i].cities.split(', ');
         var cities = self.cities();
-        cities = city.unique(cities);
+        cities = city.concat(cities).unique();
         self.cities(cities);
       }
       

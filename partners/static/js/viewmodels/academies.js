@@ -141,13 +141,13 @@ var AcademiesListViewModel = function() {
           tags[j] = tags[j].trim();
         }
 
-        self.tags(tags.unique(self.tags()));
+        self.tags(tags.concat(self.tags()).unique());
       }
 
       if(data[i].cities) {
         var city = data[i].cities.split(', ');
         var cities = self.cities();
-        cities = city.unique(cities);
+        cities = city.concat(cities).unique();
         console.log(city);
         console.log(cities);
         self.cities(cities);
