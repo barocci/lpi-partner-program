@@ -380,6 +380,13 @@
     
   </div>
 
+  <div data-bind='visible: active_section() == "logos"'>
+    <h1>Loghi LPI</h1>
+    <section data-bind='foreach: active_logos()'>
+      <img data-bind='attr: {src:  $data }'><br><br>
+    </section>
+  </div>
+
   <div data-bind='visible: active_section() == "account"'>
     <h1>Account</h1>
     <div class='row'>
@@ -390,8 +397,8 @@
               <span class="input-group-addon">
                 Vecchia password
               </span>
-              <input type='text' class='form-control' 
-                     data-bind=''
+              <input type='password' class='form-control' 
+                     data-bind='value: old_password'
                      placeholder='vecchia password'>
             </div>
 
@@ -399,8 +406,8 @@
               <span class="input-group-addon">
                 Nuova password
               </span>
-              <input type='text' class='form-control' 
-                     data-bind=''
+              <input type='password' class='form-control' 
+                     data-bind='value: new_password'
                      placeholder='nuova password'>
             </div>
 
@@ -408,21 +415,26 @@
               <span class="input-group-addon">
                 Conferma password
               </span>
-              <input type='text' class='form-control' 
-                     data-bind=''
+              <input type='password' class='form-control' 
+                     data-bind='value: new_password_conf'
                      placeholder='conferma password'>
             </div>
 
-            <a data-bind='click: function() { $parent.submit_profile(type); }' 
+            <a data-bind='click: change_password' 
                class='button pull-right'>Salva</a>
+          </div>
+          <div class='col-sm-6'>
+            <div class='alert alert-danger' 
+                data-bind='text: pwd_error_message(), visible: pwd_error_message().length >0 '>
+            </div>
           </div>
         </form>  
     </div>
+  </div>
 
+  <div data-bind='visible: active_section() == "billing"'>
     <div class='row'>
-      <br><br><br>
-
-      <h3>Portale pagamenti</h3>
+      <h1>Portale pagamenti</h1>
       <div class='col-sm-6'>
         Attraverso il nostro Portale Pagamenti &egrave; possibile visualizzare lo storico
         delle sottoscrizioni e modificare i propri dati di pagamento.
@@ -435,17 +447,6 @@
     </div>
   </div>
 
-  <div data-bind='visible: active_section() == "locations"'>
-    <h1>Sedi operative</h1>
-  </div>
-
-  <div data-bind='visible: active_section() == "teachers"'>
-    <h1>Docenti</h1>
-  </div>
-
-  <div data-bind='visible: active_section() == "billing"'>
-    <h1>Pagamenti</h1>
-  </div>
 </div>
 
 

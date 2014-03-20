@@ -16,12 +16,18 @@ var AccountViewModel = function() {
 
   self.require_login = true;
 
+  self.old_password = ko.observable('');
+  self.new_password = ko.observable('');
+  self.new_password_conf = ko.observable('');
+  self.pwd_error_message = ko.observable('');
+
   
   self.sections = [{name: 'Partnership', slug: 'partnership', visible: '*'},
                    {name: 'Azienda', slug: 'profile', visible: 'atp,aap,sp'}, 
                    {name: 'Profilo', slug: 'profile', visible: 'ct'}, 
+                   {name: 'Loghi', slug: 'logos', visible: '*'}, 
                    {name: 'Account', slug: 'account', visible: '*'},
-                   {name: 'Pagamenti', slug: 'billings', visible: '*'}, 
+                   {name: 'Pagamenti', slug: 'billing', visible: '*'}, 
                    ];
 
 
@@ -46,6 +52,22 @@ var AccountViewModel = function() {
 
     return products;
   });
+
+  self.active_logos = ko.computed(function() {
+    var products = [];
+    var subs = self.training();
+    subs = subs.concat(self.services());
+    subs = subs.concat(self.academic());
+
+    for(i in subs) {
+      if(subs[i].product) {
+        products.push(subs[i].product.image_url);
+      }
+    }
+
+    return products;
+  });
+
 
   self.loading = ko.observable(true);
 
@@ -207,7 +229,6 @@ var AccountViewModel = function() {
 
   self.profile_family = function() {
     var family = '';
-    console.log(self.profile_handle() + ' ,,,,,, ');
     if(self.profile_handle()) {
       var parts = self.profile_handle().split('-');
       if(parts.length > 1) {
@@ -490,5 +511,31 @@ var AccountViewModel = function() {
       lpi.loading(false);
       self.active_section(section.slug);
     });
+  }
+
+  self.change_password = function() {
+    if(self.new_password() ==  '' || self.new_password_conf() == '') {
+      self.pwd_error_message("La nuova password non puo' essere vuota.")
+    } else if(self.new_password() != self.new_password_conf()) {
+      self.pwd_error_message('Le password non combaciano.')
+    } else {
+      console.log('changing password');
+      lpi.post('change_password', 
+               { new_password: self.new_password(),
+                 old_password: self.old_password()}, 
+                 function(response) {
+
+        self.new_password('');
+        self.new_password_conf('');
+        self.old_password('');
+
+        if(response.error != 1) {
+          self.pwd_error_message('Password aggiornata.');
+          setTimeout(function(){ self.pwd_error_message('')}, 4000);
+        } else {
+          self.pwd_error_message(response.data);
+        }
+      });
+    }
   }
 }

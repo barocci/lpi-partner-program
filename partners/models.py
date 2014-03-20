@@ -337,7 +337,6 @@ class Product(Model):
 
         return False
 
-
     def get_by_handle(self, handle):
         resource = self.chargify.Product().getByHandle(handle)
         return self.load_from_resource(resource)
@@ -353,6 +352,8 @@ class Product(Model):
         self['description'] = resource.description
         self['product_family'] = resource.product_family
         self['price_in_cents'] = resource.price_in_cents
+        self['image_url'] = static('lpi/%s.png' % resource.handle)
+
         return self
         #self['price'] = "%.2f" % int(resource.price_in_cents)/100
 
@@ -438,13 +439,15 @@ class Company(Contact):
         ]
         contact.project_id = settings.REDMINE_PROJECT
         contact.save()
+        print contact.id
         return self.find(contact.id)
 
     def find(self, id):
-        resource = Contact().find(id, include='contacts')
+        resource = Contact().find(id=id, include='contacts')
         return self.load_from_resource(resource)
 
     def load_from_resource(self, resource):
+        print resource
         self['first_name'] = resource.first_name
         self['id'] = resource.id
 

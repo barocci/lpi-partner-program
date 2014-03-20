@@ -237,13 +237,32 @@ def avatar_upload(request):
     return renderJSON(ret)
 
 @check_login
+def change_password(request):
+    ret = {'error': 1, 'data': ''}
+    form = PasswordForm(request.POST)
+
+    if form.is_valid():
+        if request.user.check_password(form.cleaned_data['old_password']):
+            print "setting password %s" % form.cleaned_data['new_password']
+            request.user.set_password(form.cleaned_data['new_password'])
+            request.user.save()
+            ret['error'] = 0
+            ret['data'] = 'Password ok'
+        else:
+            ret['data'] = "La vecchia password non e' valida."
+    else:
+        ret['data'] = 'Errore nel cambio password.'
+
+    return renderJSON(ret)
+
+
+@check_login
 def register_contact(request):
     ret = {'error': 1, 'data:': ''}
 
     #try:
     if not Product().check_family("ct", request.GET['product']):
         company = Company().create(request.GET['company_name'], request.GET['company_sector'])
-        company['owner'] = person
 
         person = Person().create(request.GET['company_name'],
                                  company['id'],
@@ -256,6 +275,7 @@ def register_contact(request):
                                  '',
                                  'Incharge')
 
+        company['owner'] = person
         subscription = LPISubscription().create(product=request.GET['product'],
                                             user_id=request.user.id,
                                             company_id=company['id'])
