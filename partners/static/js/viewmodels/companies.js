@@ -133,22 +133,19 @@ var CompaniesListViewModel = function() {
     self.tags([]);
     
     for(i in data) {
-
       if(data[i].tags) {
         var tags = data[i].tags.split(',');
-        for(j = 0; j < tags; j++) {
+        for(j = 0; j < tags.length; j++) {
           tags[j] = tags[j].trim();
         }
 
-        self.tags(tags.unique(self.tags()));
+        self.tags(tags.concat(self.tags()).unique());
       }
 
       if(data[i].cities) {
         var city = data[i].cities.split(', ');
         var cities = self.cities();
         cities = city.unique(cities);
-        console.log(city);
-        console.log(cities);
         self.cities(cities);
       }
       
