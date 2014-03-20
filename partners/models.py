@@ -52,7 +52,7 @@ class LPIIndexes(models.Model):
 
     def search_services(self, params={}):
         result = []
-        contacts = LPIIndexes.objects.filter(family__endswith='sp')
+        contacts = LPIIndexes.objects.filter(family__endswith='sp',status='active')
         for contact in contacts:
             result.append(self.load_from_db(contact))
 
@@ -60,7 +60,7 @@ class LPIIndexes(models.Model):
 
     def search_academies(self, params={}):
         result = []
-        contacts = LPIIndexes.objects.filter(family__startswith='aa')
+        contacts = LPIIndexes.objects.filter(family__startswith='aa',status='active')
         for contact in contacts:
             result.append(self.load_from_db(contact))
 
@@ -68,7 +68,7 @@ class LPIIndexes(models.Model):
 
     def search_trainers(self, params={}):
         result = []
-        contacts = LPIIndexes.objects.filter(family__startswith='at')
+        contacts = LPIIndexes.objects.filter(family__startswith='at',status='active')
         for contact in contacts:
             result.append(self.load_from_db(contact))
 
