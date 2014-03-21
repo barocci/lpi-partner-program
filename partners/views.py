@@ -228,8 +228,8 @@ def avatar_upload(request):
 
         ret['name'] = "%s" % form.cleaned_data['avatar']
         ret['size'] = 0
-        ret['url'] = 'http://partners.lpi-italia.org/static/logos/%s' % ret['name']
-        ret['thumbnailUrl'] = 'http://partners.lpi-italia.org/static/logos/%s' % ret['name']
+        ret['url'] = 'http://partner.lpi-italia.org/static/logos/%s' % ret['name']
+        ret['thumbnailUrl'] = 'http://partner.lpi-italia.org/static/logos/%s' % ret['name']
     else:
         ret['error'] = 'file not allowed.'
 

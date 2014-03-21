@@ -229,7 +229,7 @@ var lpi = {
   },
 
   request: function(method, params, callback) {
-    $.getJSON('http://partners.lpi-italia.org/' + method + '/', params, function(response) {
+    $.getJSON('http://partner.lpi-italia.org/' + method + '/', params, function(response) {
         if(response.redirect) {
             lpi.redirect(response.redirect);
         }else {
@@ -240,7 +240,7 @@ var lpi = {
 
   post: function(method, params, callback) {
     params['csrfmiddlewaretoken'] = $.cookie('csrftoken');
-    $.post('http://partners.lpi-italia.org/' + method + '/', params, function(response) {
+    $.post('http://partner.lpi-italia.org/' + method + '/', params, function(response) {
         console.log(response);
         if(response.redirect) {
             lpi.redirect(response.redirect);
