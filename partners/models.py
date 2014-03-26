@@ -108,6 +108,22 @@ class LPIAvatar(models.Model):
 
         return path
 
+class LPIRule(models.Model):
+    handle = models.CharField(max_length=40,db_index=True)
+    exams_discount = models.IntegerField()
+    max_locations = models.IntegerField()
+    max_tags = models.IntegerField()
+    max_references = models.IntegerField()
+    max_facebook_posts = models.IntegerField()
+    max_googleplus_post = models.IntegerField()
+    max_newsletter_post = models.IntegerField()
+    free_exam_voucher = models.IntegerField()
+
+
+    def __unicode__(self):
+        return self.handle
+
+
 
 
 # Create your models here.

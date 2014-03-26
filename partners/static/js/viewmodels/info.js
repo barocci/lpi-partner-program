@@ -32,6 +32,8 @@ var InfoViewModel = function() {
       'email': ko.observable(''),
       'tag_list': ko.observable(''),
       'image_url': ko.observable(''),
+      'LPICID': ko.observable(''),
+      'Verification': ko.observable(''),
       'Role': ko.observable('Company'),
       'type': 'company',
     },
@@ -51,6 +53,8 @@ var InfoViewModel = function() {
       'phone': ko.observable(''),
       'email': ko.observable(''),
       'image_url': ko.observable(''),
+      'LPICID': ko.observable(''),
+      'Verification': ko.observable(''),
       'company_id': ko.observable(''),
       'Role': ko.observable('Incharge'),
       'type': 'incharge',
@@ -71,6 +75,8 @@ var InfoViewModel = function() {
       'phone': ko.observable(''),
       'email': ko.observable(''),
       'image_url': ko.observable(''),
+      'LPICID': ko.observable(''),
+      'Verification': ko.observable(''),
       'company_id': ko.observable(''),
       'Role': ko.observable('Commercial'),
       'type': 'commercial',
@@ -90,9 +96,13 @@ var InfoViewModel = function() {
       console.log(data);
       self.is_owner(data.owner);
 
+
+
+
       for(type in self.profiles) {
         if(data[type]) {
           for(i in data[type]) {
+            console.log(i);
             self.profiles[type][i](data[type][i]?data[type][i]:'');
           }
         }
