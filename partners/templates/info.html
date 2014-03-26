@@ -155,7 +155,7 @@
         <h4>Responsabile</h4>
         <b class='fa fa-user pull-left'></b>
         <div class='person-data'>
-          <b>Tizio Caio</b>
+          <b data-bind='text: first_name() + " " + last_name()'></b>
           <address class='small'>
             <div class='phone' data-bind='visible: phone().length > 0'>
               <b>Tel:</b>
