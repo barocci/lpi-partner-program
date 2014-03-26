@@ -402,7 +402,7 @@ footer .sitemap a:hover {
 }
 
 .prtn-box-teachers {
-  min-height:620px;
+  min-height:460px;
 }
 
 .prtn-box-services {
@@ -422,6 +422,9 @@ footer .sitemap a:hover {
   min-height:600px;
 }
 
+.prtn-box-training h3 {
+  min-height:60px;
+}
 
 .prtn-box-price {
   font-size:20px;
@@ -503,8 +506,22 @@ table {
 .prtn-box-desc {
   font-weight: 100;
   padding:15px 0px;
-  min-height:200px;
   line-height:20px;
+}
+
+.joinus-box-container .prtn-box-inner {
+  min-height:250px;
+  position:relative;
+}
+
+.joinus-box-container .prtn-box-button-offers {
+  position:absolute;
+  width:100%;
+  bottom:-10px;
+}
+
+.prtn-box-index .prtn-box-desc {
+  min-height:200px;
 }
 
 .prtn-box-button {
