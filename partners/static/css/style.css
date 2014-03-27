@@ -16,6 +16,7 @@ h1, h2, h3, h4, h5, h6 {
 
 ul {
   list-style-type:none;
+  padding-left:0px;
 }
 
 a {
@@ -372,7 +373,7 @@ footer .sitemap a:hover {
 }
 
 .prtn-box-container {
-  margin:60px 0px;
+  margin:20px 0px;
   min-height:300px;
 }
 
@@ -382,6 +383,11 @@ footer .sitemap a:hover {
   position:relative;
   margin-bottom:20px;
 }
+.prtn-box ul {
+  padding-left:40px;
+
+}
+
 
 .prtn-box-1 {
   width:50%;
@@ -717,7 +723,7 @@ h1 .button {
 
 .box-section {
   background:#fff;
-  margin:0px 0px 0px -10px;
+  margin:0px 0px 0px 0px;
   padding:15px 15px 15px 30px;
   position:relative;
   border-radius:3px;

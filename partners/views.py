@@ -70,6 +70,8 @@ def subscribe(request):
                                                request.GET['ref'],
                                                request.GET['product'])
 
+
+    
     return HttpResponseRedirect("/#account")
 
 @check_login
