@@ -60,19 +60,24 @@ def login(request):
 def logout(request):
     ret = {'error': 0, 'data:': ''}
     auth.logout(request)
-    return renderJSON(ret)
 
+    return renderJSON(ret)
 
 @check_login
 def subscribe(request):
     ret = {'error': 0, 'data:': ''}
-    subscription = LPISubscription().link_deal(request.GET['id'],
-                                               request.GET['ref'],
-                                               request.GET['product'])
+    redirect = '/#subscription_error'
 
+    form = SubscriptionForm(request.GET, request.FILES)
 
+    if form.is_valid():
+        subscription = LPISubscription().link_deal(form.cleaned_data['id'],
+                                                   form.cleaned_data['ref'],
+                                                   form.cleaned_data['product'])
+
+        redirect = '/#payment_success'
     
-    return HttpResponseRedirect("/#account")
+    return HttpResponseRedirect(redirect)
 
 @check_login
 def user_info(request):
@@ -98,7 +103,6 @@ def edit_profile(request):
     ret = {'error': 0, 'data': []}
 
     profile = request.POST.copy()
-    print profile
 
     if profile.has_key('id'):
         if profile['id'] == '':
@@ -139,6 +143,7 @@ def details(request):
         locations = company['Location']
         teacher = company['Teacher']
         references = company['Reference']
+        products = company['products']
 
 
         del company['Incharge']
@@ -146,6 +151,7 @@ def details(request):
         del company['Location']
         del company['Teacher']
         del company['Reference']
+        del company['products']
 
         ret['data'] = { 
             'company': company,
@@ -153,6 +159,7 @@ def details(request):
             'incharge': incharge,
             'teachers': teacher,
             'locations': locations,
+            'products': products,
             'references': references
         }
         
@@ -188,12 +195,15 @@ def account_info(request):
             incharge = company['Incharge']
             locations = company['Location']
             teacher = company['Teacher']
+            products = company['products']
 
             del company['Incharge']
             del company['Commercial']
             del company['Location']
             del company['Teacher']
             del company['Reference']
+            del company['products']
+
 
             ret['data'] = { 
               'company': company,
@@ -213,7 +223,6 @@ def account_info(request):
 
 @check_login
 def avatar_upload(request):
-    print request.FILES['avatar']
     ret = {
         "name": "",
         "size": 0,
@@ -222,16 +231,21 @@ def avatar_upload(request):
     form = AvatarForm(request.POST, request.FILES)
 
     if form.is_valid():
-        avatar = LPIAvatar(
-            image = form.cleaned_data['avatar'],
-            contact_id = form.cleaned_data['contact_id']
-        )
+        avatar = LPIAvatar.objects.filter(contact_id=form.cleaned_data['contact_id']).first()
+        if not avatar:
+            avatar = LPIAvatar(
+                image = form.cleaned_data['avatar'],
+                contact_id = form.cleaned_data['contact_id']
+            )
+        else:
+            avatar.image = form.cleaned_data['avatar']
+
         avatar.save()
 
         ret['name'] = "%s" % form.cleaned_data['avatar']
         ret['size'] = 0
-        ret['url'] = 'http://partner.lpi-italia.org/static/logos/%s' % ret['name']
-        ret['thumbnailUrl'] = 'http://partner.lpi-italia.org/static/logos/%s' % ret['name']
+        ret['url'] = 'http://partner.lpi-italia.org/static/%s' % avatar.image
+        ret['thumbnailUrl'] = 'http://partner.lpi-italia.org/static/%s' % avatar.image
     else:
         ret['error'] = 'file not allowed.'
 
@@ -255,14 +269,31 @@ def change_password(request):
     else:
         ret['data'] = 'Errore nel cambio password.'
 
+    return renderJSON(ret)  
+
+@check_login
+def attach_contact(request):
+    ret = {'error': 1, 'data': ''}
+
+    form = AttachSubscriptionForm(request.POST)
+
+    if form.is_valid():
+        subscription = LPISubscription().create(product=form.cleaned_data['product'],
+                                                user_id=request.user.id,
+                                                company_id=form.cleaned_data['company'])
+
+        ret['error'] = 0
+    else:
+        ret['data'] = 'Not valid form.'
+
     return renderJSON(ret)
+
 
 
 @check_login
 def register_contact(request):
     ret = {'error': 1, 'data:': ''}
 
-    #try:
     if not Product().check_family("ct", request.GET['product']):
         company = Company().create(request.GET['company_name'], request.GET['company_sector'])
 
@@ -279,8 +310,8 @@ def register_contact(request):
 
         company['owner'] = person
         subscription = LPISubscription().create(product=request.GET['product'],
-                                            user_id=request.user.id,
-                                            company_id=company['id'])
+                                                user_id=request.user.id,
+                                                company_id=company['id'])
     else:
         person = Person().create('',
                                  '',
@@ -294,8 +325,8 @@ def register_contact(request):
                                  request.GET['lpic_verification_code'])
 
         subscription = LPISubscription().create(product=request.GET['product'],
-                                            user_id=request.user.id,
-                                            company_id=person['id'])
+                                                user_id=request.user.id,
+                                                company_id=person['id'])
 
     
     if Product().check_family("aap", request.GET['product']):
@@ -304,9 +335,6 @@ def register_contact(request):
     if person is not None:
         ret['error'] = 0
 
-    #except Exception, e:
-    #    ret['data'] = "Chargify error %s" % e
-    
     return renderJSON(ret)
 
 def register(request):

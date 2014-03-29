@@ -320,7 +320,6 @@ class LPISubscription(Model):
 
         return results
 
-
 class Subscription(Model):
     pass
 
@@ -459,11 +458,12 @@ class Company(Contact):
         return self.find(contact.id)
 
     def find(self, id):
-        resource = Contact().find(id=id, include='contacts')
+        resource = Contact().find(id=id, include='contacts, deals')
         return self.load_from_resource(resource)
+    
+
 
     def load_from_resource(self, resource):
-        print resource
         self['first_name'] = resource.first_name
         self['id'] = resource.id
 
@@ -495,6 +495,7 @@ class Company(Contact):
         self['postcode'] = ''
         self['city'] = ''
         self['country'] = ''
+
         if resource.attributes.has_key('address'):
             address = resource.attributes['address'].attributes
 
@@ -504,6 +505,12 @@ class Company(Contact):
             self['country'] = address['country']
 
         self['image_url'] = LPIAvatar().company_avatar_url(self['id'])
+
+        self['products'] = []
+
+        if resource.attributes.has_key('deals'):
+            for deal_resource in resource.attributes['deals']:
+                self['products'].append(deal_resource.name)
 
         self['Incharge'] = False
         self['Commercial'] = False
@@ -515,8 +522,6 @@ class Company(Contact):
             for contact_resource in resource.attributes['contacts']:
                 contact = Person().find(id=contact_resource.attributes['id'])
 
-                print type(self[contact['Role']])
-                
                 if type(self[contact['Role']]) == type([]):
                     self[contact['Role']].append(contact)
                 else:

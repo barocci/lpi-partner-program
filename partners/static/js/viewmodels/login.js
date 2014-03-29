@@ -9,9 +9,15 @@ var LoginViewModel = function() {
   self.password = ko.observable();
   self.error_message = ko.observable();
 
-  self.init = function() {
+  self.handle = ko.observable('');
+
+  self.init = function(arg) {
     if(lpi.is_logged()) {
       lpi.redirect('#account');
+    }
+
+    if(arg) {
+      self.handle(arg.handle);
     }
   }
 
@@ -27,15 +33,17 @@ var LoginViewModel = function() {
       lpi.login(response);
       if(response.error != 1) {
         lpi.authenticate();
-        lpi.redirect('#account');
+        if(self.handle() != '') {
+          lpi.redirect('#signup/' + self.handle());
+        } else {
+          lpi.redirect('#account');
+        }
       } else {
         self.error_message('Username o password errati.');
       }
-
     });
   }
 
   self.recover_password = function() {
-    
   }
 }

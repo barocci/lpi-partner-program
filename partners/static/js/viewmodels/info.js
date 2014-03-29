@@ -12,7 +12,6 @@ var InfoViewModel = function() {
   self.is_owner = ko.observable();
   self.changed = ko.observable(false);
 
-  self.locations = ko.observableArray([]);
 
   self.profiles = {
     'company': {
@@ -85,6 +84,7 @@ var InfoViewModel = function() {
 
   self.teachers = ko.observableArray([]);
   self.locations = ko.observableArray([]);
+  self.products = ko.observableArray([]);
   self.references = ko.observableArray([]);
 
 
@@ -97,12 +97,9 @@ var InfoViewModel = function() {
       self.is_owner(data.owner);
 
 
-
-
       for(type in self.profiles) {
         if(data[type]) {
           for(i in data[type]) {
-            console.log(i);
             self.profiles[type][i](data[type][i]?data[type][i]:'');
           }
         }
@@ -120,11 +117,15 @@ var InfoViewModel = function() {
             contact_obs[field] = ko.observable(value)
           }
 
-          console.log(contact_obs);
-
           self[contacts[type]].push(contact_obs);
         }
       }
+
+      console.log(data.products);
+
+      self.products(data.products);
+
+
     });
   }
 

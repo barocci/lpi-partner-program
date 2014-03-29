@@ -125,6 +125,9 @@ var lpi = {
     }
 
     routie({ 
+      'login/:handle': function(handle) {
+         route('login', {handle: handle});
+       },
        'info/:id': function(id) {
          route('info', {id: id});
        },

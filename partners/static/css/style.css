@@ -744,7 +744,7 @@ h1 .button {
 
 .lpi-partnership-logo {
   margin:30px 0px;
-  width:100px;
+  max-width:200px;
 }
 .info-social-buttons {
   font-size:30px;
@@ -755,10 +755,10 @@ h1 .button {
   margin:20px 0px 0px 10px;
 }
 
-
 .info-social-buttons a {
   color:rgb(102, 102, 102);
 }
+
 .info-social-buttons a:hover {
   color:#692630;
   text-decoration:none;
@@ -837,13 +837,13 @@ address.small {
 .avatar-container {
   background:#fff;
   text-align:center;
-  height:250px;
+  height:300px;
   width:300px;
   padding-top:20px;
 }
 
 .avatar-box img {
-  height:150px;
+  max-width:280px;
 }
 
 .edit {

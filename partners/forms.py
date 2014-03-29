@@ -10,3 +10,12 @@ class AvatarForm(forms.Form):
 class PasswordForm(forms.Form):
     old_password = forms.CharField(required=True)
     new_password = forms.CharField(required=True)
+
+class SubscriptionForm(forms.Form):
+    id = forms.IntegerField(required=True)
+    ref = forms.IntegerField(required=True)
+    product = forms.CharField(required=True)
+
+class AttachSubscriptionForm(forms.Form):
+    company = forms.IntegerField(required=True)
+    product = forms.CharField(required=True)

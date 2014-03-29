@@ -122,10 +122,11 @@
       </div>
     </section>
 
-    <section class='box-section logo-section'>
+    <section class='box-section logo-section' 
+             data-bind='visible: products().length > 0, foreach: products()'>
       <div class="row">
         <img class='lpi-partnership-logo' 
-             src='http://partner.lpi-italia.org/static/images/logo-lpi-big.png'/>
+             data-bind='attr: { src:"http://partner.lpi-italia.org/static/lpi/" + $data + ".png"}'/>
       </div> 
     </section>
 

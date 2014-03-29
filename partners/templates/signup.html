@@ -5,7 +5,7 @@
 <br>
 <form action='' class='signup-form'>
   <div class="col-sm-6">
-    <h3>Termini di Servizio</h3>
+    <h3>Contratto di Partnership</h3>
     <div class='tos-container'>
 
       <!-- TOS SERVICE PROVIDER -->
@@ -1150,30 +1150,45 @@ engagements to promote the PARTNER’s agenda
   </div>
 
   <div class='col-sm-6'>
-    <h3>I tuoi dati</h3>
-    <div class="input-group">
-      <span class="input-group-addon">
-        <span class='glyphicon glyphicon-envelope'></span>
-      </span>
-      <input type='text' class='form-control' data-bind='value: mail'
-             placeholder='La tua email'>
-    </div>
+    <section data-bind='visible:!lpi.is_logged()'>
+      <h3>I tuoi dati</h3>
+      <div class="input-group">
+        <span class="input-group-addon">
+          <span class='glyphicon glyphicon-envelope'></span>
+        </span>
+        <input type='text' class='form-control' data-bind='value: mail'
+               placeholder='La tua email'>
+      </div>
 
-    <div class="input-group">
-      <span class="input-group-addon">
-        <span class="glyphicon glyphicon-lock"></span>
-      </span>
-      <input type='password' class='form-control' data-bind='value: password'
-             placeholder='Scegli una password'><br>
-    </div>
+      <div class="input-group">
+        <span class="input-group-addon">
+          <span class="glyphicon glyphicon-lock"></span>
+        </span>
+        <input type='password' class='form-control' data-bind='value: password'
+               placeholder='Scegli una password'><br>
+      </div>
 
-    <div class="input-group">
-      <span class="input-group-addon">
-        <span class="glyphicon glyphicon-asterisk"></span>
-      </span>          
-      <input type='password' class='form-control' data-bind='value: confirm_password'
-             placeholder='Conferma password'><br>
-    </div>
+      <div class="input-group">
+        <span class="input-group-addon">
+          <span class="glyphicon glyphicon-asterisk"></span>
+        </span>          
+        <input type='password' class='form-control' data-bind='value: confirm_password'
+               placeholder='Conferma password'><br>
+      </div>
+    </section>
+
+    <section data-bind='visible:lpi.is_logged()'>
+      <h3>Scegli il contatto</h3>
+      <div data-bind='foreach: companies()'>
+        <input type='radio' name='company' data-bind='attr: {value: company}'></input>
+        <label data-bind='attr:{for: company}, text: company_name'></label>
+                                       <br>
+      </div>
+      <input type='radio' name='company' value='-2' checked>
+      </input>
+      <label data-bind='click: function() { set_company(-2)}' for='company'>
+         Nuovo contatto</label><br>
+    </section>
 
     <div class="checkbox">
       <label>
@@ -1186,14 +1201,17 @@ engagements to promote the PARTNER’s agenda
          data-bind='html: error_message, visible: error_message'>
     </div>
     <br><br>
+    
+    <section data-bind='visible: !lpi.is_logged()'>
+      <a class='button' data-bind='click: register'>Registrati</a>
 
-    <a class='button' data-bind='click: register'>Registrati</a>
+      <a style='padding-left:20px' data-bind='attr: {href: "#login/" + handle()}'>
+        Gia' registrato? 
+      </a>
+    </section>
 
-    <a style='padding-left:20px' href='#login'>
-      Gia' registrato? 
-    </a>
-
-
-    </p>
+    <section data-bind='visible: lpi.is_logged()'>
+      <a class='button' data-bind='click: attach'>Aderisci</a>
+    </section>
   </div>
 </form>
