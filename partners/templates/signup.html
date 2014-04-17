@@ -1,3 +1,5 @@
+{% load static from staticfiles %}
+
 <h1>
   Registrati
   
@@ -360,7 +362,7 @@ The sole place of jurisdiction is Kassel, Germany.
       <!-- TOS ACADEMIC PARTNERS -->
       <div data-bind='visible: check_family("aap");'>
         <pre>
-        LPI APPROVED ACADEMIC PARTNER
+LPI APPROVED ACADEMIC PARTNER
 RECITALS
 A. The Linux Professional Institute (“LPI”) is a producer of a professional
 certification for the Linux operating system, including LPI certification,
@@ -1145,8 +1147,14 @@ engagements to promote the PARTNER’s agenda
         </pre>
       </div>
     </div>
-    
-
+    Scarica la versione 
+    <a data-bind='visible: check_family("aap");'
+       href='{% static "contracts/Contratto-lpi-aap.pdf" %}'>stampabile</a>
+    <a data-bind='visible: check_family("atp");'
+       href='{% static "contracts/Contratto-lpi-atp.pdf" %}'>stampabile</a>
+    <a data-bind='visible: check_family("sp");'
+       href='{% static "contracts/Contratto-lpi-csp.pdf" %}'>stampabile</a>.
+        
   </div>
 
   <div class='col-sm-6'>
