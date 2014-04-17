@@ -151,6 +151,7 @@ var lpi = {
   },
 
   loading: function(flag) {
+    return true;
     var animations = 'lpi-layer-active';
     if(flag) {
       $('.lpi-layer-image').addClass(animations);

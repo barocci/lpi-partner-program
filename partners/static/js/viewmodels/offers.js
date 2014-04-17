@@ -41,6 +41,15 @@ var OffersViewModel = function() {
     self.type(param.type);
 
     self.show(true);
+
+    $('.prtn-box-services-sp').hover(function() {
+      var animation = 'tada';
+      $('.ribbon-green').addClass(animation);
+      setTimeout(function() {
+        $('.ribbon-green').removeClass(animation);
+      }, 1000);
+    });
+
     return;
    
     lpi.request('load_products',{family: self.type()}, function(response) {

@@ -7,6 +7,7 @@ var SignupViewModel = function() {
 
   self.mail = ko.observable('');
   self.tos_accepted = ko.observable(false);
+  self.privacy_accepted = ko.observable(false);
   self.password = ko.observable('');
   self.confirm_password = ko.observable('');
   self.handle = ko.observable('');
@@ -62,6 +63,8 @@ var SignupViewModel = function() {
       self.error_message("Il campo password non puo' essere vuoto.")
     }else if(!self.tos_accepted()) {
       self.error_message("&Egrave; necessario accettare i Termini di Servizio per procedere.")
+    }else if(!self.privacy_accepted()) {
+      self.error_message("&Egrave; necessario accettare l'informativa sulla Privacy.")
     }else if(self.password() == self.confirm_password()) {
       var params = {
         mail: self.mail(),
