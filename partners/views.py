@@ -163,8 +163,23 @@ def details(request):
             'references': references
         }
         
-    return renderJSON(ret);
+    return renderJSON(ret)
 
+def hook(request):
+    ret = {'error': 0, 'data': []}
+
+    form = WebhookForm(request.POST)
+    print "called webhook"
+    if request.POST.has_key('id'):
+        print request.POST['id']
+
+    if request.POST.has_key('event'):
+        print request.POST['event']
+
+    if form.is_valid():
+       print form.cleaned_data
+
+    return renderJSON(ret)
 
 @check_login
 def account_info(request):
