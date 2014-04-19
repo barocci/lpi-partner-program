@@ -494,7 +494,7 @@ var AccountViewModel = function() {
       }
     },
 
-    account: function(data) {
+    billing: function(data) {
       self.management_url(data.url);
     }
   }
