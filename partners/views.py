@@ -214,7 +214,7 @@ def account_info(request):
               'locations': locations
             }
 
-    if request.GET['section'] == 'account':
+    if request.GET['section'] == 'billing':
         user = LPIUser.objects.get(id=request.user.id)
         link = user.get_management_url()
         ret['data'] = {'url': link}
