@@ -19,7 +19,8 @@ def check_login(view):
       return wrapper
 
 def index(request):
-    return render_to_response('index.html', {}, 
+
+    return render_to_response('index.html', {'user': request.user}, 
             context_instance=RequestContext(request))
 
 def load_products(request):
@@ -67,6 +68,8 @@ def logout(request):
 def subscribe(request):
     ret = {'error': 0, 'data:': ''}
     redirect = '/#subscription_error'
+
+    print "subscribing"
 
     form = SubscriptionForm(request.GET, request.FILES)
 
@@ -122,7 +125,9 @@ def edit_profile(request):
                                           profile['first_name'], 
                                           profile['last_name'],
                                           profile['job_title'], 
-                                          profile['Role'])
+                                          profile['email'], 
+                                          profile['phone'], 
+                                          profile['Role'],'','')
 
             
             profile['id'] = contact['id']
@@ -153,6 +158,7 @@ def details(request):
         del company['Reference']
         del company['products']
 
+        print company
         ret['data'] = { 
             'company': company,
             'commercial': commercial,
@@ -319,9 +325,9 @@ def register_contact(request):
                                  request.GET['owner_role'],
                                  request.GET['owner_email'],
                                  request.GET['owner_phone'],
+                                 'Incharge',
                                  '',
-                                 '',
-                                 'Incharge')
+                                 '')
 
         company['owner'] = person
         subscription = LPISubscription().create(product=request.GET['product'],
@@ -344,8 +350,8 @@ def register_contact(request):
                                                 company_id=person['id'])
 
     
-    if Product().check_family("aap", request.GET['product']):
-        issues = Issue().create('')
+    #if Product().check_family("aap", request.GET['product']):
+    #    issues = Issue().create('')
 
     if person is not None:
         ret['error'] = 0
@@ -359,7 +365,6 @@ def register(request):
         user.save()
 
         if user:
-            
             user = auth.authenticate(username=request.GET['mail'], 
                                      password=request.GET['password'])
             if user:
@@ -371,6 +376,7 @@ def register(request):
         else:
                 ret['error'] = 2  # error registering
                 ret['data'] = 'Error registering user.'
+
     except Exception, e:
         ret['error'] = 1
         ret['data'] = "L'indirizzo email risulta gi&agrave; registrato."
@@ -378,13 +384,9 @@ def register(request):
     return renderJSON(ret)
 
 def template(request):
-    print "redenring: %s" % request.GET['id'] 
     return render_to_response('%s.html' % request.GET['id'], {}, 
             context_instance=RequestContext(request))
 
 def renderJSON(data):
     return HttpResponse(json.dumps(data, separators=(',', ':')), 
-                                         content_type="application/json")
-
-
-
+                                         content_type="")

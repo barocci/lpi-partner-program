@@ -169,27 +169,28 @@
   </div>
   <div data-bind='visible: selected_profile() != false'>
     <div class="row">
-        <div data-bind='' class='col-sm-6'>
+      <div data-bind='' class='col-sm-4 pull-right'>
           <h3>Logo</h3>
           <div class='avatar-container'>
 
             <div class="row avatar-box">
-              <img src='{% static "images/logo-moc.jpg" %}'>
+              <img src='{% static "images/logo-moc.jpg" %}'
+                  data-bind='visible: profiles.company.image_url().length == 0'>
+              <img src='{% static "images/logo-moc.jpg" %}'
+                  data-bind='visible: profiles.company.image_url().length != 0,
+                             attr: {src: profiles.company.image_url}'>
             </div>
             <hr>
-            <div class="row">
-              <a data-bind=''>Cambia immagine</a>
-            </div>
-            <form>
-              {% csrf_token %}
-              <input type='hidden' name='contact_id' data-bind='value: profiles.company.id'>
-              <input id='fileupload' type="file" name="avatar" data-url="avatar_upload/" >
-            </form>
+            <div class='row' style='padding:0px 10%'>
+              <form style=''>
+                {% csrf_token %}
+                <input type='hidden' name='contact_id' data-bind='value: profiles.company.id'>
+                <input id='fileupload' type="file" name="avatar" data-url="avatar_upload/" >
+              </form>
+              </div>
 
           </div>
         </div>
-      </div>
-    <div class="row">
       <div data-bind='' class='col-sm-8'>
         <h3>Informazioni</h3>
 
@@ -246,6 +247,33 @@
 
           <div class="input-group">
             <span class="input-group-addon">
+              Facebook
+            </span>
+            <input type='text' class='form-control' 
+                   data-bind='value: profiles.company.facebook'
+                   placeholder='Facebook'>
+          </div>
+
+          <div class="input-group">
+            <span class="input-group-addon">
+              Twitter
+            </span>
+            <input type='text' class='form-control' 
+                   data-bind='value: profiles.company.twitter'
+                   placeholder='Twitter'>
+          </div>
+
+          <div class="input-group">
+            <span class="input-group-addon">
+              Google+
+            </span>
+            <input type='text' class='form-control' 
+                   data-bind='value: profiles.company.googleplus'
+                   placeholder='Google+'>
+          </div>
+
+          <div class="input-group">
+            <span class="input-group-addon">
               Telefono
             </span>
             <input type='text' class='form-control'
@@ -264,14 +292,26 @@
 
           
         </form>
+          <a data-bind='click: function() { submit_profile("company"); }' 
+             class='button pull-right'>Salva</a>  
+          <a data-bind='click: function() { abort_edit_profile(); }'>Annulla</a>
         </div>
+
       </div>
 
 
       <div class="row">
         <div data-bind='' class='col-sm-6'>
           <form class='fixed-headers'>
-            <h3>Competenze</h3>
+            <h3>Tag competenze</h3>
+
+            <select id='tag_select' style='height:30px' multiple class='chosen-select'>
+              <option value='apache'>Apache</option>
+              <option value='python'>Python</option>
+              <option value='mysql'>Mysql</option>
+              <option value='javascript'>Javascript</option>
+            </select>
+
           </form>
         </div>
       </div>
@@ -329,7 +369,7 @@
     </div>
 
     <div class="row">
-      <div data-bind='' class='col-sm-6'>
+      <div data-bind='' class='col-sm-12'>
         <h3>Sedi</h3>
         <div data-bind='if:locations().length > 0 '>
           <div data-bind='foreach: locations(), visible: !edit.location()'>
@@ -339,7 +379,7 @@
           </div>
         </div>
 
-        <div data-bind='template:{name: "address-form", 
+        <div class='location_content' data-bind='template:{name: "address-form", 
                                   data: {profile: edit_location_buffer, 
                                          parent:  $data} },
                             visible: edit.location()'>
@@ -350,6 +390,7 @@
         </a>
         
       </div>
+
 
     </div>
 
@@ -513,20 +554,33 @@
       <span class="input-group-addon">
         Indirizzo
       </span>
-      <input type='text' class='form-control' 
-             data-bind='value: $parent.edit_location_buffer.street'
+      <input type='text' class='form-control address_picker' 
+             data-bind='' 
              placeholder='Indirizzo'>
-      <input type='text' class='form-control'
-             data-bind='value: $parent.edit_location_buffer.city'
-             placeholder='Citta'>
-      <input type='text' class='form-control'
-             data-bind='value: $parent.edit_location_buffer.postcode'
-             placeholder='CAP'>
-      <input type='text' class='form-control'
-             data-bind='value: $parent.edit_location_buffer.country'
-             placeholder='Paese'>
     </div>
+    <div class='row'>
+      <div class='address_details' style='display:none'>
+      <input type='text' class='form-control'  name='formatted_address'
+             placeholder='Indirizzo'>
+      <input type='text' class='form-control' name='locality'
+             placeholder='Citta'>
+      <input type='text' class='form-control' name='postal_code'
+             placeholder='CAP'>
+      <input type='text' class='form-control' name='country'
+             placeholder='Paese'>
+           <input name="lat" type="text" value="">
+          <input name="lng" type="text" value="">
+          <input name="street_number" type="text" value="">
+          <input name="route" type="text" value="">
+      </div>
+    </div>
+    <div class='address_map_wrap'>
+      <div class='address_map col-sm-6' style='height:350px; width:100%'></div>
+    </div>
+
   </form>
+
+  
   <a data-bind='click: function() { $parent.submit_location(); }' 
      class='button pull-right'>Salva</a>  
   <a data-bind='click: function() { $parent.abort_edit_location(); }'>Annulla</a>

@@ -145,6 +145,11 @@ class Model(dict):
           'visible':         'cf_10',
           'LPICID':          'cf_11',
           'Verification':    'cf_12',
+          'twitter':         'cf_13',
+          'facebook':        'cf_14',
+          'googleplus':      'cf_15',
+          'lat':             'cf_16',
+          'lng':             'cf_17'          
         }
 
         self.mapping_id = {
@@ -158,7 +163,12 @@ class Model(dict):
           'subscription_id': '8',
           'visible':         '10',
           'LPICID':          '11',
-          'Verification':    '12'
+          'Verification':    '12',
+          'twitter':         '13',
+          'facebook':        '14',
+          'googleplus':      '15',
+          'lat':             '16',
+          'lng':             '17'
         }
 
     def __getitem__(self, key):
@@ -398,6 +408,17 @@ class Issue(Model):
 class Contact(Model):
     def find(self, id, **kwarg):
         resource = redmine.Contact.find(id_=id, **kwarg)
+        print type(resource)
+
+        try:
+            if len(resource) == 1:
+                resource = resource[0]
+            if len(resource) == 0:
+                resource = None
+                
+        except Exception, e:
+            pass
+
         return resource
 
     def exists(self, id):
@@ -440,7 +461,7 @@ class Contact(Model):
         params = self.encode_custom_fields(params)
         resources = redmine.Contact.find(**params)
         return resources
-        
+       
 
 class Company(Contact):
     def create(self, company_name, company_industry):
@@ -454,78 +475,81 @@ class Company(Contact):
         ]
         contact.project_id = settings.REDMINE_PROJECT
         contact.save()
-        print contact.id
         return self.find(contact.id)
 
     def find(self, id):
         resource = Contact().find(id=id, include='contacts, deals')
         return self.load_from_resource(resource)
     
-
-
     def load_from_resource(self, resource):
-        self['first_name'] = resource.first_name
-        self['id'] = resource.id
+        if resource is not None:
+            self['first_name'] = resource.first_name
+            self['id'] = resource.id
 
-        self['job_title'] = ''
-        if resource.attributes.has_key('job_title'):
-            self['job_title'] = resource.job_title
+            self['job_title'] = ''
+            if resource.attributes.has_key('job_title'):
+                self['job_title'] = resource.job_title
 
-        self['background'] = ''
-        if resource.attributes.has_key('background'):
-            self['background'] = resource.background
+            self['background'] = ''
+            if resource.attributes.has_key('background'):
+                self['background'] = resource.background
 
-        self['website'] = ''
-        if resource.attributes.has_key('website'):
-            self['website'] = resource.website
+            self['website'] = ''
+            if resource.attributes.has_key('website'):
+                self['website'] = resource.website
 
-        self['phone'] = ''
-        if resource.attributes.has_key('phones'):
-            self['phone'] = resource.phones[0].number
 
-        self['email'] = ''
-        if resource.attributes.has_key('emails'):
-            self['email'] = resource.emails[0].address
+            self['phone'] = ''
+            if resource.attributes.has_key('phones'):
+                self['phone'] = resource.phones[0].number
 
-        self['tag_list'] = ''
-        if resource.attributes.has_key('tag_list'):
-            self['tag_list'] = resource.tag_list
+            self['email'] = ''
+            if resource.attributes.has_key('emails'):
+                self['email'] = resource.emails[0].address
 
-        self['street'] = ''
-        self['postcode'] = ''
-        self['city'] = ''
-        self['country'] = ''
+            self['tag_list'] = ''
+            if resource.attributes.has_key('tag_list'):
+                self['tag_list'] = resource.tag_list
 
-        if resource.attributes.has_key('address'):
-            address = resource.attributes['address'].attributes
+            self['street'] = ''
+            self['postcode'] = ''
+            self['city'] = ''
+            self['country'] = ''
 
-            self['city'] = address['city']
-            self['postcode'] = address['postcode']
-            self['street'] = address['street']
-            self['country'] = address['country']
+            if resource.attributes.has_key('address'):
+                address = resource.attributes['address'].attributes
 
-        self['image_url'] = LPIAvatar().company_avatar_url(self['id'])
+                self['city'] = address['city']
+                self['postcode'] = address['postcode']
+                self['street'] = address['street']
+                self['country'] = address['country']
 
-        self['products'] = []
+            self['image_url'] = LPIAvatar().company_avatar_url(self['id'])
 
-        if resource.attributes.has_key('deals'):
-            for deal_resource in resource.attributes['deals']:
-                self['products'].append(deal_resource.name)
+            self['products'] = []
 
-        self['Incharge'] = False
-        self['Commercial'] = False
-        self['Location'] = []
-        self['Teacher'] = []
-        self['Reference'] = []
+            if resource.attributes.has_key('deals'):
+                for deal_resource in resource.attributes['deals']:
+                    self['products'].append(deal_resource.name)
 
-        if resource.attributes.has_key('contacts'):
-            for contact_resource in resource.attributes['contacts']:
-                contact = Person().find(id=contact_resource.attributes['id'])
+            self['Incharge'] = False
+            self['Commercial'] = False
+            self['Location'] = []
+            self['Teacher'] = []
+            self['Reference'] = []
 
-                if type(self[contact['Role']]) == type([]):
-                    self[contact['Role']].append(contact)
-                else:
-                    self[contact['Role']] = contact
+            for cf in resource.custom_fields:
+                self[cf.name] = cf.value
+
+            if resource.attributes.has_key('contacts'):
+                for contact_resource in resource.attributes['contacts']:
+                    contact = Person().find(id=contact_resource.attributes['id'])
+                    print contact
+
+                    if type(self[contact['Role']]) == type([]):
+                        self[contact['Role']].append(contact)
+                    else:
+                        self[contact['Role']] = contact
 
         return self
 
@@ -602,46 +626,47 @@ class Person(Contact):
         return self.load_from_resource(resource)
 
     def load_from_resource(self, resource):
-        self['id'] = resource.id
-        self['first_name'] = resource.first_name
-        self['last_name'] = resource.last_name
+        if resource is not None:
+            self['id'] = resource.id
+            self['first_name'] = resource.first_name
+            self['last_name'] = resource.last_name
 
-        self['job_title'] = ''
-        if resource.attributes.has_key('job_title'):
-            self['job_title'] = resource.job_title
+            self['job_title'] = ''
+            if resource.attributes.has_key('job_title'):
+                self['job_title'] = resource.job_title
 
-        self['background'] = ''
-        if resource.attributes.has_key('background'):
-            self['background'] = resource.background
+            self['background'] = ''
+            if resource.attributes.has_key('background'):
+                self['background'] = resource.background
 
-        self['website'] = ''
-        if resource.attributes.has_key('website'):
-            self['website'] = resource.website
+            self['website'] = ''
+            if resource.attributes.has_key('website'):
+                self['website'] = resource.website
 
-        self['phone'] = ''
-        if resource.attributes.has_key('phones'):
-            self['phone'] = resource.phones[0].number
+            self['phone'] = ''
+            if resource.attributes.has_key('phones'):
+                self['phone'] = resource.phones[0].number
 
-        self['email'] = ''
-        if resource.attributes.has_key('emails'):
-            self['email'] = resource.emails[0].address
+            self['email'] = ''
+            if resource.attributes.has_key('emails'):
+                self['email'] = resource.emails[0].address
 
-        self['street'] = ''
-        self['postcode'] = ''
-        self['city'] = ''
-        self['country'] = ''
-        if resource.attributes.has_key('address'):
-            address = resource.attributes['address'].attributes
+            self['street'] = ''
+            self['postcode'] = ''
+            self['city'] = ''
+            self['country'] = ''
+            if resource.attributes.has_key('address'):
+                address = resource.attributes['address'].attributes
 
-            self['city'] = address['city']
-            self['postcode'] = address['postcode']
-            self['street'] = address['street']
-            self['country'] = address['country']
+                self['city'] = address['city']
+                self['postcode'] = address['postcode']
+                self['street'] = address['street']
+                self['country'] = address['country']
 
-        for cf in resource.custom_fields:
-            self[cf.name] = cf.value
+            for cf in resource.custom_fields:
+                self[cf.name] = cf.value
 
-        self['image_url'] = LPIAvatar().company_avatar_url(self['id'])
+            self['image_url'] = LPIAvatar().company_avatar_url(self['id'])
 
         return self
 
