@@ -9,11 +9,23 @@
   <link rel="stylesheet" href="{% static 'css/vendor/bootstrap/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/vendor/jquery.tagsinput.css' %}">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-	<link rel="stylesheet" href="{% static 'css/vendor/isotope.css' %}">
-	<link rel="stylesheet" href="{% static 'css/vendor/animate.css' %}">
+  <link rel="stylesheet" href="{% static 'css/vendor/animate.css' %}">
+  <link rel="stylesheet" href="{% static 'css/vendor/chosen.css' %}">
+  <link rel="stylesheet" href="{% static 'css/vendor/alertify.core.css' %}">
+  <link rel="stylesheet" href="{% static 'css/vendor/alertify.default.css' %}">
 	<link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script type='text/javascript'>
+    {% if request.user.is_authenticated %}
+      var login_username = '{{ request.user.username }}';
+      var login_userid = '{{ request.user.id }}';
+    {% else %}
+      var login_userid = '';
+      var login_username = '';
+    {% endif %}
+
+  </script>
 </head>
 <body>
   <div class="lpi-layer-container">
@@ -39,6 +51,9 @@
                 </li>
                 <li data-bind="visible: logged()">
                   <a href="#account">Mio account</a>
+                </li>
+                <li data-bind="visible: logged()">
+                  <a href='#joinus'>Partnership</a>
                 </li>
                 <li data-bind="visible: logged()">
                   <a data-bind="click: logout">Logout</a>
@@ -226,13 +241,19 @@
   <script type='text/javascript' src='{% static "js/vendor/jquery/jquery.ui.widget.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/jquery/jquery.iframe-transport.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/jquery/jquery.fileupload.js" %}'></script>
+  <script type='text/javascript' src='{% static "js/vendor/jquery/chosen.jquery.min.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/bootstrap/bootstrap.min.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/routie.min.js" %}'></script>
+  <script type='text/javascript' src='{% static "js/vendor/alertify.min.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/knockout.js/knockout-3.0.0.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/knockout.js/knockout.mapping.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/radio.min.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/class.js" %}'></script>
   <script type='text/javascript' src='{% static "js/vendor/pace.min.js" %}'></script>
+
+  <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
+  <script type='text/javascript' src='{% static "js/vendor/jquery/jquery.geocomplete.min.js" %}'></script>
+
 
   <script type='text/javascript' src='{% static "js/viewmodels/base.js" %}'></script>
   <script type='text/javascript' src='{% static "js/viewmodels/companies.js" %}'></script>

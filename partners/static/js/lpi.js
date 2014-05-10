@@ -16,9 +16,13 @@ var lpi = {
 
 
   init: function() {
+    this.username = login_username;
+    this.user_id = login_userid;
+
     this.init_views();
-    this.init_router(); 
+    this.init_router();
     this.authenticate();
+
   },
 
   authenticate: function() {
@@ -54,9 +58,7 @@ var lpi = {
   },
 
   is_logged: function() {
-    console.log($.cookie('csrftoken'));
-    if($.cookie('csrftoken') != undefined && 
-       $.cookie('csrftoken') != '')
+    if(this.username != '' && this.user_id != '')
       return true;
 
     return false;
@@ -150,6 +152,10 @@ var lpi = {
 
   },
 
+  alert: function(message) {
+    alertify.log(message);
+  }, 
+
   loading: function(flag) {
     return true;
     var animations = 'lpi-layer-active';
@@ -233,12 +239,13 @@ var lpi = {
   },
 
   request: function(method, params, callback) {
-    $.getJSON('http://partner.lpi-italia.org/' + method + '/', params, function(response) {
-        if(response.redirect) {
-            lpi.redirect(response.redirect);
-        }else {
-            callback(response);
-        }
+    $.get('http://partner.lpi-italia.org/' + method + '/', params, function(response) {
+      response = JSON.parse(response);
+      if(response.redirect) {
+          lpi.redirect(response.redirect);
+      }else {
+          callback(response);
+      }
      });
   },
 
@@ -253,8 +260,6 @@ var lpi = {
         }
      });
   }
-
-
 }
 
 

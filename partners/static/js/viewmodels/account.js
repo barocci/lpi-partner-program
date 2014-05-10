@@ -5,6 +5,8 @@ var AccountViewModel = function() {
   self.template_loaded = false;
   self.template = 'account';
 
+  self.init_edit_location = false;
+
   self.tags = [ 
                  'PHP', 
                  'Python',
@@ -97,11 +99,16 @@ var AccountViewModel = function() {
       'piva': ko.observable(''),
       'postcode': ko.observable(''),
       'country': ko.observable(''),
-      'eccoeccoeccopiva': ko.observable(''),
+      'piva': ko.observable(''),
+      'twitter': ko.observable(''),
+      'googleplus': ko.observable(''),
+      'facebook': ko.observable(''),
       'website': ko.observable(''),
       'phone': ko.observable(''),
       'email': ko.observable(''),
       'tag_list': ko.observable(''),
+      'lat': ko.observable(''),
+      'lng': ko.observable(''),
       'Verification': ko.observable(''),
       'LPICID': ko.observable(''),
       'image_url': ko.observable(''),
@@ -117,12 +124,17 @@ var AccountViewModel = function() {
       'background': ko.observable(''),
       'street': ko.observable(''),
       'city': ko.observable(''),
+      'twitter': ko.observable(''),
+      'googleplus': ko.observable(''),
+      'facebook': ko.observable(''),
       'postcode': ko.observable(''),
       'country': ko.observable(''),
       'piva': ko.observable(''),
       'website': ko.observable(''),
       'phone': ko.observable(''),
       'email': ko.observable(''),
+      'lat': ko.observable(''),
+      'lng': ko.observable(''),
       'Verification': ko.observable(''),
       'LPICID': ko.observable(''),
       'image_url': ko.observable(''),
@@ -143,6 +155,11 @@ var AccountViewModel = function() {
       'postcode': ko.observable(''),
       'country': ko.observable(''),
       'piva': ko.observable(''),
+      'twitter': ko.observable(''),
+      'googleplus': ko.observable(''),
+      'facebook': ko.observable(''),
+      'lat': ko.observable(''),
+      'lng': ko.observable(''),
       'website': ko.observable(''),
       'phone': ko.observable(''),
       'email': ko.observable(''),
@@ -169,7 +186,12 @@ var AccountViewModel = function() {
       'website': ko.observable(''),
       'phone': ko.observable(''),
       'email': ko.observable(''),
+      'twitter': ko.observable(''),
+      'googleplus': ko.observable(''),
+      'facebook': ko.observable(''),
       'image_url': ko.observable(''),
+      'lat': ko.observable(''),
+      'lng': ko.observable(''),
       'company_id': ko.observable(''),
       'Role': ko.observable('Location'),
       'type': ko.observable('location')
@@ -189,7 +211,12 @@ var AccountViewModel = function() {
       'website': ko.observable(''),
       'phone': ko.observable(''),
       'email': ko.observable(''),
+      'twitter': ko.observable(''),
+      'googleplus': ko.observable(''),
+      'facebook': ko.observable(''),
       'image_url': ko.observable(''),
+      'lat': ko.observable(''),
+      'lng': ko.observable(''),
       'company_id': ko.observable(''),
       'Role': ko.observable('Teacher'),
       'type': ko.observable('teacher')
@@ -202,6 +229,11 @@ var AccountViewModel = function() {
     if(!lpi.is_logged()) {
       lpi.redirect('#login');
     }
+
+    console.log('initializing map');
+    
+
+    
 
     self.show_section({slug: 'partnership'});
   }
@@ -243,12 +275,12 @@ var AccountViewModel = function() {
     for(type in self.profiles) {
       if(data[type]) {
         for(i in data[type]) {
-          console.log('setting ' + type + ' ' + i);
           self.profiles[type][i](data[type][i]?data[type][i]:'');
         }
       }
     }
 
+    self.teachers([]);
     for(i =0; i < data.teachers.length; i++) {
       var teacher = {};
       console.log(i);
@@ -264,6 +296,7 @@ var AccountViewModel = function() {
       self.teachers.push(teacher);
     }
 
+    self.locations([]);
     for(i =0; i < data.locations.length; i++) {
       var location = {};
       for(field in data.locations[i]) {
@@ -290,6 +323,51 @@ var AccountViewModel = function() {
 
   self.new_location = function() {
     self.edit['location'](true);
+
+    if(!self.init_edit_location) {
+    console.log('edit location ' + $('.address_picker', '.location_content').length);
+
+      $('.address_picker', '.location_content').geocomplete({
+        map: '.address_map',
+        details: '.address_details'
+      }).bind("geocode:result", function(event, result) {
+        console.log(result);
+        $('input', '.address_details').trigger('change');
+        var steet = '';
+        var street_number = '';
+
+        result.address_components.map(function(item) {
+          if(item.types.indexOf('route') >= 0) {
+            street = item.long_name;
+            console.log('set street ' + street);
+          }
+
+          if(item.types.indexOf('street_number') >= 0) {
+            street_number = item.long_name;
+          }
+
+          if(item.types.indexOf('locality') >= 0) {
+            self.edit_location_buffer.city(item.long_name);
+          }
+
+          if(item.types.indexOf('country') >= 0) {
+            self.edit_location_buffer.country(item.long_name);
+          }
+
+          if(item.types.indexOf('postal_code') >= 0) {
+            self.edit_location_buffer.postcode(item.long_name);
+          }
+
+        });
+
+        console.log('street -> ' + street);
+        self.edit_location_buffer.street(street + ' ' + street_number);
+        self.edit_location_buffer.lat(result.geometry.location['k']);
+        self.edit_location_buffer.lng(result.geometry.location['A']);
+        
+      });
+      self.init_edit_location = true;
+    }
   }
 
   self.edit_location = function(location) {
@@ -297,6 +375,8 @@ var AccountViewModel = function() {
       self.edit_location_buffer[i](location[i]());
     }
     self.edit['location'](true);
+
+    
   }
 
   self.abort_edit_location = function() {
@@ -436,14 +516,21 @@ var AccountViewModel = function() {
     self.profiles.company.tag_list(tags.join(","));
   }
 
+  self.tags = function() {
+    var tags = self.profiles.company.tag_list().split(',');
+    tags.map(function(tag, index) {
+      tags[index] = tag.trim();
+    });
+    return tags;
+  }
+
   self.submit_profile = function(type) {
     var profile = ko.mapping.toJS(self.profiles[type]);
-    console.log(profile);
     profile.company = self.profiles.company.first_name()
     profile.company_id = self.profiles.company.id()
     lpi.post('edit_profile', profile, function(response) {
-      console.log(response);
       self.edit[type](false);
+      lpi.alert('Profilo aggiornato correttamente.')
     });
   }
 
@@ -472,21 +559,23 @@ var AccountViewModel = function() {
 
     profile: function(data) {
       if(self.selected_profile()) {
-        console.log(data);
         self.observe_form(data);
-        
-        console.log(self.profiles.company.first_name());
+        $('#tag_select').chosen({
+          max_selected_options: 5,
+          width:'100%'
+        });
+
+        $('#tag_select').on('change', function(evt, params) {
+          self.profiles.company.tag_list($('#tag_select').val().join(','));
+          self.submit_profile('company'); 
+        });
+
         $('#fileupload').fileupload({
               dataType: 'json',
               done: function (e, data) {
-                console.log('ritorno');
-                console.log(data);
-                console.log(data.result.url);
                 $('.avatar-box img').attr('src', data.result.url);
-                
               }
         });
-
       } else {
         lpi.request('account_info', {section: 'partnership'}, function(response) {
           self.ready['partnership'](response);

@@ -3,14 +3,68 @@
     <section class='section-info row box-section'>
       <div class='col-sm-12'>
         <ul class='info-social-buttons pull-right'>
-          <li><a class='fa fa-google-plus-square'></a></li>
-          <li><a class='fa fa-linkedin-square'></a></li>
-          <li><a class='fa fa-twitter-square'></a></li>
-          <li><a class='fa fa-facebook-square'></a></li>
+          <li data-bind='visible: profiles.company.googleplus() != ""'>
+             <a class='fa fa-google-plus-square'
+                data-bind='attr: {href: profiles.company.googleplus()}'></a>
+          </li>
+          <li data-bind='visible: profiles.company.twitter() != ""'>
+            <a class='fa fa-twitter-square'
+                data-bind='attr: {href: profiles.company.twitter()}'></a>
+          </li>
+          <li data-bind='visible: profiles.company.facebook() != ""'>
+            <a class='fa fa-facebook-square'
+                data-bind='attr: {href: profiles.company.facebook()}'></a>
+          </li>
         </ul>
 
         <h1 data-bind='text: profiles.company.first_name()'></h1>
         <p data-bind='text: profiles.company.background()'></p>
+      </div>
+    </section>
+
+    <section class='section-info row'> 
+      <div class='col-sm-3 section-label'>
+        <div>Contatti<span></span></div>
+      </div>
+      <div class='col-sm-9 section-container'>
+        <div  data-bind='with:profiles.incharge;visible: profiles.incharge.first_name() != ""' 
+              class='col-sm-6'>
+          <h4>Responsabile</h4>
+          <b class='fa fa-user pull-left'></b>
+          <div class='person-data'>
+            <b data-bind='text: first_name() + " " + last_name()'></b>
+            <address class='small'>
+              <div class='phone' data-bind='visible: phone().length > 0'>
+                <b>Tel:</b>
+                <span data-bind='text: phone()'></span>
+              </div>
+              <div class='email'  data-bind='visible: email().length > 0'>
+                <b>Email:</b> 
+                <span data-bind='text: email()'></span>
+              </div>
+            </address>
+          </div>
+        </div>
+        
+        <div  data-bind='with:profiles.commercial;visible: profiles.incharge.first_name() != ""' 
+              class='col-sm-6'>
+          <h4>Commerciale</h4>
+          <b class='fa fa-user pull-left'></b>
+          <div class='person-data'>
+            <b data-bind='text: first_name() + " " + last_name()'></b>
+            <address class='small'>
+              <div class='phone' data-bind='visible: phone().length > 0'>
+                <b>Tel:</b>
+                <span data-bind='text: phone()'></span>
+              </div>
+              <div class='email'  data-bind='visible: email().length > 0'>
+                <b>Email:</b> 
+                <span data-bind='text: email()'></span>
+              </div>
+                
+            </address>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -30,7 +84,7 @@
         <div>Sedi<span></span></div>
       </div>
       <div class='col-sm-9 section-container' data-bind='foreach: locations()'>
-        <div class='row'> 
+        <div class='row' data-bind='attr:{id: "location_" + id()}'> 
           <section class='map-section'>
               <div class='col-sm-6'>
                 <div class='col-sm-1'>
@@ -115,12 +169,6 @@
   </div>
 
   <div class='col-sm-4'>
-    <section class='logo-section box-section'  
-             data-bind='visible: profiles.company.image_url().length > 0'>
-      <div class="row">
-        <img class='contact-logo' data-bind='attr: { src: profiles.company.image_url() }'/>
-      </div>
-    </section>
 
     <section class='box-section logo-section' 
              data-bind='visible: products().length > 0, foreach: products()'>
@@ -130,45 +178,13 @@
       </div> 
     </section>
 
-    <section class='box-section' data-bind='visible: profiles.commercial.first_name() != ""'>
-      <section class='person-section' data-bind='with:profiles.commercial'>
-        <h4>Commerciale</h4>
-        <b class='fa fa-user pull-left'></b>
-        <div class='person-data'>
-          <b data-bind='text: first_name() + " " + last_name()'></b>
-          <address class='small'>
-            <div class='phone' data-bind='visible: phone().length > 0'>
-              <b>Tel:</b>
-              <span data-bind='text: phone()'></span>
-            </div>
-            <div class='email'  data-bind='visible: email().length > 0'>
-              <b>Email:</b> 
-              <span data-bind='text: email()'></span>
-            </div>
-              
-          </address>
-        </div>
-      </section>
+    <section class='logo-section box-section'  
+             data-bind='visible: profiles.company.image_url().length > 0'>
+      <div class="row">
+        <img class='contact-logo' data-bind='attr: { src: profiles.company.image_url() }'/>
+      </div>
     </section>
 
-    <section class='box-section' data-bind='visible: profiles.incharge.first_name() != ""'>
-      <section class='person-section' data-bind='with: profiles.incharge'>
-        <h4>Responsabile</h4>
-        <b class='fa fa-user pull-left'></b>
-        <div class='person-data'>
-          <b data-bind='text: first_name() + " " + last_name()'></b>
-          <address class='small'>
-            <div class='phone' data-bind='visible: phone().length > 0'>
-              <b>Tel:</b>
-              <span data-bind='text: phone()'></span>
-            </div>
-            <div class='email'  data-bind='visible: email().length > 0'>
-              <b>Email:</b> 
-              <span data-bind='text: email()'></span>
-            </div>
-          </address>
-        </div>
-      </section>
-    </section>
+ 
   </div>
 </div>

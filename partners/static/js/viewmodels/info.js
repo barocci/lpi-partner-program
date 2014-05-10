@@ -23,10 +23,15 @@ var InfoViewModel = function() {
       'street': ko.observable(''),
       'city': ko.observable(''),
       'piva': ko.observable(''),
+      'lat': ko.observable(''),
+      'lng': ko.observable(''),
       'postcode': ko.observable(''),
       'country': ko.observable(''),
       'piva': ko.observable(''),
       'website': ko.observable(''),
+      'twitter': ko.observable(''),
+      'googleplus': ko.observable(''),
+      'facebook': ko.observable(''),
       'phone': ko.observable(''),
       'email': ko.observable(''),
       'tag_list': ko.observable(''),
@@ -46,9 +51,14 @@ var InfoViewModel = function() {
       'street': ko.observable(''),
       'city': ko.observable(''),
       'postcode': ko.observable(''),
+      'lat': ko.observable(''),
+      'lng': ko.observable(''),
       'country': ko.observable(''),
       'piva': ko.observable(''),
       'website': ko.observable(''),
+      'twitter': ko.observable(''),
+      'googleplus': ko.observable(''),
+      'facebook': ko.observable(''),
       'phone': ko.observable(''),
       'email': ko.observable(''),
       'image_url': ko.observable(''),
@@ -69,8 +79,13 @@ var InfoViewModel = function() {
       'city': ko.observable(''),
       'postcode': ko.observable(''),
       'country': ko.observable(''),
+      'lat': ko.observable(''),
+      'lng': ko.observable(''),
       'piva': ko.observable(''),
       'website': ko.observable(''),
+      'twitter': ko.observable(''),
+      'googleplus': ko.observable(''),
+      'facebook': ko.observable(''),
       'phone': ko.observable(''),
       'email': ko.observable(''),
       'image_url': ko.observable(''),
@@ -100,6 +115,7 @@ var InfoViewModel = function() {
       for(type in self.profiles) {
         if(data[type]) {
           for(i in data[type]) {
+            console.log('--> ' + i);
             self.profiles[type][i](data[type][i]?data[type][i]:'');
           }
         }
@@ -125,9 +141,30 @@ var InfoViewModel = function() {
 
       self.products(data.products);
 
+      self.init_location_maps();
+
 
     });
-  }
+  };
+
+  self.init_location_maps = function() {
+    self.locations().map(function(location) {
+      console.log(location.lat());
+      var container_id = '#location_' + location.id();
+      var mapOptions = {
+          center: new google.maps.LatLng(location.lat(), location.lng()),
+          mapMaker: true,
+          zoom: 14
+        };
+
+      var map = new google.maps.Map($('.info-map', container_id)[0], mapOptions);
+      var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(location.lat(), location.lng()), 
+        map: map
+      });
+
+    });
+  };
 
   self.end = function() {
     self.teachers([]);
