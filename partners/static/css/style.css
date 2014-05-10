@@ -421,7 +421,7 @@ footer .sitemap a:hover {
 }
 
 .prtn-box-services {
-  min-height:1130px;
+  min-height:1250px;
 }
 
 .prtn-box-services h3 {
@@ -462,9 +462,12 @@ footer .sitemap a:hover {
   width:92%;
 }
 
+
+.prtn-box-req-list,
 .prtn-box-bonus-list {
   list-style-type: circle;
 }
+
 
 .prtn-box-bonus-list li {
   font-weight:bold;
@@ -529,6 +532,11 @@ table {
   padding:15px 0px;
   line-height:20px;
 }
+
+.prtn-box-desc p {
+  min-height:110px;
+}
+
 
 .joinus-box-container .prtn-box-inner {
   min-height:321px;
