@@ -21,5 +21,6 @@ urlpatterns = patterns('',
     url(r'^template/', 'partners.views.template'),
     url(r'^register_contact/', 'partners.views.register_contact'),
     url(r'^attach_contact/', 'partners.views.attach_contact'),
+    url(r'^contratto/', 'partners.views.contract'),
     url(r'^admin/', include(admin.site.urls)),
 )

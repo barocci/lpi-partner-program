@@ -1,7 +1,11 @@
 from django.shortcuts import render_to_response, get_object_or_404
-from django.template import RequestContext
+from django.template import RequestContext, Context
+from django.template.loader import get_template
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
+from django import http
+import xhtml2pdf.pisa as pisa
+import cStringIO as StringIO
 from forms import *
 from models import *
 import json
@@ -171,6 +175,28 @@ def details(request):
         
     return renderJSON(ret);
 
+
+def render_to_pdf(template_src, context_dict):
+    template = get_template(template_src)
+    context = Context(context_dict)
+    html = template.render(context)
+    result = StringIO.StringIO()
+    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result)
+    if not pdf.err:
+        return http.HttpResponse(result.getvalue(), content_type='application/pdf')
+    return http.HttpResponse('We had some errors<pre>%s</pre>' % cgi.escape(html))
+
+
+def contract(request):
+    if request.GET.has_key('type'):
+        if request.GET['type'] == 'atp':
+            return render_to_pdf('contract-atp.html', {'pagesize': 'A4', 'title': 'LPI Partner'})
+
+        if request.GET['type'] == 'aap':
+            return render_to_pdf('contract-aap.html', {'pagesize': 'A4', 'title': 'LPI Partner'})
+
+    return render_to_response('contract-atp.html', {'user': request.user}, 
+            context_instance=RequestContext(request))
 
 @check_login
 def account_info(request):
