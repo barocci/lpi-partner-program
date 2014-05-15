@@ -6,6 +6,7 @@ from django.contrib import auth
 from django import http
 import xhtml2pdf.pisa as pisa
 import cStringIO as StringIO
+from django.views.decorators.csrf import csrf_exempt
 from forms import *
 from models import *
 import json
@@ -173,8 +174,26 @@ def details(request):
             'references': references
         }
         
-    return renderJSON(ret);
+    return renderJSON(ret)
 
+
+@csrf_exempt
+def hook(request):
+    ret = {'error': 0, 'data': []}
+
+    print "called webhook"
+
+    form = WebhookForm(request.POST)
+    if request.POST.has_key('id'):
+        print request.POST['id']
+
+    if request.POST.has_key('event'):
+        print request.POST['event']
+
+    if form.is_valid():
+       print form.cleaned_data
+
+    return renderJSON(ret)
 
 def render_to_pdf(template_src, context_dict):
     template = get_template(template_src)

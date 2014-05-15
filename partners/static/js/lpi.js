@@ -240,7 +240,9 @@ var lpi = {
 
   request: function(method, params, callback) {
     $.get('http://partner.lpi-italia.org/' + method + '/', params, function(response) {
-      response = JSON.parse(response);
+      if(typeof(response) != 'object') {
+        response = JSON.parse(response);
+      }
       if(response.redirect) {
           lpi.redirect(response.redirect);
       }else {
