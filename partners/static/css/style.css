@@ -861,13 +861,14 @@ address.small {
 .avatar-container {
   background:#fff;
   text-align:center;
-  height:300px;
-  width:300px;
+  height:100px;
+  width:100%;
   padding-top:20px;
 }
 
 .avatar-box img {
-  max-width:280px;
+  width:100%;
+  height:auto;
 }
 
 .edit {

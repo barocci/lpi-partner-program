@@ -2,14 +2,21 @@
 <div class="prtn-page-sidebar"> 
   <ul data-bind='foreach: sections'>
     <li data-bind='visible: $parent.check_family(visible), 
-                   css: { active: $parent.active_section() == slug}'>
-      <a data-bind='click: function() { $parent.show_section({slug: slug},{}); }, text: name'></a>
+                   css: { active: $parent.active_menu() == slug || 
+                                  ($parent.active_menu() == "profile" && slug == "partnership")}'>
+      <a data-bind='click: function() { $parent.redirect(slug); }, text: name'></a>
       <span></span>
     </li>
   </ul>
 </div>
 
-<div class='prtn-page-content' data-bind='visible: loading() == false'>
+  
+<div class='prtn-page-content' data-bind='visible: loading() == false || true'>
+  <div data-bind='visible: active_section().length == 0'>
+  <h1>
+    Loading...
+  </h1>
+</div>
 <div data-bind='visible: active_section() == "partnership"'>
   <h1>
     Partnership
@@ -33,16 +40,89 @@
         <tr>
           <td data-bind='text: product.name'></td>
           <td>
-            <a data-bind='text: company_name, click: function() {$parent.goto_profile($data) }'></a>
+            <a data-bind='text: company_name, click: function() {$parent.goto_profile($data); }'></a>
           </td>
           <td data-bind='text: state'>
           <td data-bind='text: due_date'> - </td>
           <td>
-            <a data-bind="attr: {href: product.url}, visible: state != 'active'" 
+            <a data-bind="click: function() { $parent.open_instructions($data); }, 
+                          visible: state == 'incomplete' || state == 'approving'" 
+               class='button'>INFO</a>
+
+            <a data-bind="attr: {href: product.url}, visible: state == 'pending'" 
                class='button'>Attiva</a>
 
-            <a data-bind="click: function() { $parent.goto_profile($data) }, visible: state == 'active'">
+            <a data-bind="click: function() { $parent.goto_profile($data); }, visible: state == 'active'">
               <i class='glyphicon glyphicon-cog'></i></a>
+          </td>
+        </tr>
+        <tr data-bind='visible: $parent.selected_info() == id'>
+          <td colspan=5>
+            
+            <div class='col-sm-12' data-bind='visible:state =="approving"'>
+
+              Ora e' necessario scaricare il contratto, staparlo e inviarlo a:<br>
+              <br>
+              <a class='button' 
+                 data-bind='attr: {href:"contract?type=" + product.handle + "&id=" + company}'>
+                 SCARICA IL CONTRATTO
+              </a>
+              <br><br>
+            </div>
+            <div class='col-sm-12' data-bind='visible:state =="incomplete"'>
+              <h3>Completa il tuo profilo LPI</h3>
+              <p>
+                Per poter diventare partner LPI &egrave; necessario completare le informazioni
+                del proprio profilo.<br>
+                Queste sono le informazione che mancano:<br><br>
+              </p>
+              <div data-bind='visible: step.incharge == 0'>
+                <h4>Responsabile</h4>
+                <p>
+                  Il responsabile e' la persona a cui il contratto sara' intesta....
+                </p>
+              </div>
+
+              <div data-bind='visible: step.representative ==0'>
+                <h4>Referente</h4>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris.                   
+                </p>
+              </div>
+
+              <div data-bind='visible: step.teachers == 0 && $parent.check_family("aap,atp")'>
+                <h4>Docente LPI</h4>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
+                </p>
+              </div>
+
+              <div data-bind='visible: step.location == 0'>
+                <h4>Sede</h4>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
+                </p>
+              </div>
+
+              <div data-bind='visible: step.billing == 0'>
+                <h4>Dati di fatturazione</h4>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
+                </p>
+              </div>
+
+              <div data-bind='visible: step.book == 0'>
+                <h4>Libro di testo</h4>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
+                </p>
+              </div>
+              
+              <br>
+              <a class='button push-right' 
+                 data-bind='click:function() {$parent.goto_profile($data);}'>Completa il profilo</a>
+              <br><br>
+            </div>
           </td>
         </tr>
       </tbody>
@@ -75,6 +155,64 @@
                class='button'>Attiva</a>
             <a data-bind="click: $parent.goto_profile, visible: state == 'active'">
               <i class='glyphicon glyphicon-cog'></i></a>
+          </td>
+        </tr>
+        <tr data-bind='visible: $parent.selected_info() == id'>
+          <td colspan=5>
+            <div class='col-sm-12'>
+              <h3>Completa il tuo profilo LPI</h3>
+              <p>
+                Per poter diventare partner LPI &egrave; necessario completare le informazioni
+                del proprio profilo.<br>
+                Queste sono le informazione che mancano:<br><br>
+              </p>
+              <div data-bind='visible: step.incharge ==0'>
+                <h4>Responsabile</h4>
+                <p>
+                  Il responsabile e' la persona a cui il contratto sara' intesta....
+                </p>
+              </div>
+
+              <div data-bind='visible: step.representative ==0'>
+                <h4>Referente</h4>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris.                   
+                </p>
+              </div>
+
+              <div data-bind='visible: step.teachers == 0 && $parent.check_family("aap,atp")'>
+                <h4>Docente LPI</h4>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
+                </p>
+              </div>
+
+              <div data-bind='visible: step.location == 0'>
+                <h4>Sede</h4>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
+                </p>
+              </div>
+
+              <div data-bind='visible: step.billing == 0'>
+                <h4>Dati di fatturazione</h4>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
+                </p>
+              </div>
+
+              <div data-bind='visible: step.billing == 0'>
+                <h4>Libro di testo</h4>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
+                </p>
+              </div>
+              
+              <br>
+              <a class='button push-right' 
+                 data-bind='click:function() {$parent.goto_profile($data)}'>Completa il profilo</a>
+              <br><br>
+            </div>
           </td>
         </tr>
       </tbody>
@@ -110,11 +248,69 @@
               <i class='glyphicon glyphicon-cog'></i></a>
           </td>
         </tr>
+        <tr data-bind='visible: $parent.selected_info() == id'>
+          <td colspan=5>
+            <div class='col-sm-12'>
+              <h3>Completa il tuo profilo LPI</h3>
+              <p>
+                Per poter diventare partner LPI &egrave; necessario completare le informazioni
+                del proprio profilo.<br>
+                Queste sono le informazione che mancano:<br><br>
+              </p>
+              <div data-bind='visible: step.incharge ==0'>
+                <h4>Responsabile</h4>
+                <p>
+                  Il responsabile e' la persona a cui il contratto sara' intesta....
+                </p>
+              </div>
+
+              <div data-bind='visible: step.representative ==0'>
+                <h4>Referente</h4>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris.                   
+                </p>
+              </div>
+
+              <div data-bind='visible: step.teachers == 0 && $parent.check_family("aap,atp")'>
+                <h4>Docente LPI</h4>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
+                </p>
+              </div>
+
+              <div data-bind='visible: step.location == 0'>
+                <h4>Sede</h4>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
+                </p>
+              </div>
+
+              <div data-bind='visible: step.billing == 0'>
+                <h4>Dati di fatturazione</h4>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
+                </p>
+              </div>
+
+              <div data-bind='visible: step.billing == 0'>
+                <h4>Libro di testo</h4>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
+                </p>
+              </div>
+              
+              <br>
+              <a class='button push-right' 
+                 data-bind='click:function() {$parent.goto_profile($data);}'>Completa il profilo</a>
+              <br><br>
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
 
-  <div data-bind='visible: teachers().length > 0'>
+  <div data-bind='visible: teachers().length > 0 && false'>
     <h3>Docente Certificato</h3>
 
     <table class='table'>
@@ -152,271 +348,340 @@
 <div data-bind='visible: active_section() == "profile"'>
   <h1>
     <small data-bind='visible: selected_profile() != false' class='pull-right'>
-      <a data-bind='click: show_all_profiles'>Visualizza tutti i profili</a>
+      <a href='#account/partnership'>Visualizza tutti i profili</a>
     </small>
     Profilo: 
-    <span data-bind='text: profile_product()!=false?profile_product():""'></span>
+    <span data-bind='text: selected_profile()!=false?profiles.company.first_name():""'></span>
     
   </h1>
   <div data-bind='visible: selected_profile() == false'>
     <ul data-bind='foreach: services()'>
       <li>
-        <a data-bind='text: product.name, click: $parent.goto_profile'></a>
+        <a data-bind='text: "("+product.name+") " + company_name, click: $parent.goto_profile'></a>
+      </li>
+    </ul>
+    
+    <ul data-bind='foreach: training()'>
+      <li>
+        <a data-bind='text: "("+product.name+") " + company_name, click: $parent.goto_profile'></a>
+      </li>
+    </ul>
+    <ul data-bind='foreach: academic()'>
+      <li>
+        <a data-bind='text: "("+product.name+") " + company_name, click: $parent.goto_profile'></a>
       </li>
     </ul>
     
 
   </div>
   <div data-bind='visible: selected_profile() != false'>
-    <div class="row">
-      <div data-bind='' class='col-sm-4 pull-right'>
-          <h3>Logo</h3>
-          <div class='avatar-container'>
+    <div data-bind='text:'></div>
+    <section class="row box-section">
+        <div data-bind='' class='col-sm-4 pull-right'>
+            <h3>Logo</h3>
+            <div class='avatar-container'>
 
-            <div class="row avatar-box">
-              <img src='{% static "images/logo-moc.jpg" %}'
-                  data-bind='visible: profiles.company.image_url().length == 0'>
-              <img src='{% static "images/logo-moc.jpg" %}'
-                  data-bind='visible: profiles.company.image_url().length != 0,
-                             attr: {src: profiles.company.image_url}'>
-            </div>
-            <hr>
-            <div class='row' style='padding:0px 10%'>
-              <form style=''>
-                {% csrf_token %}
-                <input type='hidden' name='contact_id' data-bind='value: profiles.company.id'>
-                <input id='fileupload' type="file" name="avatar" data-url="avatar_upload/" >
-              </form>
+              <div class="row avatar-box">
+                <img src='{% static "images/logo-moc.jpg" %}'
+                    data-bind='visible: profiles.company.image_url().length == 0'>
+                <img src='{% static "images/logo-moc.jpg" %}'
+                    data-bind='visible: profiles.company.image_url().length != 0,
+                               attr: {src: profiles.company.image_url}'>
               </div>
+              <hr>
+              <div class='row' style='padding:0px 10%'>
+                <form style=''>
+                  {% csrf_token %}
+                  <input type='hidden' name='contact_id' data-bind='value: profiles.company.id'>
+                  <input id='fileupload' type="file" name="avatar" data-url="avatar_upload/" >
+                </form>
+                </div>
 
+            </div>
           </div>
-        </div>
-      <div data-bind='' class='col-sm-8'>
-        <h3>Informazioni</h3>
-
-        <table class=''>
-        </table>
-
-        <div data-bind=''></div>
-        <form class='fixed-headers'>
-          
-          <div class="input-group">
-            <span class="input-group-addon">
-              Nome
-            </span>
-            <input type='text' class='form-control' 
-                   data-bind='value: profiles.company.first_name'
-                   placeholder='Nome azienda'>
-          </div>
-
-          <div class="input-group">
-            <span class="input-group-addon">
-              Settore
-            </span>
-            <input type='text' class='form-control' 
-                   data-bind='value: profiles.company.job_title'
-                   placeholder='Settore'>
-          </div>
-
-          <div class="input-group">
-            <span class="input-group-addon">
-              Descrizione
-            </span>
-            <textarea class='form-control' style='height:100px' 
-                      data-bind='value: profiles.company.background'
-                      placeholder='Descrizione'></textarea>
-          </div>
-
-          <div class="input-group">
-            <span class="input-group-addon">
-              Partita IVA
-            </span>
-            <input type='text' class='form-control' 
-                   data-bind='value: profiles.company.piva'
-                   placeholder='Partita IVA'>
-          </div>
-
-          <div class="input-group">
-            <span class="input-group-addon">
-              Website
-            </span>
-            <input type='text' class='form-control' 
-                   data-bind='value: profiles.company.website'
-                   placeholder='Website'>
-          </div>
-
-          <div class="input-group">
-            <span class="input-group-addon">
-              Facebook
-            </span>
-            <input type='text' class='form-control' 
-                   data-bind='value: profiles.company.facebook'
-                   placeholder='Facebook'>
-          </div>
-
-          <div class="input-group">
-            <span class="input-group-addon">
-              Twitter
-            </span>
-            <input type='text' class='form-control' 
-                   data-bind='value: profiles.company.twitter'
-                   placeholder='Twitter'>
-          </div>
-
-          <div class="input-group">
-            <span class="input-group-addon">
-              Google+
-            </span>
-            <input type='text' class='form-control' 
-                   data-bind='value: profiles.company.googleplus'
-                   placeholder='Google+'>
-          </div>
-
-          <div class="input-group">
-            <span class="input-group-addon">
-              Telefono
-            </span>
-            <input type='text' class='form-control'
-                   data-bind='value: profiles.company.phone'
-                   placeholder='Telefono'>
-          </div>
-
-          <div class="input-group">
-            <span class="input-group-addon">
-              Email
-            </span>
-            <input type='text' class='form-control'
-                   data-bind='value: profiles.company.email'
-                   placeholder='Email'>
-          </div>
-
-          
-        </form>
-          <a data-bind='click: function() { submit_profile("company"); }' 
-             class='button pull-right'>Salva</a>  
-          <a data-bind='click: function() { abort_edit_profile(); }'>Annulla</a>
-        </div>
-
-      </div>
-
-
-      <div class="row">
-        <div data-bind='' class='col-sm-6'>
-          <form class='fixed-headers'>
-            <h3>Tag competenze</h3>
-
-            <select id='tag_select' style='height:30px' multiple class='chosen-select'>
-              <option value='apache'>Apache</option>
-              <option value='python'>Python</option>
-              <option value='mysql'>Mysql</option>
-              <option value='javascript'>Javascript</option>
-            </select>
-
-          </form>
-        </div>
-      </div>
-
-      
-
-      <div class="row">
         <div data-bind='' class='col-sm-8'>
-          <form class='fixed-headers' data-bind='with:profiles.incharge'>
-
-            <h3>Responsabile aministrativo</h3>
-            <div class='person-card'>
-              <b data-bind='text: first_name() + " " + last_name(), visible: !$parent.edit.incharge()'></b>
+          <h3>Informazioni generali</h3>
+          
+          <form class='fixed-headers'>
+            
+            <div class="input-group">
+              <span class="input-group-addon">
+                Nome
+              </span>
+              <input type='text' class='form-control' 
+                     data-bind='value: profiles.company.first_name'
+                     placeholder='Nome azienda'>
             </div>
 
-            <div data-bind='template: {name: "person-form", data: {profile: $parent.profiles.incharge, 
-                                                                   parent:  $parent}},
-                            visible: $parent.edit.incharge()'>
+            <div class="input-group">
+              <span class="input-group-addon">
+                Settore
+              </span>
+              <input type='text' class='form-control' 
+                     data-bind='value: profiles.company.job_title'
+                     placeholder='Settore'>
             </div>
 
-            <a data-bind='click: function() { $parent.edit_profile("incharge") },
-                          visible: !$parent.edit.incharge()'>
-                Modifica responsabile amministrativo
-            </a>
-        </div>
-        
-
-      </div>
-
-      <div class="row">
-        <div data-bind='with:profiles.commercial' class='col-sm-6'>
-            <h3>Responsabile commerciale</h3>
-
-            <div class='person-card'>
-              <b data-bind='text: first_name() + " " + last_name(), visible: !$parent.edit.commercial()'></b>
+            <div class="input-group">
+              <span class="input-group-addon">
+                Descrizione
+              </span>
+              <textarea class='form-control' style='height:100px' 
+                        data-bind='value: profiles.company.background'
+                        placeholder='Descrizione'></textarea>
             </div>
 
-            <div data-bind='template: {name: "person-form", data: {profile: $parent.profiles.commercial, 
-                                                                   parent:  $parent}},
-                            visible: $parent.edit.commercial()'>
+                      <div class="input-group">
+              <span class="input-group-addon">
+                Website
+              </span>
+              <input type='text' class='form-control' 
+                     data-bind='value: profiles.company.website'
+                     placeholder='Website'>
             </div>
 
-            <a data-bind='click: function() { $parent.edit_profile("commercial") },
-                          visible: !$parent.edit.commercial()'>
-                Modifica responsabile commerciale
-            </a>
+            <div class="input-group">
+              <span class="input-group-addon">
+                Facebook
+              </span>
+              <input type='text' class='form-control' 
+                     data-bind='value: profiles.company.facebook'
+                     placeholder='Facebook'>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-addon">
+                Twitter
+              </span>
+              <input type='text' class='form-control' 
+                     data-bind='value: profiles.company.twitter'
+                     placeholder='Twitter'>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-addon">
+                Google+
+              </span>
+              <input type='text' class='form-control' 
+                     data-bind='value: profiles.company.googleplus'
+                     placeholder='Google+'>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-addon">
+                Telefono
+              </span>
+              <input type='text' class='form-control'
+                     data-bind='value: profiles.company.phone'
+                     placeholder='Telefono'>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-addon">
+                Email
+              </span>
+              <input type='text' class='form-control'
+                     data-bind='value: profiles.company.email'
+                     placeholder='Email'>
+            </div>
+
+
+            <h3>Dati di fatturazione</h3>
+            
+            <div data-bind='visible:current_step.billing() == 0'
+                 class='alert alert-danger'>
+              I dati di fatturazione sono obbligatori.
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-addon">
+                Partita IVA
+              </span>
+              <input type='text' class='form-control' 
+                     data-bind='value: profiles.company.piva'
+                     placeholder='Partita IVA'>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-addon">
+                Indirizzo
+              </span>
+              <input type='text' class='form-control' 
+                     data-bind='value: profiles.company.street'
+                     placeholder='Indirizzo di fatturazione'>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-addon">
+                Citt&agrave;
+              </span>
+              <input type='text' class='form-control' 
+                     data-bind='value: profiles.company.city'
+                     placeholder='Citt&agrave; di fatturazione'>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-addon">
+                CAP
+              </span>
+              <input type='text' class='form-control' 
+                     data-bind='value: profiles.company.postcode'
+                     placeholder='Indirizzo di fatturazione'>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-addon">
+                Paese
+              </span>
+              <input type='text' class='form-control' 
+                     data-bind='value: profiles.company.country'
+                     placeholder='Paese di fatturazione'>
+            </div>
+
 
             
           </form>
-        </div>
-        <div data-mind='template: {name: "person-form", data: profiles.commercial},
-                        visible: edit.commercial()' class='col-sm-6'>
-        </div>
-      </div>
-    </div>
+            <a data-bind='click: function() { submit_profile("company"); }' 
+               class='button pull-right'>Salva</a>  
+            <a data-bind='click: function() { abort_edit_profile(); }'>Annulla</a>
+          </div>
 
-    <div class="row">
-      <div data-bind='' class='col-sm-12'>
-        <h3>Sedi</h3>
-        <div data-bind='if:locations().length > 0 '>
-          <div data-bind='foreach: locations(), visible: !edit.location()'>
-            <div data-bind='if:$data'>
-              <b data-bind='text:$data.first_name, click: function() {$parent.edit_location($data)}'></b>
+        </div>
+
+
+        <section class="row box-section">
+          <div data-bind='' class='col-sm-6'>
+            <form class='fixed-headers'>
+              <h3>Tag competenze</h3>
+
+              <select id='tag_select' style='height:30px' multiple class='chosen-select'>
+                <option value='apache'>Apache</option>
+                <option value='python'>Python</option>
+                <option value='mysql'>Mysql</option>
+                <option value='javascript'>Javascript</option>
+              </select>
+
+            </form>
+          </div>
+        </section>
+
+        
+
+        <section class="row box-section">
+          <div data-bind='' class='col-sm-12'>
+            <form class='fixed-headers' data-bind='with:profiles.incharge'>
+
+              <h3>Responsabile</h3>
+              <div data-bind='visible:  $root.current_step.incharge() == 0'
+                 class='alert alert-danger'>
+                I dati angrafici del responsabile sono obbligatori.
+              </div>
+              <div class='person-card'>
+                <b data-bind='text: first_name() + " " + last_name(), visible: !$parent.edit.incharge()'></b>
+              </div>
+
+              <div data-bind='template: {name: "person-form", data: {profile: $parent.profiles.incharge, 
+                                                                     parent:  $parent}},
+                              visible: $parent.edit.incharge()'>
+              </div>
+
+              <a data-bind='click: function() { $parent.edit_profile("incharge") },
+                            visible: !$parent.edit.incharge()'>
+                  Modifica responsabile
+              </a>
+          </div>
+          
+
+        </section>
+
+        <section class="row box-section">
+          <div data-bind='with:profiles.commercial' class='col-sm-12'>
+              <h3>Referente</h3>
+              <div data-bind='visible:$root.current_step.representative() == 0'
+                 class='alert alert-danger'>
+                I dati angrafici del referente sono obbligatori.
+              </div>
+
+              <div class='person-card'>
+                <b data-bind='text: first_name() + " " + last_name(), visible: !$parent.edit.commercial()'></b>
+              </div>
+
+              <div data-bind='template: {name: "person-form", data: {profile: $parent.profiles.commercial, 
+                                                                     parent:  $parent}},
+                              visible: $parent.edit.commercial()'>
+              </div>
+
+              <a data-bind='click: function() { $parent.edit_profile("commercial") },
+                            visible: !$parent.edit.commercial()'>
+                  Modifica referente
+              </a>
+
+              
+            </form>
+          </div>
+          <div data-mind='template: {name: "person-form", data: profiles.commercial},
+                          visible: edit.commercial()' class='col-sm-6'>
+          </div>
+        </section>
+
+      <section class="row box-section">
+        <div data-bind='' class='col-sm-12'>
+          <h3>Sedi</h3>
+              <div data-bind='visible:$root.current_step.location() == 0'
+                 class='alert alert-danger'>
+                E' necessario specificare almeno una sede.
+              </div>
+          <div data-bind='if:locations().length > 0 '>
+            <div data-bind='foreach: locations(), visible: !edit.location()'>
+              <div data-bind='if:$data'>
+                <b data-bind='text:$data.first_name, click: function() {$parent.edit_location($data)}'></b>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class='location_content' data-bind='template:{name: "address-form", 
-                                  data: {profile: edit_location_buffer, 
-                                         parent:  $data} },
-                            visible: edit.location()'>
-        </div>
-        <a data-bind='click: function() { new_location() },
-                        visible: !edit.location()'>
-              Aggiungi sede operativa
-        </a>
-        
-      </div>
-
-
-    </div>
-
-    <div class="row">
-      <div data-bind='visible: check_family("aap,atp", [profile_family()])' class='col-sm-6'>
-        <h3>Docenti</h3>
-        <div data-bind='foreach: teachers(), visible: !edit.teacher()'>
-          <div data-bind='if:$data'>
-            <b data-bind='text:$data.first_name() + " " + $data.last_name(),  
-                          click: function() {$parent.edit_teacher($data)}'></b>
+          <div class='location_content' data-bind='template:{name: "address-form", 
+                                    data: {profile: edit_location_buffer, 
+                                           parent:  $data} },
+                              visible: edit.location()'>
           </div>
+          <a data-bind='click: function() { new_location() },
+                          visible: !edit.location()'>
+                Aggiungi sede operativa
+          </a>
+          
         </div>
 
-        <div data-bind='template:{name: "teacher-form", 
-                                  data: {profile: edit_teacher_buffer, 
-                                         parent:  $data} },
-                            visible: edit.teacher()'>
+
+      </section>
+
+      <section class="row box-section">
+        <div data-bind='visible: check_family("aap,atp", [profile_family()])' class='col-sm-12'>
+          <h3>Docenti</h3>
+          <div data-bind='visible:$root.current_step.teachers() == 0'
+                 class='alert alert-danger'>
+                E' necessario specificare almeno un docente.
+              </div>
+          <div data-bind='foreach: teachers(), visible: !edit.teacher()'>
+            <div data-bind='if:$data'>
+              <b data-bind='text:$data.first_name() + " " + $data.last_name(),  
+                            click: function() {$parent.edit_teacher($data)}'></b>
+            </div>
+          </div>
+
+          <div data-bind='template:{name: "teacher-form", 
+                                    data: {profile: edit_teacher_buffer, 
+                                           parent:  $data} },
+                              visible: edit.teacher()'>
+          </div>
+          <a data-bind='click: function() { new_teacher() },
+                        visible: !edit.teacher()'>
+                Aggiungi docente certificato
+          </a>
+          
         </div>
-        <a data-bind='click: function() { new_teacher() },
-                      visible: !edit.teacher()'>
-              Aggiungi docente certificato
-        </a>
+      </section>
         
-      </div>
-
-    </div>
+    </section>
 
     
   </div>

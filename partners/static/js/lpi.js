@@ -108,6 +108,7 @@ var lpi = {
             new_view.in_transition();
             that.loading(false);
             that.routing = false;
+
           }
 
           $('body,html').animate({scrollTop: 0}, 500);
@@ -126,7 +127,13 @@ var lpi = {
       }
     }
 
-    routie({ 
+    routie({
+      'account/:section/:id': function(section, id) {
+         route('account', {section: section, id: id});
+      },
+      'account/:section': function(section) {
+         route('account', {section: section});
+      },
       'login/:handle': function(handle) {
          route('login', {handle: handle});
        },
@@ -255,6 +262,7 @@ var lpi = {
     params['csrfmiddlewaretoken'] = $.cookie('csrftoken');
     $.post('http://partner.lpi-italia.org/' + method + '/', params, function(response) {
         console.log(response);
+        response = JSON.parse(response);
         if(response.redirect) {
             lpi.redirect(response.redirect);
         }else {
@@ -263,7 +271,6 @@ var lpi = {
      });
   }
 }
-
 
 // Array Remove - By John Resig (MIT Licensed)
 Array.prototype.remove = function(from, to) {

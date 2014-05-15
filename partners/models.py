@@ -108,6 +108,85 @@ class LPIAvatar(models.Model):
 
         return path
 
+class LPIRegistrationStep(models.Model):
+    subscription = models.IntegerField()
+    product = models.CharField(max_length=100)
+    contact = models.IntegerField()
+
+    incharge = models.IntegerField(default=0)
+    representative = models.IntegerField(default=0)
+    location = models.IntegerField(default=0)
+    teachers = models.IntegerField(default=0)
+    billing = models.IntegerField(default=0)
+    book = models.IntegerField(default=0)
+
+    def create(self, subscription_id, product, contact_id):
+        self.subscription = subscription_id
+        self.product = product
+        self.contact = contact_id
+        self.save()
+
+        return self
+
+    def getBySubscription(self, subscription_id):
+        ret = self
+        step = LPIRegistrationStep.objects.filter(subscription=subscription_id)
+        if len(step) > 0:
+            ret = step[0]
+
+        return ret
+
+    def check(self, profile):
+        if profile['Role'] == 'Location':
+            self.location = 1
+
+        if profile['Role'] == 'Incharge':
+            self.incharge = 1
+
+        if profile['Role'] == 'Commercial':
+            self.representative = 1
+
+        if profile['Role'] == 'Teacher':
+            self.teachers = 1
+
+        if profile['Role'] == 'Company':
+            if profile['street'] != '' and profile['city'] != '' \
+                    and profile['postcode'] != '' and profile['country'] != '':
+                self.billing = 1
+
+        self.save()
+
+    def completed(self):
+        completed = True
+        for i in ['incharge', 'representative', 'location', 'teachers', 'billing']:
+            if getattr(self, i) == 0:
+                completed = False
+
+        return completed
+
+    def getByContact(self, contact_id):
+        ret = self
+        step = LPIRegistrationStep.objects.filter(contact=contact_id)
+        if len(step) > 0:
+            ret = step[0]
+
+        return ret
+
+    def toObject(self):
+        obj = {}
+
+        obj['subscription'] = self.subscription
+        obj['product'] = self.product
+        obj['contact'] = self.contact
+        obj['incharge'] = self.incharge
+        obj['representative'] = self.representative
+        obj['teachers'] = self.teachers
+        obj['billing'] = self.billing
+        obj['location'] = self.location
+        obj['book'] = self.book
+
+        return obj
+
 class LPIRule(models.Model):
     handle = models.CharField(max_length=40,db_index=True)
     exams_discount = models.IntegerField()
@@ -119,12 +198,8 @@ class LPIRule(models.Model):
     max_newsletter_post = models.IntegerField()
     free_exam_voucher = models.IntegerField()
 
-
     def __unicode__(self):
         return self.handle
-
-
-
 
 # Create your models here.
 class Model(dict):
@@ -245,7 +320,7 @@ class LPISubscription(Model):
         custom_fields = [
           {'id': self.mapping_id['product'], 'value': product},
           {'id': self.mapping_id['user_id'], 'value': user_id},
-          {'id': self.mapping_id['state'], 'value': 'pending'} 
+          {'id': self.mapping_id['state'], 'value': 'incomplete'} 
         ]
 
         deal.name = product
@@ -258,6 +333,15 @@ class LPISubscription(Model):
         self.load_from_resource(deal)
 
         return self
+
+    def set_status(self, id, status):
+        deal = redmine.Deal()
+        deal.id = id
+        deal.custom_fields = [
+            {'id': self.mapping_id['state'], 'value':'pending'}
+        ]
+
+        deal.save()
 
     def is_owner(self, user_id, contact_id):
         print 'checku %s  comp %s' % (user_id, contact_id)
@@ -426,11 +510,13 @@ class Contact(Model):
 
     def edit(self, data):
         exclude = ['image_url', 'csrfmiddlewaretoken', 'type', 
-                   'street', 'city', 'country', 'postcode']
+                   'street', 'city', 'country', 'postcode','sub']
         contact = redmine.Contact()
         data = self.encode_custom_fields(data)
 
         custom_fields = []
+        if data.has_key('id'):
+            contact.id = data['id']
 
         for key, value in data.iteritems():
             if key in exclude: continue
@@ -464,11 +550,10 @@ class Contact(Model):
        
 
 class Company(Contact):
-    def create(self, company_name, company_industry):
+    def create(self, company_name):
         contact = redmine.Contact()
         contact.is_company = True
         contact.first_name = company_name
-        contact.job_title = company_industry
         contact.visibility = 1
         contact.custom_fields = [
             { 'value': 'Company', 'id': self.mapping_id['Role']}
@@ -614,7 +699,11 @@ class Person(Contact):
             contact.custom_fields.append({'value': verification_code, 
                                            'id': self.mapping_id['Verification']})
 
+
+        print "saving"
         contact.save()
+
+        print "--------------------------"
 
         resource = Contact().find(contact.id)
 

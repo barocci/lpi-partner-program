@@ -24,7 +24,6 @@ def check_login(view):
       return wrapper
 
 def index(request):
-
     return render_to_response('index.html', {'user': request.user}, 
             context_instance=RequestContext(request))
 
@@ -53,12 +52,16 @@ def redirect(page):
 
 def login(request):
     ret = { 'error': 0, 'data': {} }
+
+    print "loggin in %s %s " % (request.GET['username'], request.GET['password'])
+
     user = auth.authenticate(username=request.GET['username'], 
                              password=request.GET['password'])
     if user:
         auth.login(request, user)
         ret['data'] = {'username': user.username, 'id': user.id}
     else:
+        print 'error auth'
         ret['error'] = 1
 
     return renderJSON(ret)
@@ -108,13 +111,14 @@ def profile(request):
 
 @check_login
 def edit_profile(request):
-    ret = {'error': 0, 'data': []}
+    ret = {'error': 0, 'data': {}}
 
     profile = request.POST.copy()
 
     if profile.has_key('id'):
         if profile['id'] == '':
             print "Creating contact"
+
             if profile['Role'] == 'Location':
                 contact = Location().create(profile['company'], 
                                             profile['company_id'], 
@@ -123,6 +127,7 @@ def edit_profile(request):
                                             profile['city'], 
                                             profile['postcode'],
                                             profile['country'])
+
 
             else:
                 contact = Person().create(profile['company'], 
@@ -136,10 +141,21 @@ def edit_profile(request):
 
             
             profile['id'] = contact['id']
+            
 
-        print profile
         Contact().edit(profile)
-        ret['data'] = profile
+        
+        print "looking step for %s" % profile['company_id']
+        step = LPIRegistrationStep().getByContact(profile['company_id'])
+        step.check(profile)
+
+        if step.completed():
+            print "resolving issue %s" % profile['sub'] 
+            LPISubscription().set_status(profile['sub'], 'approving')
+
+
+
+        ret['data'] = {'profile': profile, 'step': step.toObject()  }
  
     return renderJSON(ret);
 
@@ -207,12 +223,18 @@ def render_to_pdf(template_src, context_dict):
 
 
 def contract(request):
-    if request.GET.has_key('type'):
-        if request.GET['type'] == 'atp':
-            return render_to_pdf('contract-atp.html', {'pagesize': 'A4', 'title': 'LPI Partner'})
 
-        if request.GET['type'] == 'aap':
-            return render_to_pdf('contract-aap.html', {'pagesize': 'A4', 'title': 'LPI Partner'})
+    if request.GET.has_key('type') and request.GET.has_key('id'):
+        print "============================"
+        print "looking for %s" % request.GET['id']
+        company = Company().find(id=request.GET['id'])
+        if request.GET['type'].find('atp') >= 0:
+            return render_to_pdf('contract-atp.html', {'pagesize': 'A4', 'title': 'LPI Partner',
+                                                       'company' : company})
+
+        if request.GET['type'].find('aap') >= 0:
+            return render_to_pdf('contract-aap.html', {'pagesize': 'A4', 'title': 'LPI Partner',
+                                                       'company': company})
 
     return render_to_response('contract-atp.html', {'user': request.user}, 
             context_instance=RequestContext(request))
@@ -221,14 +243,16 @@ def contract(request):
 def account_info(request):
     ret = {'error': 0, 'data': []}
 
-    if request.GET['section'] == 'partnership':
+    if request.GET['section'] == 'init':
         data = {'training':[], 'services':[], 'academic':[], 'teachers': []}
         subscriptions = LPISubscription().find(cf_7=request.user.id)
-        print subscriptions
         for sub in subscriptions:
             product = Product().get_by_handle(sub['product'])
             sub['product'] = product
             sub['product']['url'] = Product().hostedURL(product['id'], request.user.id)
+
+            sub['step'] = LPIRegistrationStep().getBySubscription(sub['id']).toObject()
+            print sub['step']
 
             family = product.family()
 
@@ -262,10 +286,12 @@ def account_info(request):
               'subscription': subscription,
               'incharge': incharge,
               'teachers': teacher,
-              'locations': locations
+              'locations': locations,
+              'step': LPIRegistrationStep().getBySubscription(subscription['id']).toObject()
             }
 
     if request.GET['section'] == 'billing':
+        print "looking billing link for %s" % request.user.username
         user = LPIUser.objects.get(id=request.user.id)
         link = user.get_management_url()
         ret['data'] = {'url': link}
@@ -346,7 +372,6 @@ def register_contact(request):
     ret = {'error': 1, 'data:': ''}
 
     if not Product().check_family("ct", request.GET['product']):
-        company = Company().create(request.GET['company_name'], request.GET['company_sector'])
 
         person = Person().create(request.GET['company_name'],
                                  company['id'],
@@ -360,9 +385,7 @@ def register_contact(request):
                                  '')
 
         company['owner'] = person
-        subscription = LPISubscription().create(product=request.GET['product'],
-                                                user_id=request.user.id,
-                                                company_id=company['id'])
+        
     else:
         person = Person().create('',
                                  '',
@@ -390,26 +413,37 @@ def register_contact(request):
 
 def register(request):
     ret = { 'error': 0, 'data': {} }
-    try:
-        user = LPIUser().register(request.GET['mail'], request.GET['password'])        
-        user.save()
+    #try:
+    user = LPIUser().register(request.GET['mail'], request.GET['password'])        
+    user.save()
 
+    if user:
+        print "user ok"
+        company = Company().create(request.GET['company_name'])
+        print "company ok"
+        subscription = LPISubscription().create(product=request.GET['product'],
+                                                user_id=user.id,
+                                                company_id=company['id'])
+        print "sub ok"
+        registration = LPIRegistrationStep().create(subscription['id'], 
+                                                    request.GET['product'],
+                                                    company['id'])
+        print "reg step ok"
+        user = auth.authenticate(username=request.GET['mail'], 
+                                 password=request.GET['password'])
         if user:
-            user = auth.authenticate(username=request.GET['mail'], 
-                                     password=request.GET['password'])
-            if user:
-                auth.login(request, user)
-                ret['data'] = {'login': user.username, 'id': user.id}
-            else:
-                ret['error'] = 2  # error registering
-                ret['data'] = 'Error registering user.'
+            auth.login(request, user)
+            ret['data'] = {'login': user.username, 'id': user.id}
         else:
-                ret['error'] = 2  # error registering
-                ret['data'] = 'Error registering user.'
+            ret['error'] = 2  # error registering
+            ret['data'] = 'Error registering user.'
+    else:
+            ret['error'] = 2  # error registering
+            ret['data'] = 'Error registering user.'
 
-    except Exception, e:
-        ret['error'] = 1
-        ret['data'] = "L'indirizzo email risulta gi&agrave; registrato."
+    #except Exception, e:
+    #    ret['error'] = 1
+    #    ret['data'] = "L'indirizzo email risulta gi&agrave; registrato."
 
     return renderJSON(ret)
 

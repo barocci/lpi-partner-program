@@ -7,6 +7,7 @@ var AccountViewModel = function() {
 
   self.init_edit_location = false;
 
+
   self.tags = [ 
                  'PHP', 
                  'Python',
@@ -25,7 +26,7 @@ var AccountViewModel = function() {
 
   
   self.sections = [{name: 'Partnership', slug: 'partnership', visible: '*'},
-                   {name: 'Azienda', slug: 'profile', visible: 'atp,aap,sp'}, 
+                   {name: 'Azienda', slug: 'profile', visible: 'hidden'}, 
                    {name: 'Profilo', slug: 'profile', visible: 'ct'}, 
                    {name: 'Loghi', slug: 'logos', visible: '*'}, 
                    {name: 'Account', slug: 'account', visible: '*'},
@@ -34,6 +35,7 @@ var AccountViewModel = function() {
 
 
   self.active_section = ko.observable('');
+  self.active_menu = ko.observable('');
 
   self.training  = ko.observableArray([]);
   self.services = ko.observableArray([]);
@@ -42,22 +44,24 @@ var AccountViewModel = function() {
 
   self.active_subscriptions = ko.computed(function() {
     var products = [];
-    var subs = self.training();
+    var subs = [];
+    subs = subs.concat(self.training());
     subs = subs.concat(self.services());
     subs = subs.concat(self.academic());
-
-    for(i in subs) {
-      if(subs[i].product) {
-        products.push(subs[i].product.handle);
+    console.log(subs);
+    subs.map(function(sub) {
+      if(sub.product) {
+        products.push(sub.product.handle);
       }
-    }
+    });
 
     return products;
   });
 
   self.active_logos = ko.computed(function() {
     var products = [];
-    var subs = self.training();
+    var subs = [];
+    subs = subs.concat(self.training());
     subs = subs.concat(self.services());
     subs = subs.concat(self.academic());
 
@@ -75,9 +79,12 @@ var AccountViewModel = function() {
 
   self.management_url = ko.observable('');
 
+  self.selected_info = ko.observable('');
+
   self.selected_profile = ko.observable(false);
   self.profile_product = ko.observable(false);
   self.profile_handle = ko.observable(false);
+  self.selected_subscription = null;
 
   self.edit = { 
     incharge: ko.observable(false),
@@ -222,20 +229,64 @@ var AccountViewModel = function() {
       'type': ko.observable('teacher')
     }
 
+  self.current_step = {
+    'product': ko.observable(''),
+    'contact': ko.observable(''),
+    'subscription': ko.observable(''),
+    'incharge': ko.observable(0),
+    'representative': ko.observable(0),
+    'teachers': ko.observable(0),
+    'location': ko.observable(0),
+    'billing': ko.observable(0),
+    'book': ko.observable(0),
+  }
+
   self.locations = ko.observableArray([]);
   self.teachers = ko.observableArray([]);
 
-  self.init = function() {
+  self.initialized = false;
+
+  self.init = function(params) {
     if(!lpi.is_logged()) {
       lpi.redirect('#login');
     }
 
     console.log('initializing map');
-    
+    console.log(params);
 
+    self.active_section('');
     
+    function goto_section() {
+      if(params != undefined && params.section != undefined) {
+        if(params.id != undefined) {
+          self.show_section({slug: params.section}, params.id);
+        } else {
+          self.show_section({slug: params.section});
+        }
 
-    self.show_section({slug: 'partnership'});
+      } else {
+        self.show_section({slug: 'partnership'});
+      }
+    }
+
+    if(!self.initialized) {
+      lpi.request('account_info', {section: 'init'}, function(response) {
+        console.log(response);
+        self.training(response.data.training);
+        self.services(response.data.services);
+        self.academic(response.data.academic);
+        self.initialized = true;
+        goto_section();
+      });
+    } else {
+      goto_section();
+    }
+
+  }
+       
+  self.open_instructions = function(deal) {
+    self.selected_info(deal.id);
+    console.log(deal);
   }
 
   self.check_family = function(family, set) {
@@ -281,6 +332,7 @@ var AccountViewModel = function() {
     }
 
     self.teachers([]);
+    /*
     for(i =0; i < data.teachers.length; i++) {
       var teacher = {};
       console.log(i);
@@ -295,6 +347,7 @@ var AccountViewModel = function() {
 
       self.teachers.push(teacher);
     }
+    */
 
     self.locations([]);
     for(i =0; i < data.locations.length; i++) {
@@ -399,10 +452,11 @@ var AccountViewModel = function() {
 
     location.company = self.profiles.company.first_name()
     location.company_id = self.profiles.company.id()
-
+    location.sub = self.selected_profile()
     lpi.post('edit_profile', location, function(response) {
       console.log(response);
       self.edit[type](false);
+      self.update_step(response.data.step);
     });
 
     if(location.id == '') {
@@ -436,6 +490,27 @@ var AccountViewModel = function() {
     self.abort_edit_location();
   }
 
+  self.step_completed = function(step) {
+    var ret = true;
+    console.log(step);
+    for(i in step) {
+      if(step[i] == 0) {
+        console.log('STEP NOT FINISHED');
+        ret = false;
+      }
+    }
+
+    return ret;
+  }
+
+  self.update_step = function(step) {
+    console.log(step);
+    for(i in step) {
+      console.log(i);
+      self.current_step[i](step[i]);
+    }
+  }
+
   self.new_teacher = function() {
     self.edit['teacher'](true);
   }
@@ -467,10 +542,11 @@ var AccountViewModel = function() {
 
     teacher.company = self.profiles.company.first_name()
     teacher.company_id = self.profiles.company.id()
-
+    teacher.sub = self.selected_profile()
     lpi.post('edit_profile', teacher, function(response) {
       console.log(response);
       self.edit[type](false);
+      self.update_step(response.data.step);
     });
 
     if(teacher.id == '') {
@@ -528,18 +604,22 @@ var AccountViewModel = function() {
     var profile = ko.mapping.toJS(self.profiles[type]);
     profile.company = self.profiles.company.first_name()
     profile.company_id = self.profiles.company.id()
+    profile.sub = self.selected_profile()
     lpi.post('edit_profile', profile, function(response) {
       self.edit[type](false);
+      self.update_step(response.data.step);
       lpi.alert('Profilo aggiornato correttamente.')
     });
   }
 
   self.goto_profile = function(obj) {
+    console.log('Going to profile');
     console.log(obj);
+    self.selected_subscription = obj;
     self.selected_profile(obj.id);
     self.profile_product(obj.product.name);
     self.profile_handle(obj.product.handle);
-    self.show_section({slug: 'profile'}, obj.id);
+    lpi.redirect('account/profile/' + obj.id);
   }
 
   self.show_all_profiles = function() {
@@ -548,16 +628,22 @@ var AccountViewModel = function() {
     self.ready['profile']();
   }
 
+  self.redirect = function(slug) {
+    self.active_menu(slug);
+    lpi.redirect("account/" + slug);
+  }
+
   self.ready = {
-    partnership: function(data) {
+    profile: function(data) {
       console.log(data);
 
-      self.training(data.training);
-      self.services(data.services);
-      self.academic(data.academic);
-    },
+      if(data.subscription) {
+        self.selected_profile(data.subscription.id);
+        self.profile_product(data.subscription.product);
+        self.profile_handle(data.subscription.product);
+        self.update_step(data.step);
+      }
 
-    profile: function(data) {
       if(self.selected_profile()) {
         self.observe_form(data);
         $('#tag_select').chosen({
@@ -577,9 +663,9 @@ var AccountViewModel = function() {
               }
         });
       } else {
-        lpi.request('account_info', {section: 'partnership'}, function(response) {
-          self.ready['partnership'](response);
-        });
+       // lpi.request('account_info', {section: 'partnership'}, function(response) {
+       //   self.ready['partnership'](response);
+       // });
       }
     },
 
@@ -589,19 +675,25 @@ var AccountViewModel = function() {
   }
 
   self.show_section = function(section, data) {
+    console.log(data);
     console.log('showing ' + section.slug + ' data ' + data);
     self.loading(true);
     lpi.loading(true);
 
-    lpi.request('account_info', {section: section.slug, data: data}, function(response) {
-      if(self.ready[section.slug]) {
+    self.active_menu(section.slug);
+    if(self.ready[section.slug] != undefined) {
+      console.log('ajaxing');
+      lpi.request('account_info', {section: section.slug, data: data}, function(response) {
         self.ready[section.slug](response.data);
-      }
-
+        self.loading(false);
+        lpi.loading(false);
+        self.active_section(section.slug);
+      });
+    } else {
       self.loading(false);
       lpi.loading(false);
       self.active_section(section.slug);
-    });
+    }
   }
 
   self.change_password = function() {

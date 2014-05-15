@@ -5,6 +5,7 @@ var SignupViewModel = function() {
   self.template_loaded = false;
   self.template = 'signup';
 
+  self.company_name = ko.observable('');
   self.mail = ko.observable('');
   self.tos_accepted = ko.observable(false);
   self.privacy_accepted = ko.observable(false);
@@ -61,20 +62,23 @@ var SignupViewModel = function() {
       console.log("Il campo email non puo' essere vuoto.")
     }else if(self.password() == '') {
       self.error_message("Il campo password non puo' essere vuoto.")
+    }else if(self.company_name() == '') {
+      self.error_message("Il campo nome non puo' essere vuoto.")
     }else if(!self.tos_accepted()) {
       self.error_message("&Egrave; necessario accettare i Termini di Servizio per procedere.")
     }else if(!self.privacy_accepted()) {
       self.error_message("&Egrave; necessario accettare l'informativa sulla Privacy.")
     }else if(self.password() == self.confirm_password()) {
       var params = {
+        company_name: self.company_name(),
         mail: self.mail(),
         password: self.password(),
-        product: self.product_handle
+        product: self.handle()
       };
 
       lpi.request('register', params, function(response) {
         if(!response.error) {
-          lpi.redirect('wizard/' + response.data.id + '/' + self.handle());
+          lpi.redirect('account/partnership');
         } else {
           self.error_message(response['data']);
         }
@@ -98,7 +102,7 @@ var SignupViewModel = function() {
             if(response.error == 0) {
               console.log('dasdsadas');
               lpi.pages.nav.login();
-              lpi.redirect('#account');
+              lpi.redirect('account/partnership');
             } else {
               self.error_message('Registrazione non valida.');     
             }

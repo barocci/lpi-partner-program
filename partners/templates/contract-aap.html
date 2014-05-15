@@ -84,7 +84,7 @@
               width="200px">
         </td>
         <td style='vertical-align:top;padding:30px'>
-    <h1>LPI APPROVED TRAINING PARTNER<br>
+    <h1>LPI APPROVED ACADEMIC PARTNER<br>
         (LPI ATP) AGREEMENT</h1>
         </td>
       </tr>
@@ -93,9 +93,9 @@
       This Agreement is made between <b>THE LINUX PROFESSIONAL
       INSTITUTE MASTER AFFILIATE (MA)</b> with its principal office located
       at ______________________ AND The LPI Academic Partner <b>(THE PARTNER)</b>
-      _____________________  <br>
-
-      With its principal office located at: ____________________________
+      {{company.first_name}}. <br>
+      
+      With its principal office located at: {{company.street}} - {{company.city}} - {{company.country}}
     </p>
 
     <h2>RECITALS</h2>
@@ -228,7 +228,7 @@ website.
     <p>
       PARTNER is authorized to perform the duties of LPI ATP only in geographies
       assigned to MA through a separate agreement with LPI. The territory for the
-      PARTNER is  _________
+      PARTNER is  {{company.city}} ({{company.country}}).
     </p>
 
     <h2 style='margin-top:30px'>SECTION 7</h2>
@@ -466,8 +466,8 @@ delivered by electronic mail.
     </p>
 
     <p>
-      FOR THE PARTNER: ___________________________<br>
-      Email: __________________________
+      FOR THE PARTNER: {{company.Incharge.first_name}} {{company.Incharge.last_name}}<br>
+      Email: {{company.Incharge.email}}
     </p>
     <p>
       The parties have executed this agreement on the day and year written below.
