@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
+from django.views.decorators.csrf import csrf_exempt
 from forms import *
 from models import *
 import json
@@ -171,11 +172,14 @@ def details(request):
         
     return renderJSON(ret)
 
+
+@csrf_exempt
 def hook(request):
     ret = {'error': 0, 'data': []}
 
-    form = WebhookForm(request.POST)
     print "called webhook"
+
+    form = WebhookForm(request.POST)
     if request.POST.has_key('id'):
         print request.POST['id']
 
