@@ -1,0 +1,54 @@
+{% load static from staticfiles %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Linux Professional Institute - Italia </title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
+
+  <script type='text/javascript'>
+    {% autoescape off %}
+      var geo = {{geo}};
+    {% endautoescape %}
+
+    $(function() {
+      $('#map').css('width', $(document).width() + 'px');
+      $('#map').css('height', $(document).height() + 'px');
+
+      var mapOptions = {
+          center: new google.maps.LatLng("42.309815", "12.502441"),
+          mapMaker: true,
+          zoom: 5
+      };
+
+      var map = new google.maps.Map($('#map')[0], mapOptions);
+
+      geo.map(function(couple) {
+        console.log('lat ' + couple[0] + ' lng ' + couple[1]);
+        var marker = new google.maps.Marker({
+          icon: '{% static "images/logo-lpi-marker.png" %}',
+          position: new google.maps.LatLng(couple[0], couple[1]), 
+          map: map
+        });
+      });
+    });
+
+  </script>
+
+  <style>
+    * {
+      margin:0px;
+      padding:0px;
+    }
+
+    #map {
+      background:#eaeaea;
+    }
+  </style>
+</head>
+<body>
+  <div id='map'></div>
+</body>
+</html>

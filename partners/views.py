@@ -209,6 +209,21 @@ def hook(request):
 
     return renderJSON(ret)
 
+
+def map(request):
+    indexes = LPIIndexes.objects.all()
+    geo = []
+
+    for index in indexes:
+        geo.extend(index.get_geo())
+
+    geo = json.dumps(geo, separators=(',', ':')) 
+    print geo
+                                        
+    return render_to_response('map.html', {'geo': geo}, context_instance=RequestContext(request))
+
+
+
 def render_to_pdf(template_src, context_dict):
     template = get_template(template_src)
     context = Context(context_dict)
@@ -218,6 +233,8 @@ def render_to_pdf(template_src, context_dict):
     if not pdf.err:
         return http.HttpResponse(result.getvalue(), content_type='application/pdf')
     return http.HttpResponse('We had some errors<pre>%s</pre>' % cgi.escape(html))
+
+
 
 @check_login
 def contract(request):

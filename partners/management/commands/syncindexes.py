@@ -25,6 +25,7 @@ class Command(BaseCommand):
                 index.tags = self.get_tags(company)
                 index.cities = self.parse_locations(locations)
                 index.handle = deal['product']
+                index.geo = self.parse_geo(locations)
                 index.family = self.parse_family(deal['product'])
                 index.lpic_id = self.parse_lpicid(teachers)
                 index.status = deal['state']
@@ -63,8 +64,19 @@ class Command(BaseCommand):
     def parse_locations(self, locations):
         ret = []
         for location in locations:
-            if location['city'] not in ret:
+            if location['city'] not in ret and location['city'] is not None:
                 ret.append(location['city'])
+
+        print ret
+        return ", ".join(ret)
+
+    def parse_geo(self, locations):
+        ret = []
+        for location in locations:
+
+            geo = "%s-%s" % (location['lat'], location['lng'])
+            if geo not in ret and geo.find("None") < 0:
+                ret.append(geo)
 
         return ", ".join(ret)
 

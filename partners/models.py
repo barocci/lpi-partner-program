@@ -49,6 +49,7 @@ class LPIIndexes(models.Model):
     references = models.IntegerField()
     teachers = models.IntegerField()
     locations = models.IntegerField()
+    geo = models.CharField(max_length=255)
 
     def search_services(self, params={}):
         result = []
@@ -73,6 +74,14 @@ class LPIIndexes(models.Model):
             result.append(self.load_from_db(contact))
 
         return result
+
+    def get_geo(self):
+        geo = []
+
+        for couple in self.geo.split(','):
+            geo.extend([couple.split('-')])
+
+        return geo
 
     def load_from_db(self, item):
         contact = {}
