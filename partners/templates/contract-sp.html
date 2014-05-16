@@ -1,0 +1,382 @@
+{% load static from staticfiles %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contratto LPI Service Provider</title>
+  <style>
+    body {
+      font-family: "Helvetica", sans;
+      font-size:15.5px;
+    }
+
+    .page {
+      width:850px;
+      
+      margin:0px auto 50px;
+      padding:0px 0px 100px;
+      margin:0px 40px 0px 60px;
+    }
+
+    .col {
+      width:47%;
+      margin:0px 1.5%;
+      float:left;
+    }
+
+    .centered {
+      text-align:center;
+    }
+
+    h1 {
+      font-size:10px;
+      margin:0px;
+      padding:0px;
+    }
+
+    h2 {
+      font-size:15px;
+      margin:10px 0px 0px;
+      padding:0px;
+    }
+
+    h3 {
+      margin:0px;
+      font-size:13px;
+      padding:0px;
+      margin-bottom:10px;
+    }
+
+    h5 {
+      margin:0px;
+      padding:0px;
+      margin-bottom:10px;
+    }
+
+    ul {
+      list-style-type:none;
+      margin-left:30px;
+    }
+
+    li {
+      padding:0px 0px 0px 30px;
+      margin-bottom:0px;
+      position:relative;
+    }
+
+    li span {
+      position:absolute;
+      margin-left:-40px;
+    }
+
+    p {
+      margin:0px 0px 20px 10px;
+      padding:0px;
+    }
+
+  </style>
+</head>
+<body> 
+ 
+  <h1 class='centered'>LPI Italia<br>CERTIFIED SOLUTION PROVIDER Agreement</h1>
+  
+  <p>
+    <b>This agreement is made between:</b>
+  </p>
+
+  <p class='centered'>
+    {{company.first_name}}<br>
+    {{company.street}}, {{company.postcode}}, {{company.city}}, {{company.country}}<br>
+    (hereafter, “Partner”)<br><br>
+    and<br><br>
+
+    LPI Italia<br>
+    By Metassistant Srl, Piazza Savonarola 10. 50132, Florence, Italy<br>
+    (hereafter, “LPI Italia”)<br><br>
+
+    The parties agree to the following:<br>
+  </p>
+
+  <p>
+    <b>Preamble</b><br>
+    LPI Inc., Canada, is an institution that is not related to any manufacturer, which works with partners
+    around the world to establish unified standards for continuing education in the field of free
+    software, especially that based on Linux.<br>
+    Thus, through the LPIC program, LPI offers a standardised, multi-national and recognised program
+    which utilises examinations at multiple levels to certify an individual’s Linux skills.
+    LPI Italia is the master affiliate of LPI Inc., Canada, and, as such, operates in Italy. It is especially
+    involved in certification for the Linux and open source software field. LPI Italia is explicitly a party to
+    this agreement.<br>
+    With the LPI CERTIFIED SOLUTION PROVIDER Program (hereafter, “LPI CSP”), LPI Inc. and LPI
+    Italia are seeking to support partner organisations that offer services and system solutions in the
+    Linux and open source software field.<br>
+    This agreement makes it possible for the Partner to become an LPI CERTIFIED SOLUTION
+    PROVIDER and to then participate in the partner program.
+
+  </p>
+
+  <p>
+    <b>1. Objective of the agreement</b><br>
+    The primary objective of this agreement is the inclusion of the Partner in an Internet portal which is
+    available to potential customers who are seeking a suitable service provider in the Linux and open
+    source software field.<br>
+    By intentionally promoting the Internet portal in trade journals, well-known general newspapers and
+    magazines, and especially at trade fairs, the Internet portal, and, beyond that, system solutions
+    from the Linux and open source software field will achieve significant visibility for potential
+    customers.<br>
+    LPI Italia makes no guarantee or warranty for the (commercial) success of this program.
+  </p>
+
+  <p>
+    <b>2. Partnership</b><br>
+    The Partner may choose between three differing types of partnership, insofar as the necessary
+    requirements are met. The Partner itself selects the type of partnership to the extent that it meets
+    the necessary requirements.
+  </p>
+
+  <p>
+    <b>a. Solution Provider</b><br>
+    Every company and organisation that offers system solutions in the Linux and open source
+    software field may become a partner.
+  </p>
+
+  <p>
+    <b>b. Certified Solution Provider</b><br>
+    Every company and organisation that offers system solutions in the Linux and open sourcesoftware field may become an LPI Approved Partner. Additional requirements must also be met:<br>
+    - There must be at least two persons employed who are actively certified as “Junior Level Linux
+      Professionals (LPIC-1)”.<br>
+    - The organisation must also have at least one active reference customer for whom a system
+      solution in the Linux or open source software fields has been developed or is regularly maintained.<br>
+  </p>
+
+  <p>
+    <b>c. Certified Solution Provider Gold</b><br>
+    Every company and organisation that offers system solutions in the Linux and open source
+    software field may become an LPI Approved GOLD Partner.<br><br>
+    Additional requirements must also be met:<br>
+    - There must be at least three persons employed who are actively certified as “Junior Level Linux
+    Professionals (LPIC-1)”.<br>
+    - There must be at least one person employed who is actively certified as an “Intermediate Level
+    Linux Professional (LPIC-2)”.<br>
+    - The organisation must also have at least two active reference customers for whom a system
+    solution in the Linux or open source software fields has been developed or is regularly maintained.
+  </p>
+
+  <p>
+    <b>3. Internet portal and ranking</b><br>
+    LPI offers various search options on its Internet portal for potential customers, particularly by
+    location, postal code and country. It is also possible to search from among all partners and from
+    among partners who offer system solutions for small, medium and large businesses. Combined
+    searches are possible.<br><br>
+    The potential customer who is using the Internet portal can then view the contact information
+    provided by the Partner during the registration process as well as the Partner’s references that
+    have been released for publication (see sec. 5).<br><br>
+    The Partner cannot make any claims against LPI Italia regarding a specific position in the ranking.
+    LPI establishes the ranking according to the best of its knowledge and in good faith, trusting the
+    accuracy of the information provided by the Partner.<br><br>
+    In case of an incorrect ranking, the Partner has no right to claims for damages against LPI Italia
+    unless the incorrect ranking is the result of malicious intent or gross negligence on the part of LPI
+    Italia or its agents.
+  </p>
+
+  <p>
+    <b>4. Verification of certified employees</b><br>
+    In order to verify an LPI certified employee, the Partner must provide the last name, first name, e-
+    mail address and LPI ID of that employee.<br><br>
+    The employee in question then receives an e-mail from LPI Italia in which he or she is asked to
+    verify that he or she is an employee of the Partner, and in which he or she is asked to consent to
+    be shown as an employee in the Partner’s profile.<br><br>
+    After LPI Italia has verified this, the employee is then shown as active in the Partner’s profile.
+    The same applies when the employee’s status changes (e.g. receipt of a higher level of
+    certification).
+  </p>
+
+  <p>
+    <b>5. Verification of the Partner’s reference customers</b><br>
+    In order to verify a reference customer, the Partner must provide the last name, first name,
+    company, address, telephone number, fax number and email address of that reference customer.
+    In addition, the partner must provide information about the size of the reference customer’s
+    company (see sec. 3, para. 2). In the Partner’s interest, information about the reference technology
+    should also be provided.<br><br>
+    The reference customer then receives an e-mail from LPI Italia in which he or she is asked to verify
+    the accuracy of the information provided by the Partner, and in which he or she is asked to consent
+    to be shown as a reference customer in the Partner’s profile.<br><br>
+    After LPI Italia has verified this, the reference customer is then shown as active in the Partner’s
+    profile.<br><br>
+    The same applies when the reference customer’s status changes (e.g. expansion of the system,
+    moving to the next level of the number of employees as detailed in sec. 2).
+    The Partner is obligated to indemnify LPI Italia against any claims raised by reference customers
+    arising from the information provided about him or her in the Internet portal or in another manner
+    based on this agreement.
+  </p>
+
+  <p>
+    <b>6. Attestation/LPI Italia Partner inspection</b><br>
+    The Partner attests at this time to the accuracy of the information provided, particularly that
+    regarding certified employees and reference customers.<br><br>
+    The Partner is obligated — in the interests of LPI Italia’s particular quality standards — to permit
+    LPI Italia to inspect the Partner’s records occasionally and, upon request, to provide proof that the
+    employees who have been listed are still employed by the Partner.
+  </p>
+
+  <p>
+    <b>7. Annual fee and commencement of agreement</b><br>
+    The Partner is required to pay an annual fee to LPI Italia for membership in the program. The
+    figures below are for each location of the Partner:<br><br>
+    as an Solution Provider 50,00 euros (FREE first year).<br>
+    as an Certified Solution Provider 250.00 euros (FREE first year)<br>
+    as an Certified Solution Provider Gold 650.00 euros<br><br>
+    Additional Location: 50,00 euros.<br><br>
+    This agreement takes effect beginning on the day the payment is digital approved or signed.<br><br>
+    The annual fee (plus any additional legal IVA) is to be paid in the legal amount within 30 days after
+    LPI Italia has issued an invoice for it.<br>
+    If the Partner works on multiple locations, additional fee must be paid separately for each location
+    (over the included)<br><br>
+    New Partners are not shown on the Internet portal until after they have paid their first annual fee.
+  </p>
+
+  <p>
+    <b>8. Loss of partner level</b><br>
+    If a partner who is an LPI Approved Partner or an LPI Approved GOLD Partner no longer fulfills the
+    requirements for its type of membership (such as through the loss of certified employees), the
+    Partner must report this to LPI Italia immediately.<br><br>
+    The Partner will not be placed back into the next-higher level whose requirements are met until
+    after a transition period of three (3) months, during which it can fulfill the requirements once again.
+    Nevertheless, the Partner is obligated to pay the annual fee according to the type of partnership
+    that the Partner held at the beginning of the fee year.<br><br>
+    Fees which have already been paid will not be refunded in whole or in part.
+  </p>
+
+  <p>
+    <b>9. Use of logos</b><br>
+    Through this agreement, LPI Approved GOLD Partners, LPI Approved Certified Solution Partnersand LPI Solution Partners are simultaneously entitled to use the LPI CERTIFIED SOLUTION
+    PROVIDER logo with the proper identification of their partner level for services in the Linux and
+    open source software system solutions field.<br><br>
+    These rights that are granted are non-exclusive and non-transferable. They apply only within Italy.
+    The Partner is explicitly not accorded the right to grant sublicenses.<br><br>
+    The terms of this agreement do not cover other uses of the logos. In particular, the logo may not be
+    modified in any way, nor may it be used in part.<br><br>
+    The logo may not be used in any manner that is detrimental to its owner and may not be
+    associated with any illegal contents.<br>
+    The Partner indemnifies LPI Italia against any third-party claims which arise from a non-approved
+    used of the logo. In this case, the Partner assumes the costs for the required legal defence,
+    including all court and legal fees.
+  </p>
+
+  <p>
+    <b>10. Termination of the agreement</b><br>
+    This agreement is concluded for an unspecified period of time.<br>
+    Both parties have the right to withdraw from the agreement upon three (3) months notice prior to
+    the expiration date by the “Billing Portal” or by postal mail.<br><br>
+    If there is an important reason, the partners may withdraw from this agreement without observing
+    the advance notice requirement stated above. An important reason exists particularly upon the
+    initiation of insolvency proceedings by one of the partners to this agreement or if initiation is
+    rejected due to insufficiency of assets.<br><br>
+    An important reason exists for LPI Italia specifically when the Partner is in default in payment of the
+    annual fee or if LPI Italia decides to terminate the CERTIFIED SOLUTION PROVIDER program.<br><br>
+    Notices of withdrawal from this agreement must be made in writing by registered letter.<br>
+    In particular, the permission to use the logo ends upon the termination of the agreement.
+  </p>
+
+  <p>
+    <b>11. Internet portal</b><br>
+    LPI Italia’s Internet portal is normally available 24 hours per day (hereafter, “operating time”).<br><br>
+    Operating times exclude periods during which data is being backed up, system or software
+    maintenance is being carried out, or work on the system or on the database are being performed.<br>
+    To the extent that it is required in the interest of the users, LPI Italia is entitled to perform such work
+    during operating time. During these periods, which the company shall endeavour to keep to a
+    minimum, data may be temporarily unavailable for download.
+  </p>
+
+  <p>
+    <b>12. Improper use</b><br>
+    LPI Italia reserves the right, upon suspicion of improper use or significant breach of contract, or
+    suspicion that the Partner has provided false information, to investigate such occurrences, to take
+    appropriate measures, and, in the case of a justified suspicion, to deactivate the customer’s profile
+    on the Internet portal, if appropriate, at least until such time as the Partner provides evidence to
+    allay the suspicion. If appropriate, LPI Italia can withdraw from the agreement without notice in the
+    case of especially serious infringements. The said deactivation shall be lifted without delay if the
+    Partner is able to allay the suspicion.<br><br>
+    Provided that the Partner is responsible for such an infringement, the Partner shall compensate
+    LPI Italia for any damages that arise as a result of an infringement of the obligations in the previous
+    paragraph.
+  </p>
+
+  <p>
+    <b>13. Offsetting, right of retention</b><br>
+    The Partner may only offset payable charges when its counter-claims have been established orwhere they are not disputed by the LPI Italia.<br>
+    The Partner may only exercise a right of retention when its counter-claim is based on the same
+    contractual relationship.
+  </p>
+
+  <p>
+    <b>14. Rights in the event of a defect, liability</b><br>
+    LPI Italia makes no warranties or representations as to the accuracy of information provided by the
+    Partner or its reference customer, particularly to the extent that they may be shown incorrectly in
+    the Partner’s profile. LPI Italia assumes no liability in this regard.<br><br>
+    LPI Italia offers no guarantee that interactive procedures reach the Partner, its employees,
+    reference customers or potential customers in the correct form or that the dial-up procedure via the
+    Internet functions correctly at all times.<br>
+    Furthermore, LPI Italia offers no guarantee that data will be transmitted at a specific speed.<br><br>
+    LPI Italia assumes no liability for the security of data outside its own area of control. In addition, it
+    offers no guarantee regarding disruptions arising as a result of faults in the customer’s or Partner’s
+    computer or in the communication path to the server.<br><br>
+    In cases of ordinary negligence, LPI Italia shall only be liable for the breach of contractual
+    obligations, and any such liability shall be limited to foreseeable damage, at the most, however,
+    equal to the amount of a net annual fee.<br>
+    This limitation shall not apply in the event of death, personal injury or damage to health. LPI Italia
+    shall not be liable for any other damage resulting from ordinary negligence.<br><br>
+    LPI Italia's legal representatives, vicarious agents and employees may not be held personally liable
+    for damage they cause as a result of ordinary negligence.
+  </p>
+
+  <p>
+    <b>15. Final provisions</b><br>
+    No oral collateral agreements to this agreement have been made. Any changes or additions to this
+    agreement must be made in writing to be effective.<br>
+    The same applies to the waiving of the requirement that changes and additions be made in writing.<br>
+    This agreement replaces all previous agreements between the parties to the agreement. Any oral
+    agreements which have been made are a part of this agreement only if they are recorded in this
+    agreement in writing.<br>
+    If one or more provisions of this agreement are invalid, that provision is to be replaced by a legally
+    valid provision that comes nearest to the commercial purpose of the provision that was chosen, but
+    which is invalid.<br>
+    This agreement does not establish any corporate relationships between the partners to the
+    agreement. This agreement is not a franchise agreement.<br>
+    Only Italian law with the exception of the UN Convention on the Sale of Goods shall be used for
+    legal actions resulting from the contract.<br>
+  </p>
+
+  <p>The sole place of jurisdiction is Florence, Italy.</p>
+
+  <p>
+    Florence, ____________________
+  </p>
+  
+  <p>
+    <style>
+      table {
+        margin:10px;
+      }
+    </style>
+    <table>
+      <tr>
+        <td>
+          <BR>_________________________<BR>
+          <I>Place, date<br>
+
+          <BR>_________________________<BR>
+          <I>LPI Italia<br>
+        </td>
+        <td>
+          <BR>_________________________<BR>
+          <I>Place, date<br>
+
+          <BR>_________________________<BR>
+          <I>Signature of the partner<br>
+        </td>
+      </tr>
+    </table>
+  </p>
+</body>
+</html>

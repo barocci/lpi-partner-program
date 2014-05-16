@@ -156,11 +156,22 @@ class LPIRegistrationStep(models.Model):
 
         self.save()
 
-    def completed(self):
+    def completed(self, handle):
         completed = True
-        for i in ['incharge', 'representative', 'location', 'teachers', 'billing']:
+
+        required = {
+            'training': ['incharge', 'representative', 'location', 'teachers', 'billing'],
+            'services': ['incharge', 'representative', 'location', 'billing']
+        }
+
+        selected = 'training'
+        if handle.find('sp') >= 0:
+            selected = 'services'
+
+        for i in required[selected]:
             if getattr(self, i) == 0:
                 completed = False
+                print "NOT COMPLETED %s %s %s" % (i, handle, selected)
 
         return completed
 
@@ -184,6 +195,8 @@ class LPIRegistrationStep(models.Model):
         obj['billing'] = self.billing
         obj['location'] = self.location
         obj['book'] = self.book
+        obj['completed'] = self.completed(self.product)
+
 
         return obj
 
@@ -224,7 +237,9 @@ class Model(dict):
           'facebook':        'cf_14',
           'googleplus':      'cf_15',
           'lat':             'cf_16',
-          'lng':             'cf_17'          
+          'lng':             'cf_17',
+          'LPICDate':        'cf_18',
+          'LPICLevel':       'cf_19'          
         }
 
         self.mapping_id = {
@@ -243,7 +258,9 @@ class Model(dict):
           'facebook':        '14',
           'googleplus':      '15',
           'lat':             '16',
-          'lng':             '17'
+          'lng':             '17',
+          'LPICDate':        '18',
+          'LPICLevel':       '19'          
         }
 
     def __getitem__(self, key):
@@ -298,7 +315,6 @@ class ProductFamily(Model):
         families = self.chargify.ProductFamily().getAll()
         for family in families:
             if family.handle == handle:
-                print 'found'
                 self.load_from_resource(family)
 
         return self
@@ -338,7 +354,7 @@ class LPISubscription(Model):
         deal = redmine.Deal()
         deal.id = id
         deal.custom_fields = [
-            {'id': self.mapping_id['state'], 'value':'pending'}
+            {'id': self.mapping_id['state'], 'value':status}
         ]
 
         deal.save()
@@ -461,6 +477,7 @@ class Product(Model):
         self['description'] = resource.description
         self['product_family'] = resource.product_family
         self['price_in_cents'] = resource.price_in_cents
+        self['price'] = float(resource.price_in_cents)/float(100)
         self['image_url'] = static('lpi/%s.png' % resource.handle)
 
         return self
@@ -509,8 +526,8 @@ class Contact(Model):
         return redmine.Contact.exists(id)
 
     def edit(self, data):
-        exclude = ['image_url', 'csrfmiddlewaretoken', 'type', 
-                   'street', 'city', 'country', 'postcode','sub']
+        exclude = ['image_url', 'csrfmiddlewaretoken', 'type', 'handle',
+                   'street', 'city', 'country', 'postcode','sub', 'status']
         contact = redmine.Contact()
         data = self.encode_custom_fields(data)
 
@@ -735,6 +752,10 @@ class Person(Contact):
             self['phone'] = ''
             if resource.attributes.has_key('phones'):
                 self['phone'] = resource.phones[0].number
+
+            self['skype_name'] = ''
+            if resource.attributes.has_key('skype_name'):
+                self['skype_name'] = resource.skype_name
 
             self['email'] = ''
             if resource.attributes.has_key('emails'):

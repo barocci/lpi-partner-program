@@ -20,7 +20,7 @@
 <div data-bind='visible: active_section() == "partnership"'>
   <h1>
     Partnership
-    <a data-bind='visible: check_family("aap,atp,csp")' class='button pull-right' href='#offers/test-center'>DIVENTA TEST CENTER</a>
+    <a data-bind='visible: false && check_family("aap,atp,csp")' class='button pull-right' href='#offers/test-center'>DIVENTA TEST CENTER</a>
   </h1>
 
   <div data-bind='visible: training().length > 0'>
@@ -56,73 +56,11 @@
               <i class='glyphicon glyphicon-cog'></i></a>
           </td>
         </tr>
-        <tr data-bind='visible: $parent.selected_info() == id'>
-          <td colspan=5>
+        <tr data-bind='visible: $parent.selected_info() == id || $parent.is_newbie()'>
+          <td colspan=5 data-bind='template: {name: "profile-instructions", 
+                                              data: $data}'> 
+                                                                        
             
-            <div class='col-sm-12' data-bind='visible:state =="approving"'>
-
-              Ora e' necessario scaricare il contratto, staparlo e inviarlo a:<br>
-              <br>
-              <a class='button' 
-                 data-bind='attr: {href:"contract?type=" + product.handle + "&id=" + company}'>
-                 SCARICA IL CONTRATTO
-              </a>
-              <br><br>
-            </div>
-            <div class='col-sm-12' data-bind='visible:state =="incomplete"'>
-              <h3>Completa il tuo profilo LPI</h3>
-              <p>
-                Per poter diventare partner LPI &egrave; necessario completare le informazioni
-                del proprio profilo.<br>
-                Queste sono le informazione che mancano:<br><br>
-              </p>
-              <div data-bind='visible: step.incharge == 0'>
-                <h4>Responsabile</h4>
-                <p>
-                  Il responsabile e' la persona a cui il contratto sara' intesta....
-                </p>
-              </div>
-
-              <div data-bind='visible: step.representative ==0'>
-                <h4>Referente</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris.                   
-                </p>
-              </div>
-
-              <div data-bind='visible: step.teachers == 0 && $parent.check_family("aap,atp")'>
-                <h4>Docente LPI</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
-                </p>
-              </div>
-
-              <div data-bind='visible: step.location == 0'>
-                <h4>Sede</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
-                </p>
-              </div>
-
-              <div data-bind='visible: step.billing == 0'>
-                <h4>Dati di fatturazione</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
-                </p>
-              </div>
-
-              <div data-bind='visible: step.book == 0'>
-                <h4>Libro di testo</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
-                </p>
-              </div>
-              
-              <br>
-              <a class='button push-right' 
-                 data-bind='click:function() {$parent.goto_profile($data);}'>Completa il profilo</a>
-              <br><br>
-            </div>
           </td>
         </tr>
       </tbody>
@@ -151,68 +89,19 @@
           <td data-bind='text: state'></td>
           <td data-bind='text: due_date'> - </td>
           <td>
-            <a data-bind="attr: {href: product.url}, visible: state != 'active'" 
+            <a data-bind="click: function() { $parent.open_instructions($data); }, 
+                          visible: state == 'incomplete' || state == 'approving'" 
+               class='button'>INFO</a>
+
+            <a data-bind="attr: {href: product.url}, visible: state == 'pending'" 
                class='button'>Attiva</a>
             <a data-bind="click: $parent.goto_profile, visible: state == 'active'">
               <i class='glyphicon glyphicon-cog'></i></a>
           </td>
         </tr>
-        <tr data-bind='visible: $parent.selected_info() == id'>
-          <td colspan=5>
-            <div class='col-sm-12'>
-              <h3>Completa il tuo profilo LPI</h3>
-              <p>
-                Per poter diventare partner LPI &egrave; necessario completare le informazioni
-                del proprio profilo.<br>
-                Queste sono le informazione che mancano:<br><br>
-              </p>
-              <div data-bind='visible: step.incharge ==0'>
-                <h4>Responsabile</h4>
-                <p>
-                  Il responsabile e' la persona a cui il contratto sara' intesta....
-                </p>
-              </div>
-
-              <div data-bind='visible: step.representative ==0'>
-                <h4>Referente</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris.                   
-                </p>
-              </div>
-
-              <div data-bind='visible: step.teachers == 0 && $parent.check_family("aap,atp")'>
-                <h4>Docente LPI</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
-                </p>
-              </div>
-
-              <div data-bind='visible: step.location == 0'>
-                <h4>Sede</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
-                </p>
-              </div>
-
-              <div data-bind='visible: step.billing == 0'>
-                <h4>Dati di fatturazione</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
-                </p>
-              </div>
-
-              <div data-bind='visible: step.billing == 0'>
-                <h4>Libro di testo</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
-                </p>
-              </div>
-              
-              <br>
-              <a class='button push-right' 
-                 data-bind='click:function() {$parent.goto_profile($data)}'>Completa il profilo</a>
-              <br><br>
-            </div>
+        <tr data-bind='visible: $parent.selected_info() == id || $parent.is_newbie()'>
+          <td colspan=5 data-bind='template: {name: "profile-instructions", 
+                                              data: $data}'> 
           </td>
         </tr>
       </tbody>
@@ -241,69 +130,21 @@
           <td data-bind='text: state'>
           <td data-bind='text: due_date'> - </td>
           <td>
-            <a data-bind="attr: {href: product.url}, visible: state != 'active'" 
+            <a data-bind="click: function() { $parent.open_instructions($data); }, 
+                          visible: state == 'incomplete' || state == 'approving'" 
+               class='button'>INFO</a>
+
+            <a data-bind="attr: {href: product.url}, visible: state == 'pending'" 
                class='button'>Attiva</a>
 
             <a data-bind="click: $parent.goto_profile, visible: state == 'active'">
               <i class='glyphicon glyphicon-cog'></i></a>
           </td>
         </tr>
-        <tr data-bind='visible: $parent.selected_info() == id'>
-          <td colspan=5>
-            <div class='col-sm-12'>
-              <h3>Completa il tuo profilo LPI</h3>
-              <p>
-                Per poter diventare partner LPI &egrave; necessario completare le informazioni
-                del proprio profilo.<br>
-                Queste sono le informazione che mancano:<br><br>
-              </p>
-              <div data-bind='visible: step.incharge ==0'>
-                <h4>Responsabile</h4>
-                <p>
-                  Il responsabile e' la persona a cui il contratto sara' intesta....
-                </p>
-              </div>
-
-              <div data-bind='visible: step.representative ==0'>
-                <h4>Referente</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris.                   
-                </p>
-              </div>
-
-              <div data-bind='visible: step.teachers == 0 && $parent.check_family("aap,atp")'>
-                <h4>Docente LPI</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
-                </p>
-              </div>
-
-              <div data-bind='visible: step.location == 0'>
-                <h4>Sede</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
-                </p>
-              </div>
-
-              <div data-bind='visible: step.billing == 0'>
-                <h4>Dati di fatturazione</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
-                </p>
-              </div>
-
-              <div data-bind='visible: step.billing == 0'>
-                <h4>Libro di testo</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
-                </p>
-              </div>
-              
-              <br>
-              <a class='button push-right' 
-                 data-bind='click:function() {$parent.goto_profile($data);}'>Completa il profilo</a>
-              <br><br>
-            </div>
+        <tr data-bind='visible: $parent.selected_info() == id  || $parent.is_newbie()'>
+          <td colspan=5 data-bind='template: {name: "profile-instructions", 
+                                    data: $data}'> 
+          
           </td>
         </tr>
       </tbody>
@@ -323,7 +164,7 @@
           <th></th>
         </tr>
       </thead>
-      <tbody data-bind='foreach: teachers()'>
+      <tbody data-bind='foreach: []'>
         <tr>
           <td data-bind='text: product.name'></td>
           <td>
@@ -411,15 +252,6 @@
               <input type='text' class='form-control' 
                      data-bind='value: profiles.company.first_name'
                      placeholder='Nome azienda'>
-            </div>
-
-            <div class="input-group">
-              <span class="input-group-addon">
-                Settore
-              </span>
-              <input type='text' class='form-control' 
-                     data-bind='value: profiles.company.job_title'
-                     placeholder='Settore'>
             </div>
 
             <div class="input-group">
@@ -654,8 +486,8 @@
 
       </section>
 
-      <section class="row box-section">
-        <div data-bind='visible: check_family("aap,atp", [profile_family()])' class='col-sm-12'>
+      <section class="row box-section" data-bind='visible: check_family("aap,atp", [profile_family()])'>
+        <div  class='col-sm-12'>
           <h3>Docenti</h3>
           <div data-bind='visible:$root.current_step.teachers() == 0'
                  class='alert alert-danger'>
@@ -741,7 +573,11 @@
   <div data-bind='visible: active_section() == "billing"'>
     <div class='row'>
       <h1>Portale pagamenti</h1>
-      <div class='col-sm-6'>
+      <div class='col-sm-6' data-bind='visible: management_url() == false'>
+        Il portale pagamenti sar&agrave; disponibile dopo aver effettuato il 
+        primo addebito.
+      </div>
+      <div class='col-sm-6' data-bind='visible: management_url() != false'>
         Attraverso il nostro Portale Pagamenti &egrave; possibile visualizzare lo storico
         delle sottoscrizioni e modificare i propri dati di pagamento.
         <br><br>
@@ -772,15 +608,6 @@
       <input type='text' class='form-control' data-bind='value: profile.last_name'
              placeholder='Cognome'>
     </div>
-     <div class="input-group">
-      <span class="input-group-addon">
-        Titolo
-      </span>
-      <input type='text' class='form-control' data-bind='value: profile.job_title'
-             placeholder='Titolo'>
-    </div>
-
-
 
     <div class="input-group">
       <span class="input-group-addon">
@@ -796,6 +623,14 @@
       </span>
       <input type='text' class='form-control' data-bind='value: profile.email'
              placeholder='Email'>
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon">
+        Skype
+      </span>
+      <input type='text' class='form-control' data-bind='value: profile.skype_name'
+             placeholder='Skype contact'>
     </div>
 
     <div>
@@ -874,13 +709,101 @@
       <span class="input-group-addon">
         LPIC ID
       </span>
-      <input type='text' class='form-control' data-bind='value: $parent.edit_teacher_buffer.job_title'
-             placeholder='Nome'>
+      <input type='text' class='form-control' data-bind='value: $parent.edit_teacher_buffer.LPICID'
+             placeholder='LPIC ID'>
     </div>
+
+    <div class="input-group">
+      <span class="input-group-addon">
+        LPIC Livello
+      </span>
+      <input type='text' class='form-control' data-bind='value: $parent.edit_teacher_buffer.LPICLevel'
+             placeholder='Livello LPIC'>
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon">
+        LPIC Data
+      </span>
+      <input type='text' class='form-control' data-bind='value: $parent.edit_teacher_buffer.LPICDate'
+             placeholder='Data LPIC'>
+    </div>
+
+
 
   </form>
   <a data-bind='click: function() { $parent.submit_teacher(); }' 
      class='button pull-right'>Salva</a>  
   <a data-bind='click: function() { $parent.abort_edit_teacher(); }'>Annulla</a>
 
+</script>
+
+<script type='text/html' id='profile-instructions'>
+
+  <div class='col-sm-12' data-bind='visible: state =="approving"'>
+    <h2>Step 2 di 2</h2>
+    <h3>Spedizione contrato</h3>
+    Ora &egrave; necessario scaricare il contratto, staparlo e inviarlo a:<br>
+    <br>
+    <a class='button' target="_blank"
+       data-bind='attr: {href:"contract?type=" + product.handle + "&id=" + company}'>
+       SCARICA IL CONTRATTO
+    </a>
+    <br><br>
+  </div>
+  <div class='col-sm-12' data-bind='visible:state =="incomplete"'>
+    <h2>Step 1 di 2</h2>
+    <h3>Completa il tuo profilo LPI</h3>
+    <p>
+      Per poter diventare partner LPI &egrave; necessario completare le informazioni
+      del proprio profilo.<br>
+      Queste sono le informazione che mancano:<br><br>
+    </p>
+    <div data-bind='visible: step.incharge == 0'>
+      <h4>Responsabile</h4>
+      <p>
+        Il responsabile e' la persona a cui il contratto sara' intesta....
+      </p>
+    </div>
+
+    <div data-bind='visible: step.representative ==0'>
+      <h4>Referente</h4>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris.                   
+      </p>
+    </div>
+
+    <div data-bind='visible: step.teachers == 0 && $root.check_family("aap,atp")'>
+      <h4>Docente LPI</h4>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
+      </p>
+    </div>
+
+    <div data-bind='visible: step.location == 0'>
+      <h4>Sede</h4>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
+      </p>
+    </div>
+
+    <div data-bind='visible: step.billing == 0'>
+      <h4>Dati di fatturazione</h4>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
+      </p>
+    </div>
+
+    <div data-bind='visible: step.book == 0 && $root.check_family("aap,atp")'>
+      <h4>Libro di testo</h4>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. 
+      </p>
+    </div>
+    
+    <br>
+    <a class='button push-right' 
+       data-bind='click:function() {$root.goto_profile($data);}'>Completa il profilo</a>
+    <br><br>
+  </div>
 </script>

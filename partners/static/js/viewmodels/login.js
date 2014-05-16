@@ -30,7 +30,7 @@ var LoginViewModel = function() {
     var data = { username: self.mail(), password: self.password()};
 
     lpi.request('login', data, function(response) {
-      lpi.login(response);
+      lpi.login(response.data);
       if(response.error != 1) {
         lpi.authenticate();
         if(self.handle() != '') {

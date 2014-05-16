@@ -8,22 +8,38 @@
 <form action='' class='signup-form'>
   
   <div class='col-sm-6'>
-    <section data-bind='visible:!lpi.is_logged()'>
+    <section data-bind='visible:lpi.is_logged()'>
+      <h3>Scegli il contatto</h3>
+      <div data-bind='foreach: companies()'>
+        <input type='radio' name='company' 
+               data-bind='attr: {value: company}, checked: $root.selected_company'></input>
+        <label data-bind='attr:{for: company}, text: company_name'></label>
+        <br>
+      </div>
+      <input type='radio' id='default' name='company' value='-1' data-bind='checked: $root.selected_company'>
+      </input>
+      <label data-bind='click: function() { set_company(-1)}' for='company'>
+         Nuovo contatto</label><br>
+    </section>
+
+    <section data-bind=''>
       <h3 data-bind='visible: check_family("atp,aap")'>Nome della scuola</h3>
       <h3 data-bind='visible: check_family("sp")'>Nome dell'azienda</h3>
       <div class="input-group">
         <span class="input-group-addon">
           <span class='glyphicon glyphicon-envelope'></span>
         </span>
-        <input type='text' class='form-control' data-bind='value: company_name'
-               placeholder='Nome scuola'>
+        <input type='text' class='form-control' 
+               data-bind='value: company_name, disable: $root.selected_company() >= 0'
+               placeholder='Nome'>
       </div>
       <h3>I tuoi dati di accesso</h3>
       <div class="input-group">
         <span class="input-group-addon">
-          <span class='glyphicon glyphicon-envelope'></span>
+          <span class='glyphicon glyphicon-home'></span>
         </span>
-        <input type='text' class='form-control' data-bind='value: mail'
+        <input type='text' class='form-control' 
+               data-bind='value: mail, disable: $root.selected_company() >= 0'
                placeholder='La tua email'>
       </div>
 
@@ -31,7 +47,8 @@
         <span class="input-group-addon">
           <span class="glyphicon glyphicon-lock"></span>
         </span>
-        <input type='password' class='form-control' data-bind='value: password'
+        <input type='password' class='form-control' 
+               data-bind='value: password, disable: $root.selected_company() >= 0'
                placeholder='Scegli una password'><br>
       </div>
 
@@ -39,23 +56,13 @@
         <span class="input-group-addon">
           <span class="glyphicon glyphicon-asterisk"></span>
         </span>          
-        <input type='password' class='form-control' data-bind='value: confirm_password'
+        <input type='password' class='form-control' 
+               data-bind='value: confirm_password, disable: $root.selected_company() >= 0'
                placeholder='Conferma password'><br>
       </div>
     </section>
 
-    <section data-bind='visible:lpi.is_logged()'>
-      <h3>Scegli il contatto</h3>
-      <div data-bind='foreach: companies()'>
-        <input type='radio' name='company' data-bind='attr: {value: company}'></input>
-        <label data-bind='attr:{for: company}, text: company_name'></label>
-                                       <br>
-      </div>
-      <input type='radio' name='company' value='-2' checked>
-      </input>
-      <label data-bind='click: function() { set_company(-2)}' for='company'>
-         Nuovo contatto</label><br>
-    </section>
+
 
     <div class="checkbox">
       <label>
@@ -94,4 +101,7 @@
            data-bind='html: error_message'>
     </div>
   </div>
+
 </form>
+
+<div style='clear:both'></div>

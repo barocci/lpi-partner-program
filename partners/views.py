@@ -149,7 +149,7 @@ def edit_profile(request):
         step = LPIRegistrationStep().getByContact(profile['company_id'])
         step.check(profile)
 
-        if step.completed():
+        if step.completed(profile['handle']):
             print "resolving issue %s" % profile['sub'] 
             LPISubscription().set_status(profile['sub'], 'approving')
 
@@ -171,7 +171,6 @@ def details(request):
         references = company['Reference']
         products = company['products']
 
-
         del company['Incharge']
         del company['Commercial']
         del company['Location']
@@ -191,7 +190,6 @@ def details(request):
         }
         
     return renderJSON(ret)
-
 
 @csrf_exempt
 def hook(request):
@@ -221,22 +219,25 @@ def render_to_pdf(template_src, context_dict):
         return http.HttpResponse(result.getvalue(), content_type='application/pdf')
     return http.HttpResponse('We had some errors<pre>%s</pre>' % cgi.escape(html))
 
-
+@check_login
 def contract(request):
 
     if request.GET.has_key('type') and request.GET.has_key('id'):
-        print "============================"
-        print "looking for %s" % request.GET['id']
         company = Company().find(id=request.GET['id'])
+        product = Product().get_by_handle(request.GET['type'])
+        template = 'contract-sp.html'
+
         if request.GET['type'].find('atp') >= 0:
-            return render_to_pdf('contract-atp.html', {'pagesize': 'A4', 'title': 'LPI Partner',
-                                                       'company' : company})
+            template = 'contract-atp.html'
 
         if request.GET['type'].find('aap') >= 0:
-            return render_to_pdf('contract-aap.html', {'pagesize': 'A4', 'title': 'LPI Partner',
-                                                       'company': company})
+            template = 'contract-aap.html'
+        
+        return render_to_pdf(template, {'pagesize': 'A4', 'title': 'LPI Partner',
+                                        'company': company, 'product': product})
 
-    return render_to_response('contract-atp.html', {'user': request.user}, 
+
+    return render_to_response('contract-sp.html', {'user': request.user}, 
             context_instance=RequestContext(request))
 
 @check_login
@@ -291,10 +292,13 @@ def account_info(request):
             }
 
     if request.GET['section'] == 'billing':
-        print "looking billing link for %s" % request.user.username
-        user = LPIUser.objects.get(id=request.user.id)
-        link = user.get_management_url()
-        ret['data'] = {'url': link}
+        try:
+            print "looking billing link for %s" % request.user.username
+            user = LPIUser.objects.get(id=request.user.id)
+            link = user.get_management_url()
+            ret['data'] = {'url': link}
+        except Exception,e:
+            ret['error'] = 1
   
     return renderJSON(ret)
 
@@ -433,7 +437,7 @@ def register(request):
                                  password=request.GET['password'])
         if user:
             auth.login(request, user)
-            ret['data'] = {'login': user.username, 'id': user.id}
+            ret['data'] = {'username': user.username, 'id': user.id}
         else:
             ret['error'] = 2  # error registering
             ret['data'] = 'Error registering user.'

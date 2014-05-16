@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Contratto ATP</title>
+  <title>Contratto LPI AAP</title>
   <style>
     body {
       font-family: "Helvetica", sans;
@@ -92,7 +92,8 @@
     <p>
       This Agreement is made between <b>THE LINUX PROFESSIONAL
       INSTITUTE MASTER AFFILIATE (MA)</b> with its principal office located
-      at ______________________ AND The LPI Academic Partner <b>(THE PARTNER)</b>
+      at LPI Italia, By Metassistant Srl, Piazza Savonarola 10. 50132, Florence, Italy
+      AND The LPI Academic Partner <b>(THE PARTNER)</b>
       {{company.first_name}}. <br>
       
       With its principal office located at: {{company.street}} - {{company.city}} - {{company.country}}
@@ -263,8 +264,8 @@ described in this Agreement.
     <h2>SECTION 8</h2>
     <h3>MEMBERSHIP FEES</h3>
     <p>
-      The PARTNER agrees to pay an annual fee of ___________ for two academic
-      locations. Additional locations may be added for a fee of _________ per location.
+      The PARTNER agrees to pay an annual fee of {{product.price}} &euro; for two academic
+      locations. Additional locations may be added for a fee of 50 &euro; per location.
       This is a one year agreement and may be renewed with the consent of the MA
       for additional one year periods following the anniversary date of this agreement.
     </p>
@@ -621,34 +622,35 @@ engagements to promote the PARTNER’s agenda.
         text-align:left;
       }
     </style>
+    
     <table class='contact'>
       <tr>
         <th>Contact Name:</th>
-        <td></td>
+        <td>{{company.Commercial.first_name}} {{company.Commercial.last_name}}</td>
       </tr>
       <tr>
         <th>School:</th>
-        <td></td>
+        <td>{{company.first_name}}</td>
       </tr>
       <tr>
         <th>Address:</th>
-        <td></td>
+        <td>{{company.street}}</td>
       </tr>
       <tr>
         <th>City:</th>
-        <td></td>
+        <td>{{company.city}}</td>
       </tr>
       <tr>
         <th>State:</th>
-        <td></td>
+        <td>{{company.city}}</td>
       </tr>
       <tr>
         <th>Country:</th>
-        <td></td>
+        <td>{{company.country}}</td>
       </tr>
       <tr>
         <th>Postal Code:</th>
-        <td></td>
+        <td>{{company.postcode}}</td>
       </tr>
       <tr >
         <th style='padding-bottom:50px'></th>
@@ -656,7 +658,7 @@ engagements to promote the PARTNER’s agenda.
       </tr>
       <tr>
         <th>Phone Number:</th>
-        <td></td>
+        <td>{{company.Commercial.phone}}</td>
       </tr>
       <tr>
         <th>Fax Number:</th>
@@ -664,7 +666,7 @@ engagements to promote the PARTNER’s agenda.
       </tr>
       <tr>
         <th>SKYPE ID:</th>
-        <td></td>
+        <td>{{company.Commercial.skype_name}}</td>
       </tr>
       <tr >
         <th style='padding-bottom:50px'></th>
@@ -672,14 +674,13 @@ engagements to promote the PARTNER’s agenda.
       </tr>
       <tr>
         <th>Email:</th>
-        <td></td>
+        <td>{{company.Commercial.email}}</td>
       </tr>
       <tr>
         <th>Website:</th>
-        <td></td>
+        <td>{{company.website}}</td>
       </tr>
     </table>
-
     <h2 style='margin-top:680px;text-align:center;font-style:italic'>Exhibit B</h2>
     <h3 style='text-align:center'>Designation of LPI Certified Instructors</h3>
 
@@ -693,49 +694,17 @@ engagements to promote the PARTNER’s agenda.
         <th style='color:#692630'>CERTIFICATE ATTACHED</th>
       </tr>
 
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
+      {% for teacher in company.Teacher %}
 
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
+        <tr>
+          <td>{{teacher.first_name}} {{teacher.last_name}}</td>
+          <td>{{teacher.LPICLevel}}</td>
+          <td>{{teacher.LPICID}}</td>
+          <td>{{teacher.LPICDate}}</td>
+          <td></td>
+        </tr>
+
+      {% endfor %}
     </table>
 
 

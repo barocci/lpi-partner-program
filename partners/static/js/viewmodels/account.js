@@ -43,11 +43,31 @@ var AccountViewModel = function() {
   self.teachers = ko.observableArray([]);
 
   self.active_subscriptions = ko.computed(function() {
-    var products = [];
     var subs = [];
     subs = subs.concat(self.training());
     subs = subs.concat(self.services());
     subs = subs.concat(self.academic());
+
+    return subs
+  });
+
+
+  self.get_subscription = function(id) {
+    var subs = self.active_subscriptions();
+    var ret = false;
+
+    subs.map(function(sub) {
+      if(sub.id == id) {
+        ret = sub;
+      }
+    });
+
+    return ret;
+  }
+
+  self.active_products = ko.computed(function() {
+    var products = [];
+    var subs = self.active_subscriptions();
     console.log(subs);
     subs.map(function(sub) {
       if(sub.product) {
@@ -73,7 +93,6 @@ var AccountViewModel = function() {
 
     return products;
   });
-
 
   self.loading = ko.observable(true);
 
@@ -113,11 +132,14 @@ var AccountViewModel = function() {
       'website': ko.observable(''),
       'phone': ko.observable(''),
       'email': ko.observable(''),
+      'skype_name': ko.observable(''),
       'tag_list': ko.observable(''),
       'lat': ko.observable(''),
       'lng': ko.observable(''),
       'Verification': ko.observable(''),
       'LPICID': ko.observable(''),
+      'LPICDate': ko.observable(''),
+      'LPICLevel': ko.observable(''),
       'image_url': ko.observable(''),
       'Role': ko.observable('Company'),
       'type': 'company',
@@ -138,12 +160,15 @@ var AccountViewModel = function() {
       'country': ko.observable(''),
       'piva': ko.observable(''),
       'website': ko.observable(''),
+      'skype_name': ko.observable(''),
       'phone': ko.observable(''),
       'email': ko.observable(''),
       'lat': ko.observable(''),
       'lng': ko.observable(''),
       'Verification': ko.observable(''),
       'LPICID': ko.observable(''),
+      'LPICDate': ko.observable(''),
+      'LPICLevel': ko.observable(''),
       'image_url': ko.observable(''),
       'company_id': ko.observable(''),
       'Role': ko.observable('Incharge'),
@@ -168,10 +193,13 @@ var AccountViewModel = function() {
       'lat': ko.observable(''),
       'lng': ko.observable(''),
       'website': ko.observable(''),
+      'skype_name': ko.observable(''),      
       'phone': ko.observable(''),
       'email': ko.observable(''),
       'Verification': ko.observable(''),
       'LPICID': ko.observable(''),
+      'LPICDate': ko.observable(''),
+      'LPICLevel': ko.observable(''),
       'image_url': ko.observable(''),
       'company_id': ko.observable(''),
       'Role': ko.observable('Commercial'),
@@ -195,8 +223,12 @@ var AccountViewModel = function() {
       'email': ko.observable(''),
       'twitter': ko.observable(''),
       'googleplus': ko.observable(''),
+      'skype_name': ko.observable(''),
       'facebook': ko.observable(''),
       'image_url': ko.observable(''),
+      'LPICID': ko.observable(''),
+      'LPICDate': ko.observable(''),
+      'LPICLevel': ko.observable(''),
       'lat': ko.observable(''),
       'lng': ko.observable(''),
       'company_id': ko.observable(''),
@@ -220,6 +252,10 @@ var AccountViewModel = function() {
       'email': ko.observable(''),
       'twitter': ko.observable(''),
       'googleplus': ko.observable(''),
+      'skype_name': ko.observable(''),
+      'LPICID': ko.observable(''),
+      'LPICDate': ko.observable(''),
+      'LPICLevel': ko.observable(''),
       'facebook': ko.observable(''),
       'image_url': ko.observable(''),
       'lat': ko.observable(''),
@@ -239,6 +275,7 @@ var AccountViewModel = function() {
     'location': ko.observable(0),
     'billing': ko.observable(0),
     'book': ko.observable(0),
+    'completed': ko.observable(0),
   }
 
   self.locations = ko.observableArray([]);
@@ -283,6 +320,12 @@ var AccountViewModel = function() {
     }
 
   }
+
+  self.end = function() {
+    self.initialized = false;
+  }
+
+
        
   self.open_instructions = function(deal) {
     self.selected_info(deal.id);
@@ -294,7 +337,7 @@ var AccountViewModel = function() {
     if(set != undefined) {
       handles = set;
     } else {
-      handles = self.active_subscriptions();
+      handles = self.active_products();
     }
     var families = family.split(',');
     for(i in handles) {
@@ -332,11 +375,12 @@ var AccountViewModel = function() {
     }
 
     self.teachers([]);
-    /*
+    
     for(i =0; i < data.teachers.length; i++) {
       var teacher = {};
       console.log(i);
       console.log(data.teachers[i]);
+
       for(field in data.teachers[i]) {
         var value = data.teachers[i][field];
 
@@ -347,7 +391,7 @@ var AccountViewModel = function() {
 
       self.teachers.push(teacher);
     }
-    */
+    
 
     self.locations([]);
     for(i =0; i < data.locations.length; i++) {
@@ -453,6 +497,7 @@ var AccountViewModel = function() {
     location.company = self.profiles.company.first_name()
     location.company_id = self.profiles.company.id()
     location.sub = self.selected_profile()
+    location.handle = self.profile_handle();
     lpi.post('edit_profile', location, function(response) {
       console.log(response);
       self.edit[type](false);
@@ -509,6 +554,17 @@ var AccountViewModel = function() {
       console.log(i);
       self.current_step[i](step[i]);
     }
+
+    var sub = self.get_subscription(self.selected_profile());
+    console.log(step);
+
+    if(sub.state == 'incomplete' && step.completed) {
+      self.initialized = false;
+      
+      lpi.alert("Il tuo profilo e' completo.<br>Torna alla "+ 
+                "<a href='#account/partnership'>partnership</a> per il prossimo step.");
+
+    }
   }
 
   self.new_teacher = function() {
@@ -540,9 +596,10 @@ var AccountViewModel = function() {
 
     console.log(teacher);
 
-    teacher.company = self.profiles.company.first_name()
-    teacher.company_id = self.profiles.company.id()
-    teacher.sub = self.selected_profile()
+    teacher.company = self.profiles.company.first_name();
+    teacher.company_id = self.profiles.company.id();
+    teacher.sub = self.selected_profile();
+    teacher.handle = self.profile_handle();
     lpi.post('edit_profile', teacher, function(response) {
       console.log(response);
       self.edit[type](false);
@@ -605,6 +662,7 @@ var AccountViewModel = function() {
     profile.company = self.profiles.company.first_name()
     profile.company_id = self.profiles.company.id()
     profile.sub = self.selected_profile()
+    profile.handle = self.profile_handle()
     lpi.post('edit_profile', profile, function(response) {
       self.edit[type](false);
       self.update_step(response.data.step);
@@ -631,10 +689,18 @@ var AccountViewModel = function() {
   self.redirect = function(slug) {
     self.active_menu(slug);
     lpi.redirect("account/" + slug);
-  }
+  };
+
+  self.is_newbie = ko.computed(function() {
+    var count = self.training().length + self.services().length + self.academic().length;
+    console.log("COUNT: " +   " 1 == " + count);
+    console.log((count== 1));
+    return count == 1;
+  });
 
   self.ready = {
-    profile: function(data) {
+    profile: function(response) {
+      var data = response.data;
       console.log(data);
 
       if(data.subscription) {
@@ -669,8 +735,12 @@ var AccountViewModel = function() {
       }
     },
 
-    billing: function(data) {
-      self.management_url(data.url);
+    billing: function(response) {
+      if(response.error == 1) {
+        self.management_url(false);
+      } else {
+        self.management_url(response.data.url);
+      }
     }
   }
 
@@ -684,7 +754,7 @@ var AccountViewModel = function() {
     if(self.ready[section.slug] != undefined) {
       console.log('ajaxing');
       lpi.request('account_info', {section: section.slug, data: data}, function(response) {
-        self.ready[section.slug](response.data);
+        self.ready[section.slug](response);
         self.loading(false);
         lpi.loading(false);
         self.active_section(section.slug);

@@ -16,7 +16,7 @@ var lpi = {
 
 
   init: function() {
-    this.username = login_username;
+    this.username = login_username; 
     this.user_id = login_userid;
 
     this.init_views();
@@ -34,6 +34,7 @@ var lpi = {
           that.login(response);
         });
       }
+
       this.pages.nav.login();
     } else {
       console.log('not logged');
@@ -70,8 +71,9 @@ var lpi = {
     var that = this;
 
     function route(page, args) {
-      console.log('Page sel' + that.selected_page);
-      console.log('Page ' + page);
+      console.log('Page sel: ' + that.selected_page);
+      console.log('Page: ' + page);
+
       if(that.routing) {
         console.log('redirecting ' + page);  
         that.redirect(that.selected_page);
@@ -95,7 +97,9 @@ var lpi = {
 
         function init_new_page() {
           that.pages.nav.set_page(page);
-          old_view.end(page, args);
+          if(different) {
+            old_view.end(page, args);
+          }
           new_view.init(args);
 
           if(different) {
