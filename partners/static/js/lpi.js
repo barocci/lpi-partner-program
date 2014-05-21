@@ -1,6 +1,6 @@
 var lpi = {
   valid_pages: ['intro', 'training', 'companies', 'joinus', 'teachers', 'academies',
-                'signup', 'login', 'wizard', 'offers', 'account', 'info'],
+                'signup', 'login', 'wizard', 'offers', 'account', 'info', 'payment_success'],
   selected_page: 'intro',
   pages: {},
 
