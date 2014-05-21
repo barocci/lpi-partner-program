@@ -13,10 +13,10 @@
   
 <div class='prtn-page-content' data-bind='visible: loading() == false || true'>
   <div data-bind='visible: active_section().length == 0'>
-  <h1>
-    Loading...
-  </h1>
-</div>
+    <h1>
+      Loading...
+    </h1>
+  </div>
 <div data-bind='visible: active_section() == "partnership"'>
   <h1>
     Partnership
@@ -42,12 +42,16 @@
           <td>
             <a data-bind='text: company_name, click: function() {$parent.goto_profile($data); }'></a>
           </td>
-          <td data-bind='text: state'>
+          <td data-bind='text: $root.state_label(state)'>
           <td data-bind='text: due_date'> - </td>
           <td>
+            <a data-bind="click: function() { $parent.selected_info(-1) }, 
+                          visible:$parent.selected_info() == id "
+               class='button'>X</a>
+
             <a data-bind="click: function() { $parent.open_instructions($data); }, 
-                          visible: state == 'incomplete' || state == 'approving'" 
-               class='button'>INFO</a>
+                          visible: (state == 'incomplete' || state == 'approving') && !$parent.is_newbie() && $parent.selected_info() != id " 
+               class='button'>Dettagli</a>
 
             <a data-bind="attr: {href: product.url}, visible: state == 'pending'" 
                class='button'>Attiva</a>
@@ -91,7 +95,7 @@
           <td>
             <a data-bind="click: function() { $parent.open_instructions($data); }, 
                           visible: state == 'incomplete' || state == 'approving'" 
-               class='button'>INFO</a>
+               class='button'>dettagli</a>
 
             <a data-bind="attr: {href: product.url}, visible: state == 'pending'" 
                class='button'>Attiva</a>
@@ -132,7 +136,7 @@
           <td>
             <a data-bind="click: function() { $parent.open_instructions($data); }, 
                           visible: state == 'incomplete' || state == 'approving'" 
-               class='button'>INFO</a>
+               class='button'>dettagli</a>
 
             <a data-bind="attr: {href: product.url}, visible: state == 'pending'" 
                class='button'>Attiva</a>
@@ -151,7 +155,7 @@
     </table>
   </div>
 
-  <div data-bind='visible: teachers().length > 0 && false'>
+  <div data-bind='visible: certified_teachers().length > 0'>
     <h3>Docente Certificato</h3>
 
     <table class='table'>
@@ -164,7 +168,7 @@
           <th></th>
         </tr>
       </thead>
-      <tbody data-bind='foreach: []'>
+      <tbody data-bind='foreach: certified_teachers()'>
         <tr>
           <td data-bind='text: product.name'></td>
           <td>
@@ -173,11 +177,22 @@
           <td data-bind='text: state'>
           <td data-bind='text: due_date'> - </td>
           <td>
-            <a data-bind="attr: {href: product.url}, visible: state != 'active'" 
+            <a data-bind="click: function() { $parent.open_instructions($data); }, 
+                          visible: state == 'incomplete' || state == 'approving'" 
+               class='button'>dettagli</a>
+
+            <a data-bind="attr: {href: product.url}, visible: state == 'pending'" 
                class='button'>Attiva</a>
 
             <a data-bind="click: $parent.goto_profile, visible: state == 'active'">
               <i class='glyphicon glyphicon-cog'></i></a>
+          </td>
+        </tr>
+        <tr data-bind='visible: $parent.selected_info() == id  || $parent.is_newbie()'>
+          <td colspan=5 data-bind='template: {name: "profile-instructions", 
+                                    data: $data}'> 
+          
+          </td>
           </td>
         </tr>
       </tbody>
@@ -381,7 +396,7 @@
         </div>
 
 
-        <section class="row box-section">
+        <section class="row box-section" data-bind='visible:check_family("aap,atp,sp")'>
           <div data-bind='' class='col-sm-6'>
             <form class='fixed-headers'>
               <h3>Tag competenze</h3>
@@ -399,7 +414,7 @@
 
         
 
-        <section class="row box-section">
+        <section class="row box-section" data-bind='visible:check_family("aap,atp,sp")'>
           <div data-bind='' class='col-sm-12'>
             <form class='fixed-headers' data-bind='with:profiles.incharge'>
 
@@ -426,7 +441,7 @@
 
         </section>
 
-        <section class="row box-section">
+        <section class="row box-section" data-bind='visible:check_family("aap,atp,sp")'>
           <div data-bind='with:profiles.commercial' class='col-sm-12'>
               <h3>Referente</h3>
               <div data-bind='visible:$root.current_step.representative() == 0'
@@ -456,7 +471,7 @@
           </div>
         </section>
 
-      <section class="row box-section">
+      <section class="row box-section" data-bind='visible:check_family("aap,atp,sp")'>
         <div data-bind='' class='col-sm-12'>
           <h3>Sedi</h3>
               <div data-bind='visible:$root.current_step.location() == 0'
@@ -582,7 +597,7 @@
         delle sottoscrizioni e modificare i propri dati di pagamento.
         <br><br>
 
-        <a class='button' data-bind='attr: {href: management_url}'>
+        <a class='button' data-bind='attr: {href: management_url}' target="_blank">
           Accedi al Portale pagamenti
         </a>
       </div>
@@ -740,8 +755,19 @@
 
 <script type='text/html' id='profile-instructions'>
 
+  <div class='col-sm-12' data-bind='visible: state =="pending"'>
+    <h2>Step 3 di 3</h2>
+    <h3> Effettua il pagamento</h3>
+    Ora &egrave; necessario cacare il lesso<br>
+    <br>
+    <a class='button' target="_blank"
+       data-bind='attr: {href:product.url}'>
+       ATTIVA ORA
+    </a>
+    <br><br>
+  </div>
   <div class='col-sm-12' data-bind='visible: state =="approving"'>
-    <h2>Step 2 di 2</h2>
+    <h2>Step 2 di 3</h2>
     <h3>Spedizione contrato</h3>
     Ora &egrave; necessario scaricare il contratto, staparlo e inviarlo a:<br>
     <br>
@@ -752,7 +778,7 @@
     <br><br>
   </div>
   <div class='col-sm-12' data-bind='visible:state =="incomplete"'>
-    <h2>Step 1 di 2</h2>
+    <h2>Step 1 di 3</h2>
     <h3>Completa il tuo profilo LPI</h3>
     <p>
       Per poter diventare partner LPI &egrave; necessario completare le informazioni

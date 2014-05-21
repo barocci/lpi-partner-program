@@ -6,6 +6,7 @@ var SignupViewModel = function() {
   self.template = 'signup';
 
   self.company_name = ko.observable('');
+  self.last_name = ko.observable('');
   self.mail = ko.observable('');
   self.tos_accepted = ko.observable(false);
   self.privacy_accepted = ko.observable(false);
@@ -71,6 +72,7 @@ var SignupViewModel = function() {
     }else if(self.password() == self.confirm_password()) {
       var params = {
         company_name: self.company_name(),
+        last_name: self.last_name(),
         mail: self.mail(),
         password: self.password(),
         product: self.handle()

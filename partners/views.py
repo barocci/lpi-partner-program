@@ -254,7 +254,7 @@ def contract(request):
                                         'company': company, 'product': product})
 
 
-    return render_to_response('contract-sp.html', {'user': request.user}, 
+    return render_to_response('contract-atp.html', {'user': request.user}, 
             context_instance=RequestContext(request))
 
 @check_login
@@ -262,9 +262,10 @@ def account_info(request):
     ret = {'error': 0, 'data': []}
 
     if request.GET['section'] == 'init':
-        data = {'training':[], 'services':[], 'academic':[], 'teachers': []}
+        data = {'training':[], 'services':[], 'academic':[], 'certified_teachers': []}
         subscriptions = LPISubscription().find(cf_7=request.user.id)
         for sub in subscriptions:
+            print sub
             product = Product().get_by_handle(sub['product'])
             sub['product'] = product
             sub['product']['url'] = Product().hostedURL(product['id'], request.user.id)
@@ -440,15 +441,28 @@ def register(request):
 
     if user:
         print "user ok"
-        company = Company().create(request.GET['company_name'])
-        print "company ok"
-        subscription = LPISubscription().create(product=request.GET['product'],
-                                                user_id=user.id,
-                                                company_id=company['id'])
-        print "sub ok"
-        registration = LPIRegistrationStep().create(subscription['id'], 
-                                                    request.GET['product'],
-                                                    company['id'])
+        if not Product().check_family("ct", request.GET['product']):
+            company = Company().create(request.GET['company_name'])
+            print "company ok"
+            subscription = LPISubscription().create(product=request.GET['product'],
+                                                    user_id=user.id,
+                                                    company_id=company['id'])
+            print "sub ok"
+            registration = LPIRegistrationStep().create(subscription['id'], 
+                                                        request.GET['product'],
+                                                        company['id'])
+        else:
+            teacher = Person().create(first_name=request.GET['company_name'],
+                                      last_name=request.GET['last_name'],
+                                      role='Teacher')
+
+            subscription = LPISubscription().create(product=request.GET['product'],
+                                                    user_id=request.user.id,
+                                                    company_id=teacher['id'])
+
+            registration = LPIRegistrationStep().create(subscription['id'], 
+                                                        request.GET['product'],
+                                                        teacher['id'])
         print "reg step ok"
         user = auth.authenticate(username=request.GET['mail'], 
                                  password=request.GET['password'])

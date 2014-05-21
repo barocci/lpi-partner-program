@@ -704,7 +704,7 @@ class Company(Contact):
 
 
 class Person(Contact):
-    def create(self, company_name, company_id, first_name, last_name, job, email, phone, role,
+    def create(self, company_name=None, company_id=None, first_name=None, last_name=None, job=None, email=None, phone=None, role=None,
                      lpicid=None, verification_code=None):
         contact = redmine.Contact()
         contact.first_name = first_name

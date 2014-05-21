@@ -41,12 +41,27 @@ var AccountViewModel = function() {
   self.services = ko.observableArray([]);
   self.academic = ko.observableArray([]);
   self.teachers = ko.observableArray([]);
+  self.certified_teachers = ko.observableArray([]);
+
+  self.state_label = function(state) {
+    var labels = {
+      'incomplete': 'Profilo incompleto.',
+      'approving': 'In attesa di approvazione',
+      'pending': 'In attesa di pagamento',
+      'active': 'Attivo',
+      'suspendend': 'Partnership sospesa',
+      'closed': 'Partnership chiusa'
+    }
+
+    return labels[state];
+  }
 
   self.active_subscriptions = ko.computed(function() {
     var subs = [];
     subs = subs.concat(self.training());
     subs = subs.concat(self.services());
     subs = subs.concat(self.academic());
+    subs = subs.concat(self.certified_teachers());
 
     return subs
   });
@@ -280,6 +295,7 @@ var AccountViewModel = function() {
 
   self.locations = ko.observableArray([]);
   self.teachers = ko.observableArray([]);
+  self.certified_teachers = ko.observableArray([]);
 
   self.initialized = false;
 
@@ -312,6 +328,8 @@ var AccountViewModel = function() {
         self.training(response.data.training);
         self.services(response.data.services);
         self.academic(response.data.academic);
+        self.teachers(response.data.teachers);
+        self.certified_teachers(response.data.certified_teachers);
         self.initialized = true;
         goto_section();
       });
@@ -334,11 +352,14 @@ var AccountViewModel = function() {
 
   self.check_family = function(family, set) {
     var handles;
+
     if(set != undefined) {
       handles = set;
     } else {
       handles = self.active_products();
     }
+
+    console.log(handles);
     var families = family.split(',');
     for(i in handles) {
       if(typeof handles[i].indexOf == 'function') {
@@ -375,7 +396,7 @@ var AccountViewModel = function() {
     }
 
     self.teachers([]);
-    
+    console.log(data);
     for(i =0; i < data.teachers.length; i++) {
       var teacher = {};
       console.log(i);
@@ -693,8 +714,6 @@ var AccountViewModel = function() {
 
   self.is_newbie = ko.computed(function() {
     var count = self.training().length + self.services().length + self.academic().length;
-    console.log("COUNT: " +   " 1 == " + count);
-    console.log((count== 1));
     return count == 1;
   });
 

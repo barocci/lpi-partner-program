@@ -17,13 +17,8 @@
 
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">
   <script type='text/javascript'>
-    {% if request.user.is_authenticated %}
-      var login_username = '{{ request.user.username }}';
-      var login_userid = '{{ request.user.id }}';
-    {% else %}
-      var login_userid = '';
-      var login_username = '';
-    {% endif %}
+      var login_username = '{{ user.username }}';
+      var login_userid = '{{ user.id }}';
 
   </script>
 </head>

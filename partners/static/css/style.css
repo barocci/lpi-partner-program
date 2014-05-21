@@ -512,7 +512,20 @@ table {
 }
 
 .prtn-box-icon img {
+  width:75%;
+}
+
+
+.prtn-atp .prtn-box-icon img {
   width:50%;
+}
+
+.prtn-aap h3 {
+  font-size:20px;
+}
+
+.prtn-aap .prtn-box-desc p {
+  height:170px;
 }
 
 .prtn-box-icon-training {

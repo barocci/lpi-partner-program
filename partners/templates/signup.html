@@ -25,6 +25,7 @@
     <section data-bind=''>
       <h3 data-bind='visible: check_family("atp,aap")'>Nome della scuola</h3>
       <h3 data-bind='visible: check_family("sp")'>Nome dell'azienda</h3>
+      <h3 data-bind='visible: check_family("ct")'>Informazioni personali</h3>
       <div class="input-group">
         <span class="input-group-addon">
           <span class='glyphicon glyphicon-envelope'></span>
@@ -32,6 +33,15 @@
         <input type='text' class='form-control' 
                data-bind='value: company_name, disable: $root.selected_company() >= 0'
                placeholder='Nome'>
+      </div>
+
+      <div class="input-group" data-bind='visible: check_family("ct")'>
+        <span class="input-group-addon">
+          <span class='glyphicon glyphicon-envelope'></span>
+        </span>
+        <input type='text' class='form-control' 
+               data-bind='value: last_name, disable: $root.selected_company() >= 0'
+               placeholder='Cognome'>
       </div>
       <h3>I tuoi dati di accesso</h3>
       <div class="input-group">
@@ -68,14 +78,14 @@
       <label>
         <input data-bind='checked: tos_accepted' type="checkbox"> 
           Ho letto e accetto i 
-          <a href='http://nuovo.lpi-italia.org/termini-di-servizio'>Termini di Servizio</a>.
+          <a target='_blank' href='http://nuovo.lpi-italia.org/termini-di-servizio'>Termini di Servizio</a>.
       </label>
     </div>
     <div class="checkbox">
       <label>
         <input data-bind='checked: privacy_accepted' type="checkbox"> 
           Ho letto e accetto l'informativa sulla 
-          <a href='http://nuovo.lpi-italia.org/privacy'>Privacy</a>.
+          <a target='_blank' href='http://nuovo.lpi-italia.org/privacy'>Privacy</a>.
       </label>
     </div>
     
